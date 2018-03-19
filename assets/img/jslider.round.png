@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+	<link rel="pingback" href="http://demo.puriwp.com/xmlrpc.php">
+	<!--[if lt IE 9]>
+	<script src="http://demo.puriwp.com/wp-content/themes/twentyfifteen/js/html5.js"></script>
+	<![endif]-->
+	<script>(function(){document.documentElement.className='js'})();</script>
+	<title>Puri WordPress Demo Site | For demo purpose only</title>
+<meta name='robots' content='noindex,follow' />
+<link rel="alternate" type="application/rss+xml" title="Puri WordPress Demo Site &raquo; Feed" href="http://demo.puriwp.com/?feed=rss2" />
+<link rel="alternate" type="application/rss+xml" title="Puri WordPress Demo Site &raquo; Comments Feed" href="http://demo.puriwp.com/?feed=comments-rss2" />
+<link rel='stylesheet' id='twentyfifteen-fonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans%3A400italic%2C700italic%2C400%2C700%7CNoto+Serif%3A400italic%2C700italic%2C400%2C700%7CInconsolata%3A400%2C700&#038;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='http://demo.puriwp.com/wp-content/themes/twentyfifteen/genericons/genericons.css?ver=3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentyfifteen-style-css'  href='http://demo.puriwp.com/wp-content/themes/twentyfifteen/style.css?ver=4.1.12' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentyfifteen-ie-css'  href='http://demo.puriwp.com/wp-content/themes/twentyfifteen/css/ie.css?ver=20141010' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentyfifteen-ie7-css'  href='http://demo.puriwp.com/wp-content/themes/twentyfifteen/css/ie7.css?ver=20141010' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://demo.puriwp.com/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://demo.puriwp.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://demo.puriwp.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://demo.puriwp.com/wp-includes/wlwmanifest.xml" /> 
+</head>
+
+<body class="home blog">
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<div id="sidebar" class="sidebar">
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-branding">
+										<h1 class="site-title"><a href="http://demo.puriwp.com/" rel="home">Puri WordPress Demo Site</a></h1>
+											<p class="site-description">For demo purpose only</p>
+									<button class="secondary-toggle">Menu and widgets</button>
+			</div><!-- .site-branding -->
+		</header><!-- .site-header -->
+
+			</div><!-- .sidebar -->
+
+	<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+<section class="no-results not-found">
+	<header class="page-header">
+		<h1 class="page-title">Nothing Found</h1>
+	</header><!-- .page-header -->
+
+	<div class="page-content">
+
+		
+			<p>It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help.</p>
+			<form role="search" method="get" class="search-form" action="http://demo.puriwp.com/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" title="Search for:" />
+				</label>
+				<input type="submit" class="search-submit screen-reader-text" value="Search" />
+			</form>
+		
+	</div><!-- .page-content -->
+</section><!-- .no-results -->
+
+		</main><!-- .site-main -->
+	</div><!-- .content-area -->
+
+
+	</div><!-- .site-content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+						<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+		</div><!-- .site-info -->
+	</footer><!-- .site-footer -->
+
+</div><!-- .site -->
+
+<script type='text/javascript' src='http://demo.puriwp.com/wp-content/themes/twentyfifteen/js/skip-link-focus-fix.js?ver=20141010'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"<span class=\"screen-reader-text\">expand child menu<\/span>","collapse":"<span class=\"screen-reader-text\">collapse child menu<\/span>"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://demo.puriwp.com/wp-content/themes/twentyfifteen/js/functions.js?ver=20141212'></script>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+body {
+	text-align: center;
+}
+table { display: inline-block; border-top: 1px solid #ddd; border-left: 1px solid #ddd; }
+table th, table td { font-size: 14px; padding:2px 2px; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+button.exit { display: initial; margin-bottom: 10px;}
+button.print { display: initial; margin-bottom: 10px; }
+.Disconnect td { background-color: #ccc; }
+.red { color: red; }
+.green { color: green; }
+
+@media print{
+    button.exit { display: none; }
+    button.print { display: none; }
+    a[href]:after {
+	    content: none !important;
+	}
+	table th, table td { font-size: 11px;}
+	/*to hide url and date from header and footer*/
+	@page { margin: 10px; }
+    /*body { margin: 1cm .6cm; }*/
+
+    pre, blockquote, div, tr {
+        page-break-inside: avoid;
+    }
+    .page_break {
+        page-break-inside: avoid;
+    }
+}
