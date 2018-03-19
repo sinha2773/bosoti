@@ -66,6 +66,22 @@ $fetch_class = $this->router->fetch_class();
 			</li>
 			<?php } ?>
 
+
+			<li class="<?php echo $payment_li;?>">
+				<a href="#"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Bank Account</span></a>
+				<ul <?php echo $payment_sub1;?>>
+					<li>
+						<a href="<?php echo base_url("admin/bank_acc_create");?>">Add Bank Account</a>
+					</li>
+					<li>
+						<a href="<?php echo base_url("admin/bank_transfer");?>">Transfer To Bank</a>
+					</li>
+					
+				</ul>
+			</li>
+
+
+
 			<?php 
 			$employe_sub1 = '';
 			$employe_sub2 = '';
@@ -108,7 +124,7 @@ $fetch_class = $this->router->fetch_class();
 			<li class="<?php echo $account_li;?>">
 				<a href="#"><i class="fa fa-lg fa-fw fa-credit-card"></i> <span class="menu-item-parent">Account</span></a>
 				<ul <?php echo $account_sub1;?>>
-	
+
 					<?php 
 					$income_sub1 = '';
 					$income_sub2 = '';
