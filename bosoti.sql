@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
--- https://www.phpmyadmin.net/
+-- version 4.5.1
+-- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2018 at 12:01 PM
--- Server version: 10.1.26-MariaDB
--- PHP Version: 7.1.8
+-- Generation Time: Mar 20, 2018 at 01:10 PM
+-- Server version: 10.1.10-MariaDB
+-- PHP Version: 5.6.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -21,6 +19,23 @@ SET time_zone = "+00:00";
 --
 -- Database: `bosoti`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_bank_account`
+--
+
+CREATE TABLE `tbl_bank_account` (
+  `bank_acc_id` int(11) NOT NULL,
+  `bank_name` varchar(80) NOT NULL,
+  `branch_name` varchar(50) NOT NULL,
+  `acc_name` varchar(60) NOT NULL,
+  `acc_number` varchar(30) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -267,7 +282,9 @@ CREATE TABLE `tbl_payments` (
 
 INSERT INTO `tbl_payments` (`id`, `client_id`, `amount`, `discount`, `bill`, `billing_date`, `payment_date`, `payment_day`, `payment_month`, `payment_year`, `added_by`, `book_no`, `summary`, `bill_status`, `client_status`, `created`, `updated`) VALUES
 (1, 2, '200.00', '0.00', '0.00', '0000-00-00', '2018-03-10', 10, 3, 2018, 8, '', 'test', 0, 0, '2018-03-10 18:31:34', '2018-03-10 12:31:34'),
-(2, 2, '300.00', '0.00', '0.00', '0000-00-00', '2018-03-17', 17, 3, 2018, 8, '', '', 0, 0, '2018-03-17 16:37:52', '2018-03-17 10:37:52');
+(2, 2, '300.00', '0.00', '0.00', '0000-00-00', '2018-03-17', 17, 3, 2018, 8, '', '', 0, 0, '2018-03-17 16:37:52', '2018-03-17 10:37:52'),
+(3, 2, '599.00', '0.00', '0.00', '0000-00-00', '2018-03-19', 19, 3, 2018, 8, '', '', 0, 0, '2018-03-19 18:57:24', '2018-03-19 12:57:24'),
+(4, 2, '11.00', '0.00', '0.00', '0000-00-00', '2018-03-16', 16, 3, 2018, 8, '', '', 0, 0, '2018-03-19 20:27:35', '2018-03-19 14:27:35');
 
 -- --------------------------------------------------------
 
@@ -341,13 +358,19 @@ CREATE TABLE `tbl_user_roles` (
 --
 
 INSERT INTO `tbl_user_roles` (`user_role_id`, `name`, `permission`) VALUES
-(1, 'Admin', 'a:2:{s:6:\"access\";a:21:{i:0;s:17:\"super_admin_power\";i:1;s:13:\"manager_power\";i:2;s:14:\"dashboard_info\";i:3;s:13:\"manage_member\";i:4;s:14:\"manage_payment\";i:5;s:11:\"save_income\";i:6;s:10:\"add_income\";i:7;s:15:\"add_income_type\";i:8;s:15:\"see_income_list\";i:9;s:17:\"see_income_report\";i:10;s:12:\"save_expense\";i:11;s:11:\"add_expense\";i:12;s:16:\"add_expense_type\";i:13;s:16:\"see_expense_list\";i:14;s:18:\"see_expense_report\";i:15;s:14:\"account_access\";i:16;s:8:\"add_user\";i:17;s:11:\"update_user\";i:18;s:13:\"see_user_list\";i:19;s:16:\"access_user_role\";i:20;s:8:\"settings\";}s:6:\"modify\";a:1:{i:0;s:8:\"add_user\";}}'),
-(2, 'Manager', 'a:2:{s:6:\"access\";a:23:{i:0;s:13:\"manager_power\";i:1;s:14:\"dashboard_info\";i:2;s:14:\"access_package\";i:3;s:19:\"client_registration\";i:4;s:15:\"see_client_list\";i:5;s:13:\"update_client\";i:6;s:20:\"update_client_status\";i:7;s:27:\"update_client_status_active\";i:8;s:20:\"see_client_statement\";i:9;s:8:\"add_bill\";i:10;s:11:\"see_duelist\";i:11;s:12:\"see_paidlist\";i:12;s:15:\"see_bill_report\";i:13;s:7:\"see_log\";i:14;s:17:\"see_employee_list\";i:15;s:10:\"pay_salary\";i:16;s:10:\"add_income\";i:17;s:11:\"add_expense\";i:18;s:16:\"see_expense_list\";i:19;s:18:\"see_expense_report\";i:20;s:14:\"account_access\";i:21;s:12:\"send_message\";i:22;s:15:\"message_history\";}s:6:\"modify\";N;}'),
-(3, 'User', 'a:2:{s:6:\"access\";a:2:{i:0;s:20:\"see_client_statement\";i:1;s:11:\"see_duelist\";}s:6:\"modify\";N;}');
+(1, 'Admin', 'a:2:{s:6:"access";a:21:{i:0;s:17:"super_admin_power";i:1;s:13:"manager_power";i:2;s:14:"dashboard_info";i:3;s:13:"manage_member";i:4;s:14:"manage_payment";i:5;s:11:"save_income";i:6;s:10:"add_income";i:7;s:15:"add_income_type";i:8;s:15:"see_income_list";i:9;s:17:"see_income_report";i:10;s:12:"save_expense";i:11;s:11:"add_expense";i:12;s:16:"add_expense_type";i:13;s:16:"see_expense_list";i:14;s:18:"see_expense_report";i:15;s:14:"account_access";i:16;s:8:"add_user";i:17;s:11:"update_user";i:18;s:13:"see_user_list";i:19;s:16:"access_user_role";i:20;s:8:"settings";}s:6:"modify";a:1:{i:0;s:8:"add_user";}}'),
+(2, 'Manager', 'a:2:{s:6:"access";a:23:{i:0;s:13:"manager_power";i:1;s:14:"dashboard_info";i:2;s:14:"access_package";i:3;s:19:"client_registration";i:4;s:15:"see_client_list";i:5;s:13:"update_client";i:6;s:20:"update_client_status";i:7;s:27:"update_client_status_active";i:8;s:20:"see_client_statement";i:9;s:8:"add_bill";i:10;s:11:"see_duelist";i:11;s:12:"see_paidlist";i:12;s:15:"see_bill_report";i:13;s:7:"see_log";i:14;s:17:"see_employee_list";i:15;s:10:"pay_salary";i:16;s:10:"add_income";i:17;s:11:"add_expense";i:18;s:16:"see_expense_list";i:19;s:18:"see_expense_report";i:20;s:14:"account_access";i:21;s:12:"send_message";i:22;s:15:"message_history";}s:6:"modify";N;}'),
+(3, 'User', 'a:2:{s:6:"access";a:2:{i:0;s:20:"see_client_statement";i:1;s:11:"see_duelist";}s:6:"modify";N;}');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `tbl_bank_account`
+--
+ALTER TABLE `tbl_bank_account`
+  ADD PRIMARY KEY (`bank_acc_id`);
 
 --
 -- Indexes for table `tbl_client_histories`
@@ -434,6 +457,11 @@ ALTER TABLE `tbl_user_roles`
 --
 
 --
+-- AUTO_INCREMENT for table `tbl_bank_account`
+--
+ALTER TABLE `tbl_bank_account`
+  MODIFY `bank_acc_id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `tbl_client_histories`
 --
 ALTER TABLE `tbl_client_histories`
@@ -482,7 +510,7 @@ ALTER TABLE `tbl_notes`
 -- AUTO_INCREMENT for table `tbl_payments`
 --
 ALTER TABLE `tbl_payments`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `tbl_settings`
 --
@@ -497,8 +525,7 @@ ALTER TABLE `tbl_users`
 -- AUTO_INCREMENT for table `tbl_user_roles`
 --
 ALTER TABLE `tbl_user_roles`
-  MODIFY `user_role_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;COMMIT;
-
+  MODIFY `user_role_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
