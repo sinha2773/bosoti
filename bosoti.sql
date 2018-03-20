@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2018 at 01:10 PM
+-- Generation Time: Mar 20, 2018 at 02:30 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 5.6.15
 
@@ -32,10 +32,18 @@ CREATE TABLE `tbl_bank_account` (
   `branch_name` varchar(50) NOT NULL,
   `acc_name` varchar(60) NOT NULL,
   `acc_number` varchar(30) NOT NULL,
+  `balance` double NOT NULL DEFAULT '0',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `status` tinyint(1) NOT NULL
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tbl_bank_account`
+--
+
+INSERT INTO `tbl_bank_account` (`bank_acc_id`, `bank_name`, `branch_name`, `acc_name`, `acc_number`, `balance`, `created`, `updated`, `status`) VALUES
+(11, 'Dutch Bangla Bank Limited', 'Dhanmondi', 'Bosoti Sonchoy', '105.102.863254', 0, '2018-03-20 13:18:30', '2018-03-20 13:18:30', 1);
 
 -- --------------------------------------------------------
 
@@ -89,6 +97,19 @@ CREATE TABLE `tbl_expense_types` (
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_final_amount`
+--
+
+CREATE TABLE `tbl_final_amount` (
+  `final_amount_id` int(11) NOT NULL,
+  `total_amount` double NOT NULL,
+  `cashbook_amount` double NOT NULL,
+  `bank_amount` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -370,7 +391,8 @@ INSERT INTO `tbl_user_roles` (`user_role_id`, `name`, `permission`) VALUES
 -- Indexes for table `tbl_bank_account`
 --
 ALTER TABLE `tbl_bank_account`
-  ADD PRIMARY KEY (`bank_acc_id`);
+  ADD PRIMARY KEY (`bank_acc_id`),
+  ADD UNIQUE KEY `acc_number` (`acc_number`);
 
 --
 -- Indexes for table `tbl_client_histories`
@@ -390,6 +412,12 @@ ALTER TABLE `tbl_expenses`
 --
 ALTER TABLE `tbl_expense_types`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_final_amount`
+--
+ALTER TABLE `tbl_final_amount`
+  ADD PRIMARY KEY (`final_amount_id`);
 
 --
 -- Indexes for table `tbl_incomes`
@@ -460,7 +488,7 @@ ALTER TABLE `tbl_user_roles`
 -- AUTO_INCREMENT for table `tbl_bank_account`
 --
 ALTER TABLE `tbl_bank_account`
-  MODIFY `bank_acc_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bank_acc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `tbl_client_histories`
 --
@@ -476,6 +504,11 @@ ALTER TABLE `tbl_expenses`
 --
 ALTER TABLE `tbl_expense_types`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tbl_final_amount`
+--
+ALTER TABLE `tbl_final_amount`
+  MODIFY `final_amount_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tbl_incomes`
 --

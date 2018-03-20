@@ -46,7 +46,6 @@ class Bank_acc_create extends MY_Controller {
 			'acc_name'=> trim($this->input->post('acc_name')),
 			'acc_number'=> trim($this->input->post('acc_number')),
 			);
-
 		$is_save = $this->Bank_model->save_bank_acc_info($bank_data);
 		if($is_save > 0){
 			echo json_encode("success");
