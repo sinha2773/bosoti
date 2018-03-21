@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
+-- version 4.2.11
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2018 at 02:30 PM
--- Server version: 10.1.10-MariaDB
--- PHP Version: 5.6.15
+-- Generation Time: Mar 21, 2018 at 08:56 PM
+-- Server version: 5.6.21
+-- PHP Version: 5.6.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `bosoti`
@@ -26,8 +26,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `tbl_bank_account`
 --
 
-CREATE TABLE `tbl_bank_account` (
-  `bank_acc_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_bank_account` (
+`bank_acc_id` int(11) NOT NULL,
   `bank_name` varchar(80) NOT NULL,
   `branch_name` varchar(50) NOT NULL,
   `acc_name` varchar(60) NOT NULL,
@@ -36,14 +36,15 @@ CREATE TABLE `tbl_bank_account` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_bank_account`
 --
 
 INSERT INTO `tbl_bank_account` (`bank_acc_id`, `bank_name`, `branch_name`, `acc_name`, `acc_number`, `balance`, `created`, `updated`, `status`) VALUES
-(11, 'Dutch Bangla Bank Limited', 'Dhanmondi', 'Bosoti Sonchoy', '105.102.863254', 0, '2018-03-20 13:18:30', '2018-03-20 13:18:30', 1);
+(11, 'Dutch Bangla Bank Limited', 'Dhanmondi', 'Bosoti Sonchoy', '105.102.863254', 6000, '2018-03-20 13:18:30', '2018-03-21 19:30:26', 1),
+(12, 'Brac Bank', 'Khailgaoh', 'Bosoti', '105.236.12589', 500, '2018-03-21 19:33:00', '2018-03-21 19:33:23', 1);
 
 -- --------------------------------------------------------
 
@@ -51,8 +52,8 @@ INSERT INTO `tbl_bank_account` (`bank_acc_id`, `bank_name`, `branch_name`, `acc_
 -- Table structure for table `tbl_client_histories`
 --
 
-CREATE TABLE `tbl_client_histories` (
-  `history_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_client_histories` (
+`history_id` int(11) NOT NULL,
   `client_id` int(11) NOT NULL,
   `meta_key` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `added_by` int(11) NOT NULL,
@@ -67,8 +68,8 @@ CREATE TABLE `tbl_client_histories` (
 -- Table structure for table `tbl_expenses`
 --
 
-CREATE TABLE `tbl_expenses` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_expenses` (
+`id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT '8',
   `invoice` varchar(20) NOT NULL,
   `extype_id` int(11) NOT NULL,
@@ -88,8 +89,8 @@ CREATE TABLE `tbl_expenses` (
 -- Table structure for table `tbl_expense_types`
 --
 
-CREATE TABLE `tbl_expense_types` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_expense_types` (
+`id` int(11) NOT NULL,
   `parent_id` int(11) NOT NULL,
   `title` varchar(60) NOT NULL,
   `slug` varchar(60) NOT NULL,
@@ -105,12 +106,19 @@ CREATE TABLE `tbl_expense_types` (
 -- Table structure for table `tbl_final_amount`
 --
 
-CREATE TABLE `tbl_final_amount` (
-  `final_amount_id` int(11) NOT NULL,
-  `total_amount` double NOT NULL,
-  `cashbook_amount` double NOT NULL,
-  `bank_amount` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `tbl_final_amount` (
+`final_amount_id` int(11) NOT NULL,
+  `total_amount` double NOT NULL DEFAULT '0',
+  `cashbook_amount` double NOT NULL DEFAULT '0',
+  `bank_amount` double NOT NULL DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tbl_final_amount`
+--
+
+INSERT INTO `tbl_final_amount` (`final_amount_id`, `total_amount`, `cashbook_amount`, `bank_amount`) VALUES
+(1, 0, 43500, 0);
 
 -- --------------------------------------------------------
 
@@ -118,8 +126,8 @@ CREATE TABLE `tbl_final_amount` (
 -- Table structure for table `tbl_incomes`
 --
 
-CREATE TABLE `tbl_incomes` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_incomes` (
+`id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT '8',
   `invoice` varchar(20) NOT NULL,
   `intype_id` int(11) NOT NULL,
@@ -139,8 +147,8 @@ CREATE TABLE `tbl_incomes` (
 -- Table structure for table `tbl_income_types`
 --
 
-CREATE TABLE `tbl_income_types` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_income_types` (
+`id` int(11) NOT NULL,
   `parent_id` int(11) NOT NULL,
   `title` varchar(60) NOT NULL,
   `slug` varchar(60) NOT NULL,
@@ -156,15 +164,15 @@ CREATE TABLE `tbl_income_types` (
 -- Table structure for table `tbl_medias`
 --
 
-CREATE TABLE `tbl_medias` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_medias` (
+`id` int(11) NOT NULL,
   `media_type` varchar(10) NOT NULL,
   `name` varchar(60) NOT NULL,
   `image` varchar(60) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_medias`
@@ -181,8 +189,8 @@ INSERT INTO `tbl_medias` (`id`, `media_type`, `name`, `image`, `status`, `create
 -- Table structure for table `tbl_members`
 --
 
-CREATE TABLE `tbl_members` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_members` (
+`id` int(11) NOT NULL,
   `client_id` varchar(10) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `mobile` varchar(15) DEFAULT NULL,
@@ -233,7 +241,7 @@ CREATE TABLE `tbl_members` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_members`
@@ -248,8 +256,8 @@ INSERT INTO `tbl_members` (`id`, `client_id`, `name`, `mobile`, `email`, `gender
 -- Table structure for table `tbl_messages`
 --
 
-CREATE TABLE `tbl_messages` (
-  `message_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_messages` (
+`message_id` int(11) NOT NULL,
   `m_from` varchar(20) NOT NULL,
   `message` varchar(255) NOT NULL,
   `added_by` int(11) NOT NULL,
@@ -262,8 +270,8 @@ CREATE TABLE `tbl_messages` (
 -- Table structure for table `tbl_notes`
 --
 
-CREATE TABLE `tbl_notes` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_notes` (
+`id` int(11) NOT NULL,
   `note_type` varchar(60) NOT NULL,
   `title` varchar(60) NOT NULL,
   `description` text NOT NULL,
@@ -277,8 +285,8 @@ CREATE TABLE `tbl_notes` (
 -- Table structure for table `tbl_payments`
 --
 
-CREATE TABLE `tbl_payments` (
-  `id` bigint(20) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_payments` (
+`id` bigint(20) NOT NULL,
   `client_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `discount` decimal(10,2) NOT NULL,
@@ -295,7 +303,7 @@ CREATE TABLE `tbl_payments` (
   `client_status` tinyint(1) NOT NULL,
   `created` datetime NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_payments`
@@ -313,11 +321,11 @@ INSERT INTO `tbl_payments` (`id`, `client_id`, `amount`, `discount`, `bill`, `bi
 -- Table structure for table `tbl_settings`
 --
 
-CREATE TABLE `tbl_settings` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_settings` (
+`id` int(11) NOT NULL,
   `meta_key` varchar(60) NOT NULL,
   `meta_value` varchar(255) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=755 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_settings`
@@ -335,11 +343,41 @@ INSERT INTO `tbl_settings` (`id`, `meta_key`, `meta_value`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_transaction_history`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_transaction_history` (
+`transaction_id` int(11) NOT NULL,
+  `transaction_through` varchar(30) NOT NULL,
+  `amount` double NOT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `bank_acc_id` int(11) DEFAULT NULL,
+  `payment_date` date NOT NULL,
+  `note` text,
+  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `added_by` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `transection_type` varchar(50) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tbl_transaction_history`
+--
+
+INSERT INTO `tbl_transaction_history` (`transaction_id`, `transaction_through`, `amount`, `member_id`, `bank_acc_id`, `payment_date`, `note`, `date_created`, `date_updated`, `added_by`, `status`, `transection_type`) VALUES
+(1, 'Bankbook', 5000, NULL, 11, '2018-03-22', '', '2018-03-21 19:28:18', '2018-03-21 19:28:18', 8, 1, 'Transferred'),
+(2, 'Bankbook', 1000, NULL, 11, '2018-03-22', '', '2018-03-21 19:30:26', '2018-03-21 19:30:26', 8, 1, 'Transferred'),
+(3, 'Bankbook', 500, NULL, 12, '2018-03-22', 'hello transfer', '2018-03-21 19:33:23', '2018-03-21 19:33:23', 8, 1, 'Transferred');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_users`
 --
 
-CREATE TABLE `tbl_users` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_users` (
+`id` int(11) NOT NULL,
   `email` varchar(50) NOT NULL,
   `mobile` varchar(15) DEFAULT NULL,
   `username` varchar(30) NOT NULL,
@@ -352,7 +390,7 @@ CREATE TABLE `tbl_users` (
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_users`
@@ -368,11 +406,11 @@ INSERT INTO `tbl_users` (`id`, `email`, `mobile`, `username`, `password`, `name`
 -- Table structure for table `tbl_user_roles`
 --
 
-CREATE TABLE `tbl_user_roles` (
-  `user_role_id` int(11) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_user_roles` (
+`user_role_id` int(11) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
   `permission` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_user_roles`
@@ -391,94 +429,97 @@ INSERT INTO `tbl_user_roles` (`user_role_id`, `name`, `permission`) VALUES
 -- Indexes for table `tbl_bank_account`
 --
 ALTER TABLE `tbl_bank_account`
-  ADD PRIMARY KEY (`bank_acc_id`),
-  ADD UNIQUE KEY `acc_number` (`acc_number`);
+ ADD PRIMARY KEY (`bank_acc_id`), ADD UNIQUE KEY `acc_number` (`acc_number`);
 
 --
 -- Indexes for table `tbl_client_histories`
 --
 ALTER TABLE `tbl_client_histories`
-  ADD PRIMARY KEY (`history_id`),
-  ADD KEY `client_id` (`client_id`);
+ ADD PRIMARY KEY (`history_id`), ADD KEY `client_id` (`client_id`);
 
 --
 -- Indexes for table `tbl_expenses`
 --
 ALTER TABLE `tbl_expenses`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_expense_types`
 --
 ALTER TABLE `tbl_expense_types`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_final_amount`
 --
 ALTER TABLE `tbl_final_amount`
-  ADD PRIMARY KEY (`final_amount_id`);
+ ADD PRIMARY KEY (`final_amount_id`);
 
 --
 -- Indexes for table `tbl_incomes`
 --
 ALTER TABLE `tbl_incomes`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_income_types`
 --
 ALTER TABLE `tbl_income_types`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_medias`
 --
 ALTER TABLE `tbl_medias`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_members`
 --
 ALTER TABLE `tbl_members`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_messages`
 --
 ALTER TABLE `tbl_messages`
-  ADD PRIMARY KEY (`message_id`);
+ ADD PRIMARY KEY (`message_id`);
 
 --
 -- Indexes for table `tbl_notes`
 --
 ALTER TABLE `tbl_notes`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_payments`
 --
 ALTER TABLE `tbl_payments`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `client_id` (`client_id`);
+ ADD PRIMARY KEY (`id`), ADD KEY `client_id` (`client_id`);
 
 --
 -- Indexes for table `tbl_settings`
 --
 ALTER TABLE `tbl_settings`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_transaction_history`
+--
+ALTER TABLE `tbl_transaction_history`
+ ADD PRIMARY KEY (`transaction_id`);
 
 --
 -- Indexes for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_user_roles`
 --
 ALTER TABLE `tbl_user_roles`
-  ADD PRIMARY KEY (`user_role_id`);
+ ADD PRIMARY KEY (`user_role_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -488,77 +529,82 @@ ALTER TABLE `tbl_user_roles`
 -- AUTO_INCREMENT for table `tbl_bank_account`
 --
 ALTER TABLE `tbl_bank_account`
-  MODIFY `bank_acc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+MODIFY `bank_acc_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `tbl_client_histories`
 --
 ALTER TABLE `tbl_client_histories`
-  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tbl_expenses`
 --
 ALTER TABLE `tbl_expenses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tbl_expense_types`
 --
 ALTER TABLE `tbl_expense_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tbl_final_amount`
 --
 ALTER TABLE `tbl_final_amount`
-  MODIFY `final_amount_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `final_amount_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `tbl_incomes`
 --
 ALTER TABLE `tbl_incomes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tbl_income_types`
 --
 ALTER TABLE `tbl_income_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tbl_medias`
 --
 ALTER TABLE `tbl_medias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `tbl_members`
 --
 ALTER TABLE `tbl_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `tbl_messages`
 --
 ALTER TABLE `tbl_messages`
-  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tbl_notes`
 --
 ALTER TABLE `tbl_notes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tbl_payments`
 --
 ALTER TABLE `tbl_payments`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `tbl_settings`
 --
 ALTER TABLE `tbl_settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=755;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=755;
+--
+-- AUTO_INCREMENT for table `tbl_transaction_history`
+--
+ALTER TABLE `tbl_transaction_history`
+MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `tbl_user_roles`
 --
 ALTER TABLE `tbl_user_roles`
-  MODIFY `user_role_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+MODIFY `user_role_id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

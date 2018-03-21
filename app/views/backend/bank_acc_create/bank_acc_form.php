@@ -12,7 +12,7 @@ echo form_open('',  $form_attrib, '');?>
 	<div class="row">
 		<div class="col-sm-8">
 			<div class="form-group">
-				<label>Bank Name</label>
+				<label>Bank Name <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup></label>
 				<input type="text" name="bank_name" placeholder="Enter Bank Name" class="form-control" required >
 			</div>
 		</div>
@@ -21,7 +21,7 @@ echo form_open('',  $form_attrib, '');?>
 	<div class="row">
 		<div class="col-sm-8">
 			<div class="form-group">
-				<label>Branch Name</label>
+				<label>Branch Name <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup></label>
 				<input type="text" name="branch_name" placeholder="Enter Branch Name" class="form-control" required>
 			</div>
 		</div>
@@ -30,13 +30,13 @@ echo form_open('',  $form_attrib, '');?>
 	<div class="row">
 		<div class="col-sm-8">
 			<div class="form-group">
-				<label>Bank Account Name</label>
+				<label>Bank Account Name <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup></label>
 				<input type="text" name="acc_name" placeholder="Enter Bank Account Name" class="form-control" required>
 			</div>
 		</div>
 		<div class="col-sm-8">
 			<div class="form-group">
-				<label>Account Number</label>
+				<label>Account Number <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup></label>
 				<input type="text" name="acc_number" placeholder="Enter Bank Account Number" class="form-control">
 			</div>
 		</div>
