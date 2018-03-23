@@ -3,45 +3,70 @@
 
 <form id="PaymentForm" name="form" method="post" action="<?php echo base_url($admin_path);?>/payment/bill/insert" enctype="multipart/form-data" onsubmit='return checkPayment()'>
 
-                    
+
     <div class="col-sm-8">
         <div class="row">
-
-            <div class="col-sm-4">
+<!--             <div class="col-sm-12">
                 <div class="form-group">
                     <label>Member ID</label>
                     <select name="client_id" id="client_id" class="" onchange="clientDetails()" style="width: 100%;" required>
-                    <option value="">Select Member</option>
-                    <?php foreach($clients as $client){?>
-                    <option value="<?php echo $client->id;?>"><?php echo $client->client_id;?></option>
-                    <?php } ?>
+                        <option value="">Select Member</option>
+                        <?php foreach($clients as $client){?>
+                        <option value="<?php echo $client->id;?>"><?php echo $client->client_id;?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div> -->
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label >Select Member <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup>
+                    </label>
+                    <input type="text" autocomplete="off" name="member_name" placeholder="Select Member" id="member_select" class="form-control" required>
+                    <span class="help-block" id="member_help_block" ></span>
+                    <input type="hidden" autocomplete="off" name="client_id"  class="form-control">
+                    <table class="table table-condensed table-hover table-bordered clickable" id="member_select_result" style="position: absolute;z-index: 10;background-color: #fff;width: 92%">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label >Payment Type <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup></label>
+                    <select name="payment_type"  class="form-control" style="width: 100%;" required>
+                        <!-- <option value="">Select Typr</option> -->
+                        <option value="Deposit">Deposit</option>
+                        <option value="Profit Distribution">Profit Distribution</option>
+                        <option value="Credit Adjust">Adjust (Credit)</option>
+                        <option value="Debit Adjust">Adjust (Debit)</option>
                     </select>
                 </div>
             </div>
-            <div class="col-sm-4">
+        </div>
+        <div class="row" id="regular_amt">
+            <div class="col-sm-12">
                 <div class="form-group">
-                    <label class="amount_label">Amount</label>
+                    <label class="amount_label">Amount <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup></label>
                     <input type="number" name="amount" id="amount" class="form-control" step="any" required>
                 </div>
             </div>
-            <div class="col-sm-4">
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
                 <div class="form-group">
-                    <label>Payment Date</label>
+                    <label>Payment Date <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup></label>
                     <input type="text" name="payment_date" id="payment_date" placeholder="Enter payment date" class="form-control" value="<?php echo isset($_GET['payment_date'])?$_GET['payment_date']:date('Y-m-d');?>" required>
                 </div>                
             </div> 
-            
-                
         </div>
         <div class="row">
-            
             <div class="col-sm-12">
                 <div class="form-group">
                     <label>Note</label>
                     <textarea name="summary" class="form-control"></textarea>
                 </div>
             </div> 
-         
+
         </div>
         
         <div class="row">
@@ -64,6 +89,30 @@
 </form>
 <div class="billing_table"></div>
 <script type="text/javascript">
+    var timer;
+    $("#member_select").keyup(function(event) 
+    {
+        $("#memberacc_select_result").show();
+        $("#memberacc_select_result").html('');
+        clearTimeout(timer);
+        timer = setTimeout(function() 
+        {
+            var search_member = $("#member_select").val();
+            var html = '';
+            $.post('<?php echo site_url(); ?>admin/Payment/search_member_by_name',{q: search_member}, function(data, textStatus, xhr) {
+                data = JSON.parse(data);
+                $.each(data, function(index, val) {
+                    html+= '<tr><td data="'+val.id+'">'+val.client_id+'</td></tr>';
+                });
+                $("#member_select_result").html(html);
+            });
+        }, 500);
+    });
+    $("#member_select_result").on('click', 'td', function(event) {
+        $('input[name="member_name"]').val($(this).text());
+        $('input[name="client_id"]').val($(this).attr('data'));
+        $("#member_select_result").hide();
+    });
     // To check payment is already paid this month or not
     var isAnyPaidThisMonth = 0;
     function checkPayment(){
@@ -135,9 +184,9 @@
     });
 </script>
 <style type="text/css">
-    
-    .payment_summary { width: 100%; height: 100%; background-color: #fff; color: #000; min-height: 200px; padding:10px; }
-    .payment_summary h3 { margin: 0 0 5px 0; padding-top: 0; }
-    .payment_details h5 { margin:1px; }
+
+.payment_summary { width: 100%; height: 100%; background-color: #fff; color: #000; min-height: 200px; padding:10px; }
+.payment_summary h3 { margin: 0 0 5px 0; padding-top: 0; }
+.payment_details h5 { margin:1px; }
 
 </style>

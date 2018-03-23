@@ -45,14 +45,14 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-               
+                
                 <tbody>
                     <?php 
                     $total_balance = 0;
                     foreach ($lists as $key => $value) { ?>
                     <?php          	
-                    	 
-                        $total_balance = $total_balance + $value->total_amount;                        
+                    
+                    $total_balance = $total_balance + $value->total_amount;                        
                     ?>
                     <tr class="">
                         <td><?php echo $value->client_id ?></td>
@@ -64,16 +64,16 @@
                             
                             <div class="dropdown">
                               <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-cog" aria-hidden="true"></i>
-                              <span class="caret"></span></button>
-                              <ul class="dropdown-menu pull-right" style="min-width: auto;">
-                                <!-- <li><a class="" href="<?php echo base_url($admin_path) ?>/payment/bill/details/<?php echo $value->id ?>">Details</a> </li> -->
-                                <li><a class="" href="<?php echo base_url($admin_path) ?>/payment/statement?client_id=<?php echo $value->id ?>">Details</a> </li>
-                              </ul>
+                                  <span class="caret"></span></button>
+                                  <ul class="dropdown-menu pull-right" style="min-width: auto;">
+                                    <!-- <li><a class="" href="<?php echo base_url($admin_path) ?>/payment/bill/details/<?php echo $value->id ?>">Details</a> </li> -->
+                                    <li><a class="" href="<?php echo base_url($admin_path) ?>/payment/statement?client_id=<?php echo $value->id ?>">Details</a> </li>
+                                </ul>
                             </div>                           
                             
                         </td>
                     </tr>
-                        
+                    
                     <?php } ?>
                 </tbody>
                 <tfoot>
@@ -101,6 +101,6 @@
     });
 </script>
 <style type="text/css">
-	.Deleted td { background-color: #ce9696!important; }
-    .option_checkbox { float: right; }
+.Deleted td { background-color: #ce9696!important; }
+.option_checkbox { float: right; }
 </style>

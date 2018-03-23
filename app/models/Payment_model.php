@@ -35,19 +35,6 @@ class Payment_model extends MY_Model {
         return $this->db->get($this->table)->result();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    
     public function get_payment($id="")
     {
         $this->db->where("id",$id);
@@ -57,11 +44,6 @@ class Payment_model extends MY_Model {
         return $query->row();
     }
 
-    
-
-
-
-
     public function get_payments($filter_data=array())
     {
 
@@ -70,7 +52,9 @@ class Payment_model extends MY_Model {
         */
         $client_ids = array();
 
-        $this->db->select('sum(amount) total_amount, sum(discount) total_discount, (select name from tbl_users u where u.id=p.added_by) as added_user, m.*');
+        $this->db->select('sum(amount) total_amount,sum(discount) total_discount, (select name from tbl_users u where u.id=p.added_by) as added_user, m.*');
+        // $this->db->select("sum(amount) as new_amt", FALSE);
+
         $this->db->join('tbl_members m','p.client_id=m.id');
 
         // $this->db->where("cn.status>",0);
@@ -122,10 +106,6 @@ class Payment_model extends MY_Model {
         return $query->result();
     }
 
-
-
-
-
     public function get_cur_month_payment($client_id, $cur_year='', $cur_month='', $amount_only=true){
         $cur_year = $cur_year=='' ? date('Y') : $cur_year;
         $cur_month = $cur_month=='' ? date('m') : $cur_month;
@@ -152,11 +132,11 @@ class Payment_model extends MY_Model {
     }
 
     public function get_date_range_payment($client_id='', $from_date='', $to_date='', $billing_type=''){
-        
+
         $this->db->select('*, (SELECT DISTINCT name FROM tbl_users WHERE tbl_users.id=bill_collector) as collector');
 
         if($client_id != '')
-        $this->db->where('client_id', $client_id);
+            $this->db->where('client_id', $client_id);
 
         if($from_date != '' && $to_date != ''){
             $this->db->where('billing_date >=', $from_date);
@@ -166,14 +146,14 @@ class Payment_model extends MY_Model {
         if( $billing_type != '')
         $this->db->where('billing_type', $billing_type); // type bill 2, 3 as advance
 
-        $this->db->order_by('payment_id', 'DESC');
-        $query = $this->db->get($this->payment_table);
-        return $query->result();
-    }
+    $this->db->order_by('payment_id', 'DESC');
+    $query = $this->db->get($this->payment_table);
+    return $query->result();
+}
 
-    public function get_con_recon_payment($client_id, $bill_type = 0){
-        $this->db->select('*');
-        $this->db->where('client_id', $client_id);
+public function get_con_recon_payment($client_id, $bill_type = 0){
+    $this->db->select('*');
+    $this->db->where('client_id', $client_id);
         $this->db->where('billing_type = $bill_type', null, false); // 0 connection payment
         $this->db->order_by('payment_id', 'DESC');
         $query = $this->db->get($this->payment_table);
@@ -201,7 +181,7 @@ class Payment_model extends MY_Model {
             sum(case when(billing_date>='$from_date' and billing_date<='$to_date' and cn.status<>2) then amount+discount else 0 end) paid_none_active_user_till_todate,
             sum(case when(billing_date<='$to_date' and cn.status<>2) then monthly_bill else 0 end) total_billed_none_active_user,
             sum(case when(billing_date<='$to_date' and cn.status<>2) then amount+discount else 0 end) total_paid_none_active_user
-        ");
+            ");
 
         $this->db->join('tbl_clients cn','tbl_payments.client_id=cn.id');
         // $this->db->where('cn.status<>', 2);
@@ -303,74 +283,74 @@ class Payment_model extends MY_Model {
         if( isset($filter_data['billing_type']) && !empty($filter_data['billing_type']) )
         {
 
-             $this->db->where("billing_type", $filter_data['billing_type']);
+           $this->db->where("billing_type", $filter_data['billing_type']);
         }// connection bill
         elseif ( isset($filter_data['billing_type']) && $filter_data['billing_type']=='0' ){
-             $this->db->where("billing_type=0");
-        }
+           $this->db->where("billing_type=0");
+       }
 
         // Package
-        if( isset($filter_data['package_id']) && !empty($filter_data['package_id']) )
-        {
-            $this->db->join('tbl_client_packages pk','pk.client_id=cn.id', 'left');
-            $this->db->where("package_id", $filter_data['package_id']);
-        }
+       if( isset($filter_data['package_id']) && !empty($filter_data['package_id']) )
+       {
+        $this->db->join('tbl_client_packages pk','pk.client_id=cn.id', 'left');
+        $this->db->where("package_id", $filter_data['package_id']);
+    }
 
         // status
-        if( isset($filter_data['status']) && !empty($filter_data['status']) )
-        {
-            $this->db->where("cn.status", $filter_data['status']);
-        }
+    if( isset($filter_data['status']) && !empty($filter_data['status']) )
+    {
+        $this->db->where("cn.status", $filter_data['status']);
+    }
 
         // Address
-        if( isset($filter_data['address']) && !empty($filter_data['address']) )
-        {
-            $this->db->where("address", $filter_data['address']);
-        }
+    if( isset($filter_data['address']) && !empty($filter_data['address']) )
+    {
+        $this->db->where("address", $filter_data['address']);
+    }
 
         // Zone
-        if( isset($filter_data['zone']) && !empty($filter_data['zone']) )
-        {
-            $this->db->where("zone", $filter_data['zone']);
-        }
+    if( isset($filter_data['zone']) && !empty($filter_data['zone']) )
+    {
+        $this->db->where("zone", $filter_data['zone']);
+    }
 
         // Floor
-        if( isset($filter_data['floor']) && !empty($filter_data['floor']) )
-        {
-            $this->db->where("floor", $filter_data['floor']);
-        }
+    if( isset($filter_data['floor']) && !empty($filter_data['floor']) )
+    {
+        $this->db->where("floor", $filter_data['floor']);
+    }
 
         // Apartment
-        if( isset($filter_data['apartment']) && !empty($filter_data['apartment']) )
-        {
-            $this->db->where("apartment", $filter_data['apartment']);
-        }
+    if( isset($filter_data['apartment']) && !empty($filter_data['apartment']) )
+    {
+        $this->db->where("apartment", $filter_data['apartment']);
+    }
 
         // Book No
-        if( isset($filter_data['book_no']) && !empty($filter_data['book_no']) )
-        {
-            $this->db->where("book_no", $filter_data['book_no']);
-        }
+    if( isset($filter_data['book_no']) && !empty($filter_data['book_no']) )
+    {
+        $this->db->where("book_no", $filter_data['book_no']);
+    }
 
         // Name/Mobile
-        if( isset($filter_data['txtInput']) && !empty($filter_data['txtInput']) )
-        {
-            $this->db->like("full_name", $filter_data['txtInput']);
-            $this->db->or_like("mobile", $filter_data['txtInput']);
-            $this->db->or_like("summary", $filter_data['txtInput']);
-        }
+    if( isset($filter_data['txtInput']) && !empty($filter_data['txtInput']) )
+    {
+        $this->db->like("full_name", $filter_data['txtInput']);
+        $this->db->or_like("mobile", $filter_data['txtInput']);
+        $this->db->or_like("summary", $filter_data['txtInput']);
+    }
 
 
-        if( isset($filter_data['collector']) && !empty($filter_data['collector']) )
-        {
-            $this->db->where("bill_collector", $filter_data['collector']);
-        }
+    if( isset($filter_data['collector']) && !empty($filter_data['collector']) )
+    {
+        $this->db->where("bill_collector", $filter_data['collector']);
+    }
 
 
-        if( !empty($client_ids) && $is_due_or_adv ){
-            $this->db->where_in('cn.id', $client_ids);
-        }
-        elseif( empty($client_ids) && $is_due_or_adv ){
+    if( !empty($client_ids) && $is_due_or_adv ){
+        $this->db->where_in('cn.id', $client_ids);
+    }
+    elseif( empty($client_ids) && $is_due_or_adv ){
             $this->db->where('cn.id<', 1); // to not show any client
         }
 
@@ -469,7 +449,7 @@ class Payment_model extends MY_Model {
                 $total_monthly_billed       += $value->monthly_bill;
                 $total_footer_billed        += $total_billed;
                 $total_monthly_paid         += $value->monthly_paid;
-               
+
                 $total_all_paid             += $total_paid;
                 $total_monthly_discount     += $value->discount;
                 $total_monthly_other_billed += $value->adj_bill;
@@ -710,7 +690,7 @@ class Payment_model extends MY_Model {
         $this->db->join($this->client_table, $this->client_table.'.id='.$this->payment_table.'.client_id', 'inner');
 
         if($client_id != '')
-        $this->db->where($this->payment_table.'.client_id', $client_id);
+            $this->db->where($this->payment_table.'.client_id', $client_id);
 
         if($from_date != '' && $to_date != ''){
             $this->db->where('billing_date >=', $from_date);
@@ -752,13 +732,37 @@ class Payment_model extends MY_Model {
             return (object)array('g_month'=>date('m'), 'g_year'=>date('Y'));
     }
 
+    public function get_cashbook_amount()
+    {
+      $this->db->select('cashbook_amount');
+      $this->db->from('tbl_final_amount');
+      return $this->db->get()->row_array();
+  }
+
+  public function update_cashbook_amt($updated_amt)
+  {
+     return $this->db->update('tbl_final_amount', $updated_amt);
+
+ }
+
+ public function search_member_info($text)
+ {
+    $this->db->select('id,CONCAT(client_id," -- ",name) as client_id', FALSE);
+    $this->db->from('tbl_members');
+    $this->db->like('client_id', $text, 'both');
+    $this->db->or_like('name', $text, 'both');
+    $this->db->or_like('mobile', $text, 'both');
+    $this->db->where('status', 1);
+    return $this->db->get()->result();
+}
+
     // helping to debuging
-    function pr($data){
-        echo "<pre>";
-        print_r($data);
-        echo "</pre>";
-    }
-    
-    
-   
+function pr($data){
+    echo "<pre>";
+    print_r($data);
+    echo "</pre>";
+}
+
+
+
 }

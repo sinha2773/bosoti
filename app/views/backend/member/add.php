@@ -53,16 +53,16 @@
                 </div>
             </div>
             <div class="row">
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label>Gender</label>
-                    <select name="gender" class="form-control">
-                    <option  value="male">Male</option>
-                    <option  value="female">Female</option>
-                    </select>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select name="gender" class="form-control">
+                            <option  value="male">Male</option>
+                            <option  value="female">Female</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
 
         <div class="row">
@@ -99,7 +99,7 @@
                     $member_id = $this->member_model->getMemberNewId();
                     ?>
                     <label>Member ID</label>
-                    <input type="text" name="mobile" value="<?php echo $member_id;?>" placeholder="Enter your member No" class="form-control" required>
+                    <input type="text" name="client_id" value="<?php echo $member_id;?>" placeholder="Enter your member No" class="form-control" required>
                 </div>
             </div>
             <div class="col-sm-4">
@@ -276,15 +276,24 @@
         </div>
 
         <div class="col-sm-12">
-                <div class="form-group">
-                    <h3>Nominee relationship</h3>
-                    <input type="text" name="nominee_relationship" placeholder="Enter Nominee relationship" class="form-control">
-                </div>
+            <div class="form-group">
+                <h3>Nominee relationship</h3>
+                <input type="text" name="nominee_relationship" placeholder="Enter Nominee relationship" class="form-control">
+            </div>
         </div>
         <div class="form-group">
             <input checked="true" type="radio" name="status" value="1"> Enable  
             <input type="radio" name="status" value="0">  Disable
         </div>
+        <div class="form-group">
+            <input  type="radio" name="member_status" value="New"> New Member  
+            <input type="radio" name="member_status" value="Reference">  Reference
+        </div>
+        <div class="form-group" id="ref_member_id" style="display: none">
+            <label>Member ID</label>
+            <input type="text" name="ref_mem_id" placeholder="Enter Reference Member ID" class="form-control">
+        </div>
+
     </div>
     <div id="widget-grid" class="col-sm-3">       
 
@@ -305,7 +314,7 @@
                     </p>
                 </div>
             </div>
-        
+            
         </div>
 
     </div>
@@ -331,7 +340,7 @@
                     </p>
                 </div>
             </div>
-        
+            
         </div>
 
     </div>
@@ -351,6 +360,16 @@
             changeYear: true,
         });
     });
-</script>
+
+    $('input:radio[name="member_status"]').change(
+        function(){
+            if(this.value == "Reference"){
+                $('#ref_member_id').show();
+            }
+            else{
+              $('#ref_member_id').hide();
+          }
+      });
+  </script>
 
 

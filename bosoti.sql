@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2018 at 08:56 PM
+-- Generation Time: Mar 23, 2018 at 07:48 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `tbl_final_amount` (
 --
 
 INSERT INTO `tbl_final_amount` (`final_amount_id`, `total_amount`, `cashbook_amount`, `bank_amount`) VALUES
-(1, 0, 43500, 0);
+(1, 0, 49890, 0);
 
 -- --------------------------------------------------------
 
@@ -241,14 +241,18 @@ CREATE TABLE IF NOT EXISTS `tbl_members` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_members`
 --
 
 INSERT INTO `tbl_members` (`id`, `client_id`, `name`, `mobile`, `email`, `gender`, `fathername`, `mothername`, `spousename`, `date_of_birth`, `nid`, `occupation`, `education`, `religion`, `nationality`, `admission_date`, `blood_group`, `permanent_address`, `village`, `post_office`, `police_station`, `district`, `present_address`, `p_village`, `p_post_office`, `p_police_station`, `p_district`, `nominee_identity`, `n_name`, `n_fathername`, `n_mothername`, `n_date_of_birth`, `n_nid`, `n_permanent_address`, `n_village`, `n_post_office`, `n_police_station`, `n_district`, `n_present_address`, `np_village`, `np_post_office`, `np_police_station`, `np_district`, `nominee_relationship`, `summary`, `media_id`, `media_id2`, `added_by`, `status`, `created`, `updated`) VALUES
-(2, 'BOSOTI_1', 'Rahim uddin', '12345678999', NULL, 0, 'Jone Due', 'Mon Name', 'Husband name', '2018-03-07', '1222333444445555', 'Teacher', 'Msc', 'Other', 'Bangladesh', '2018-03-13', 'Ab', NULL, 'villagename', 'postoffice', 'policestation', 'dhaka', NULL, 'villpresent', 'postpresent', 'Dhakapresent', 'districtpresent', NULL, 'Nominee name', 'nominee father', 'nominee mother', '2018-03-22', '3338888282882828282', NULL, 'npermanenetadd', 'nomepost', 'nomPolice', 'nom Dis', NULL, 'no vill', 'no post', 'no police', 'no dis', 'nomiee relationship', '', 5, 6, 0, 1, '2018-03-03 19:56:23', '2018-03-10 15:05:23');
+(2, 'BOSOTI_1', 'Rahim uddin', '12345678999', NULL, 0, 'Jone Due', 'Mon Name', 'Husband name', '2018-03-07', '1222333444445555', 'Teacher', 'Msc', 'Other', 'Bangladesh', '2018-03-13', 'Ab', NULL, 'villagename', 'postoffice', 'policestation', 'dhaka', NULL, 'villpresent', 'postpresent', 'Dhakapresent', 'districtpresent', NULL, 'Nominee name', 'nominee father', 'nominee mother', '2018-03-22', '3338888282882828282', NULL, 'npermanenetadd', 'nomepost', 'nomPolice', 'nom Dis', NULL, 'no vill', 'no post', 'no police', 'no dis', 'nomiee relationship', '', 5, 6, 0, 1, '2018-03-03 19:56:23', '2018-03-10 15:05:23'),
+(3, '', 'Test Member Ahmed', 'BOSOTI_2', NULL, 0, 'A', 'B', 'B', '2018-03-13', 'asdasdasd', 'sdasd', 'asda', 'dasd', 'asdas', '2018-03-13', 'asdasd', NULL, 'asdas', 'dasd', 'asdasd', 'asd', NULL, 'asda', 'sdas', 'sdasd', 'da', NULL, 'asda', 'sda', 'asdas', '2018-03-06', 'asdasd', NULL, 'asdas', 'dasd', 'asd', 'asd', NULL, 'asdas', 'dasd', 'sdasd', 'asda', 'asdasd', '', 0, 0, 0, 1, '2018-03-23 01:39:39', '2018-03-23 01:39:39'),
+(4, '', 'member 3', 'BOSOTI_3', NULL, 0, 'asda', 'sdas', 'asdas', '2018-03-12', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 0, 1, '2018-03-23 02:11:18', '2018-03-23 02:11:18'),
+(5, '', 'asdasd', 'BOSOTI_2', NULL, 0, 'asdas', 'dasd', 'asdasd', '2018-03-13', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 0, 1, '2018-03-23 02:15:27', '2018-03-23 02:15:27'),
+(6, 'BOSOTI_2', 'asdasd', '015', NULL, 0, 'asdasd', 'asdasd', 'asdasd', '2018-03-13', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '2018-03-13', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 0, 1, '2018-03-23 02:17:17', '2018-03-23 02:17:17');
 
 -- --------------------------------------------------------
 
@@ -289,6 +293,7 @@ CREATE TABLE IF NOT EXISTS `tbl_payments` (
 `id` bigint(20) NOT NULL,
   `client_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
+  `payment_type` varchar(50) NOT NULL,
   `discount` decimal(10,2) NOT NULL,
   `bill` decimal(10,2) NOT NULL,
   `billing_date` date NOT NULL,
@@ -303,17 +308,24 @@ CREATE TABLE IF NOT EXISTS `tbl_payments` (
   `client_status` tinyint(1) NOT NULL,
   `created` datetime NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_payments`
 --
 
-INSERT INTO `tbl_payments` (`id`, `client_id`, `amount`, `discount`, `bill`, `billing_date`, `payment_date`, `payment_day`, `payment_month`, `payment_year`, `added_by`, `book_no`, `summary`, `bill_status`, `client_status`, `created`, `updated`) VALUES
-(1, 2, '200.00', '0.00', '0.00', '0000-00-00', '2018-03-10', 10, 3, 2018, 8, '', 'test', 0, 0, '2018-03-10 18:31:34', '2018-03-10 12:31:34'),
-(2, 2, '300.00', '0.00', '0.00', '0000-00-00', '2018-03-17', 17, 3, 2018, 8, '', '', 0, 0, '2018-03-17 16:37:52', '2018-03-17 10:37:52'),
-(3, 2, '599.00', '0.00', '0.00', '0000-00-00', '2018-03-19', 19, 3, 2018, 8, '', '', 0, 0, '2018-03-19 18:57:24', '2018-03-19 12:57:24'),
-(4, 2, '11.00', '0.00', '0.00', '0000-00-00', '2018-03-16', 16, 3, 2018, 8, '', '', 0, 0, '2018-03-19 20:27:35', '2018-03-19 14:27:35');
+INSERT INTO `tbl_payments` (`id`, `client_id`, `amount`, `payment_type`, `discount`, `bill`, `billing_date`, `payment_date`, `payment_day`, `payment_month`, `payment_year`, `added_by`, `book_no`, `summary`, `bill_status`, `client_status`, `created`, `updated`) VALUES
+(1, 2, '200.00', '', '0.00', '0.00', '0000-00-00', '2018-03-10', 10, 3, 2018, 8, '', 'test', 0, 0, '2018-03-10 18:31:34', '2018-03-10 12:31:34'),
+(2, 2, '300.00', '', '0.00', '0.00', '0000-00-00', '2018-03-17', 17, 3, 2018, 8, '', '', 0, 0, '2018-03-17 16:37:52', '2018-03-17 10:37:52'),
+(3, 2, '599.00', '', '0.00', '0.00', '0000-00-00', '2018-03-19', 19, 3, 2018, 8, '', '', 0, 0, '2018-03-19 18:57:24', '2018-03-19 12:57:24'),
+(4, 2, '11.00', '', '0.00', '0.00', '0000-00-00', '2018-03-16', 16, 3, 2018, 8, '', '', 0, 0, '2018-03-19 20:27:35', '2018-03-19 14:27:35'),
+(5, 2, '500.00', 'Deposit', '0.00', '0.00', '0000-00-00', '2018-03-22', 22, 3, 2018, 8, '', 'test ', 0, 0, '2018-03-23 00:07:57', '2018-03-22 18:07:57'),
+(6, 2, '5000.00', 'Profit Distribution', '0.00', '0.00', '0000-00-00', '2018-03-22', 22, 3, 2018, 8, '', 'cash', 0, 0, '2018-03-23 00:08:35', '2018-03-22 18:08:35'),
+(7, 2, '1000.00', 'Credit Adjust', '0.00', '0.00', '0000-00-00', '2018-03-22', 22, 3, 2018, 8, '', '', 0, 0, '2018-03-23 00:09:01', '2018-03-22 18:09:01'),
+(8, 2, '2000.00', 'Debit Adjust', '0.00', '0.00', '0000-00-00', '2018-03-22', 22, 3, 2018, 8, '', 'tsttst', 0, 0, '2018-03-23 00:09:25', '2018-03-22 18:09:25'),
+(9, 2, '2000.00', 'Profit Distribution', '0.00', '0.00', '0000-00-00', '2018-03-23', 23, 3, 2018, 8, '', 'test', 0, 0, '2018-03-23 00:34:53', '2018-03-22 18:34:53'),
+(10, 2, '610.00', 'Debit Adjust', '0.00', '0.00', '0000-00-00', '2018-03-23', 23, 3, 2018, 8, '', 'test', 0, 0, '2018-03-23 01:12:14', '2018-03-22 19:12:14'),
+(11, 3, '500.00', 'Profit Distribution', '0.00', '0.00', '0000-00-00', '2018-03-23', 23, 3, 2018, 8, '', 'asdasd', 0, 0, '2018-03-23 01:39:54', '2018-03-22 19:39:54');
 
 -- --------------------------------------------------------
 
@@ -569,7 +581,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 -- AUTO_INCREMENT for table `tbl_members`
 --
 ALTER TABLE `tbl_members`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `tbl_messages`
 --
@@ -584,7 +596,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `tbl_payments`
 --
 ALTER TABLE `tbl_payments`
-MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `tbl_settings`
 --
