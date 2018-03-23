@@ -9,9 +9,11 @@ class Income extends MY_Controller {
 			redirect($this->admin_path, "refresh");
 		}
 
+        $this->load->model('Income_model');
+
         //$this->load->driver("cache", array("adapter"=>"file"));
-	}	
-	
+    }	
+
     // Income Report
     public function incomeRepost($inc_type='all', $from_date='', $to_date=''){
 
@@ -40,7 +42,44 @@ class Income extends MY_Controller {
         $data["content"] = $this->load->view($this->theme."income/report",$data,TRUE);
         $this->load->view($this->theme.'layout',$data);
     }
-	
+
+
+    function save_receipts_voucher()
+    {
+
+        $data = $this->input->post();
+        $data['user_id']=$this->session->userdata("user_id");
+        unset($data['acc_number']);
+        $this->db->trans_start();
+        $this->Income_model->save_receipts_voucher_info($data);
+        if($data['payment_method'] == "cash"){
+            $current_cashbook_amt = $this->Income_model->get_cashbook_amt();
+            $updated_data= array(
+                'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']+$data['amount']  ,
+            );
+            $this->Income_model->update_cashbook_balance($updated_data);
+        }
+        else{
+            $bank_acc_id= $data['bank_acc_id'];
+            $curr_acc_amt=  $this->Income_model->get_bank_acc_amt($bank_acc_id);
+            $updated_data= array(
+                'balance' =>$curr_acc_amt['balance']+$data['amount']  ,
+            );
+
+            $this->Income_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+        }
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->session->set_flashdata('flashMessage', array('danger', "Sorry, Receipts Voucher Added Failed."));                   
+        }
+        else
+        {
+            $this->session->set_flashdata('flashMessage', array('success', "Receipts Voucher Added Successfully."));                   
+        }
+        redirect('/admin/common/add/income');   
+
+    }
 }
 
 /* End of file welcome.php */

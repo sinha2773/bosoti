@@ -46,33 +46,65 @@ class Expense_model extends MY_Model {
             $expenses = $this->get_siblings_expense_type($exp_type);
         }
         if(!empty($expenses))
-        foreach($expenses as $expense){
-            $expense_types[] = array('id'=>$expense->id, 'name'=>$expense->title);
-        }
+            foreach($expenses as $expense){
+                $expense_types[] = array('id'=>$expense->id, 'name'=>$expense->title);
+            }
 
 
-        if( !empty($expense_types) ){
-            foreach($expense_types as $expense){
-                $this->db->select('*');
-                $this->db->from($this->expense_table);
-                $this->db->where('status', 1);
+            if( !empty($expense_types) ){
+                foreach($expense_types as $expense){
+                    $this->db->select('*');
+                    $this->db->from($this->expense_table);
+                    $this->db->where('status', 1);
 
-                if($from_date != '' && $to_date != ''){
+                    if($from_date != '' && $to_date != ''){
                     // $this->db->where('expense_date >=', $from_date);
                     // $this->db->where('expense_date <=', $to_date);
-                    $this->db->where("DATE_FORMAT(created,'%Y-%m-%d') >=", $from_date);
-                    $this->db->where("DATE_FORMAT(created,'%Y-%m-%d') <=", $to_date);
-                }
+                        $this->db->where("DATE_FORMAT(created,'%Y-%m-%d') >=", $from_date);
+                        $this->db->where("DATE_FORMAT(created,'%Y-%m-%d') <=", $to_date);
+                    }
 
-                $this->db->where('extype_id', $expense['id']);
-                $query = $this->db->get();
-                $expense_list[] = array('id'=>$expense['id'], 'name'=>$expense['name'], 'list'=>$query->result());
+                    $this->db->where('extype_id', $expense['id']);
+                    $query = $this->db->get();
+                    $expense_list[] = array('id'=>$expense['id'], 'name'=>$expense['name'], 'list'=>$query->result());
+                }
             }
+            return $expense_list;
         }
-        return $expense_list;
+
+
+        function get_cashbook_amt()
+        {
+         $this->db->select('cashbook_amount');
+         $this->db->from('tbl_final_amount');
+         return $this->db->get()->row_array();
+     }
+
+     function get_bank_acc_amt($bank_acc_id)
+     {
+        $this->db->select('balance');
+        $this->db->from('tbl_bank_account');
+        $this->db->where('bank_acc_id', $bank_acc_id);
+        return $this->db->get()->row_array();
     }
 
-    
+    function update_bank_acc_balance($bank_acc_id,$updated_data)
+    {
+        $this->db->where('bank_acc_id', $bank_acc_id)->update('tbl_bank_account', $updated_data);
+        return $this->db->affected_rows();
+    }
+
+    function update_cashbook_balance($updated_data)
+    {
+        $this->db->update('tbl_final_amount', $updated_data);
+        return $this->db->affected_rows();
+    }
+
+    function save_payment_voucher_info($data)
+    {
+        $this->db->insert('tbl_expenses', $data);
+        return $this->db->affected_rows();
+    }
 
     // helping to debuging
     function pr($data){
@@ -82,5 +114,5 @@ class Expense_model extends MY_Model {
     }
     
     
-   
+
 }

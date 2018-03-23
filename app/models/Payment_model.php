@@ -283,15 +283,15 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
         if( isset($filter_data['billing_type']) && !empty($filter_data['billing_type']) )
         {
 
-           $this->db->where("billing_type", $filter_data['billing_type']);
+         $this->db->where("billing_type", $filter_data['billing_type']);
         }// connection bill
         elseif ( isset($filter_data['billing_type']) && $filter_data['billing_type']=='0' ){
-           $this->db->where("billing_type=0");
-       }
+         $this->db->where("billing_type=0");
+     }
 
         // Package
-       if( isset($filter_data['package_id']) && !empty($filter_data['package_id']) )
-       {
+     if( isset($filter_data['package_id']) && !empty($filter_data['package_id']) )
+     {
         $this->db->join('tbl_client_packages pk','pk.client_id=cn.id', 'left');
         $this->db->where("package_id", $filter_data['package_id']);
     }
@@ -741,18 +741,19 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
 
   public function update_cashbook_amt($updated_amt)
   {
-     return $this->db->update('tbl_final_amount', $updated_amt);
+   return $this->db->update('tbl_final_amount', $updated_amt);
 
- }
+}
 
- public function search_member_info($text)
- {
+public function search_member_info($text)
+{
     $this->db->select('id,CONCAT(client_id," -- ",name) as client_id', FALSE);
     $this->db->from('tbl_members');
     $this->db->like('client_id', $text, 'both');
     $this->db->or_like('name', $text, 'both');
     $this->db->or_like('mobile', $text, 'both');
     $this->db->where('status', 1);
+    $this->db->limit(5);
     return $this->db->get()->result();
 }
 

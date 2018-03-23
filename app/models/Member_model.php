@@ -10,7 +10,7 @@ class Member_model extends MY_Model {
     }
 
     public function getMemberNewId($prefix='BOSOTI_'){
-        
+
         $this->prefix_client = $prefix;
 
         $this->db->select("MAX(CAST(REPLACE(client_id, '".ucwords($this->prefix_client)."','') AS UNSIGNED)) as client_id");
@@ -23,5 +23,32 @@ class Member_model extends MY_Model {
         }else
         return (empty($this->prefix_client))?'':ucwords($this->prefix_client).'1';
     }
-   
+
+
+    public function save_new_member($data)
+    {
+        $this->db->insert('tbl_members', $data);
+        return $this->db->affected_rows();
+    }
+
+    public function collect_all_info($member_id)
+    {
+        $this->db->select('*');
+        $this->db->from('tbl_members');
+        $this->db->where('id', $member_id);
+        return $this->db->get()->row_array();
+    }
+
+    public function save_reference_info($collect_info)
+    {
+        $this->db->insert('tbl_reference_history', $collect_info);
+        return $this->db->affected_rows();
+    }
+
+    public function update_member_info($member_id,$data)
+    {
+        // $this->db->update('table', $data, $condition);
+        $this->db->where('id', $member_id)->update('tbl_members', $data);
+        return $this->db->affected_rows();
+    }
 }

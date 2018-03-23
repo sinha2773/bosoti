@@ -1,4 +1,4 @@
-<form name="form" method="post" action="<?php echo base_url($admin_path);?>/common/save/<?php echo $action;?>" enctype="multipart/form-data">
+<form name="form" method="post" action="<?php echo base_url($admin_path);?>member/save_member" enctype="multipart/form-data">
     <div class="col-sm-9">
         <div class="row">
             <div class="col-sm-8">
@@ -286,12 +286,17 @@
             <input type="radio" name="status" value="0">  Disable
         </div>
         <div class="form-group">
-            <input  type="radio" name="member_status" value="New"> New Member  
-            <input type="radio" name="member_status" value="Reference">  Reference
+            <input  checked="true" type="radio" name="membership_type" value="1"> New Member  
+            <input type="radio" name="membership_type" value="2">  Reference
         </div>
         <div class="form-group" id="ref_member_id" style="display: none">
-            <label>Member ID</label>
-            <input type="text" name="ref_mem_id" placeholder="Enter Reference Member ID" class="form-control">
+            <label >Select Member <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup>
+            </label>
+            <input type="text" autocomplete="off" name="member_name" placeholder="Select Member" id="member_select" class="form-control">
+            <span class="help-block" id="member_help_block" ></span>
+            <input type="hidden" autocomplete="off" name="ref_mem_id"  class="form-control">
+            <table class="table table-condensed table-hover table-bordered clickable" id="member_select_result" style="position: absolute;z-index: 10;background-color: #fff;width: 92%">
+            </table>
         </div>
 
     </div>
@@ -306,7 +311,6 @@
                     <p>
                         <input type="file" class="file_upload1" name="image" accept="image/*" onchange="read_image(event, this.value)"/>
                         <?php $atts = array('width'=> '880','height'=> '450','scrollbars' => 'yes','status' => 'no','resizable' => 'yes','screenx' => '50','screeny' => '10');?>
-                        <?php //echo anchor_popup($admin_path.'media/', '<button type="button" class="btn btn-sm btn-danger browse_file">Browse Media</button>', $atts);?>
                     </p>
                     <p>
                         <input type="hidden" name="media_id" id="media_id" value="">
@@ -314,7 +318,7 @@
                     </p>
                 </div>
             </div>
-            
+
         </div>
 
     </div>
@@ -332,7 +336,6 @@
                     <p>
                         <input type="file" class="file_upload" name="image2" accept="image/*" onchange="read_image(event, this.value, 'reader_image2')"/>
                         <?php $atts = array('width'=> '880','height'=> '450','scrollbars' => 'yes','status' => 'no','resizable' => 'yes','screenx' => '50','screeny' => '10');?>
-                        <?php //echo anchor_popup($admin_path.'media/', '<button type="button" class="btn btn-sm btn-danger browse_file">Browse Media</button>', $atts);?>
                     </p>
                     <p>
                         <input type="hidden" name="media_id2" id="media_id2" value="">
@@ -340,7 +343,7 @@
                     </p>
                 </div>
             </div>
-            
+
         </div>
 
     </div>
@@ -353,6 +356,31 @@
 
 </form>
 <script type="text/javascript">
+    var timer;
+    $("#member_select").keyup(function(event) 
+    {
+        $("#memberacc_select_result").show();
+        $("#memberacc_select_result").html('');
+        clearTimeout(timer);
+        timer = setTimeout(function() 
+        {
+            var search_member = $("#member_select").val();
+            var html = '';
+            $.post('<?php echo site_url(); ?>admin/Payment/search_member_by_name',{q: search_member}, function(data, textStatus, xhr) {
+                data = JSON.parse(data);
+                $.each(data, function(index, val) {
+                    html+= '<tr><td data="'+val.id+'">'+val.client_id+'</td></tr>';
+                });
+                $("#member_select_result").html(html);
+            });
+        }, 500);
+    });
+    $("#member_select_result").on('click', 'td', function(event) {
+        $('input[name="member_name"]').val($(this).text());
+        $('input[name="ref_mem_id"]').val($(this).attr('data'));
+        $("#member_select_result").hide();
+    });
+
     jQuery(document).ready(function(){
         $('#admission_date, .dateofbirth, .nominee_dateofbirth').datepicker({
             dateFormat: 'yy-mm-dd', 
@@ -361,9 +389,9 @@
         });
     });
 
-    $('input:radio[name="member_status"]').change(
+    $('input:radio[name="membership_type"]').change(
         function(){
-            if(this.value == "Reference"){
+            if(this.value == "2"){
                 $('#ref_member_id').show();
             }
             else{

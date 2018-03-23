@@ -8,16 +8,16 @@ class Expense extends MY_Controller {
 		if($this->session->userdata("user_id")==""){
 			redirect($this->admin_path, "refresh");
 		}
-
+        $this->load->model('Expense_model');
         //$this->load->driver("cache", array("adapter"=>"file"));
-	}	
-	
+    }	
+
     // Expense Report
     public function expenseRepost($exp_type='all', $from_date='', $to_date=''){
 
         // if( !$this->master->isPermission('see_expense_report') )
         //     show_404();
-        
+
         $this->load->model('expense_model', 'expense');
         $this->load->model('payment_model', 'payment');
         $data = $this->init("Expense Report");
@@ -40,7 +40,44 @@ class Expense extends MY_Controller {
         $data["content"] = $this->load->view($this->theme."expense/report",$data,TRUE);
         $this->load->view($this->theme.'layout',$data);
     }
-	
+
+    function save_payment_voucher()
+    {
+
+        $data = $this->input->post();
+        $data['user_id']=$this->session->userdata("user_id");
+        unset($data['acc_number']);
+        $this->db->trans_start();
+        $this->Expense_model->save_payment_voucher_info($data);
+        if($data['payment_method'] == "cash"){
+            $current_cashbook_amt = $this->Expense_model->get_cashbook_amt();
+            $updated_data= array(
+                'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']-$data['amount']  ,
+            );
+            $this->Expense_model->update_cashbook_balance($updated_data);
+        }
+        else{
+            $bank_acc_id= $data['bank_acc_id'];
+            $curr_acc_amt=  $this->Expense_model->get_bank_acc_amt($bank_acc_id);
+            $updated_data= array(
+                'balance' =>$curr_acc_amt['balance']-$data['amount']  ,
+            );
+
+            $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+        }
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->session->set_flashdata('flashMessage', array('danger', "Sorry, Payment Voucher Added Failed."));                   
+        }
+        else
+        {
+            $this->session->set_flashdata('flashMessage', array('success', "Payment Voucher Added Successfully."));                   
+        }
+        redirect('/admin/common/add/expense');   
+
+    }
+
 }
 
 /* End of file welcome.php */
