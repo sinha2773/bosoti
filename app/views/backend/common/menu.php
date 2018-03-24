@@ -67,11 +67,30 @@ $fetch_class = $this->router->fetch_class();
 			<?php } ?>
 
 
+			<?php 
+			$payment_sub1 = '';
+			$payment_sub2 = '';
+			$payment_li   = '';
+			if($fetch_class=='bank_acc_create' || $param2=='bank_acc_create'){
+				$payment_sub1 = "style='display:block'";
+				$payment_li = "active open";				
+				$payment_sub2 = "style='display:block'";
+			};
+			if($fetch_class=='bank_transfer' || $param2=='bank_transfer'){
+				$payment_sub1 = "style='display:block'";
+				$payment_li = "active open";				
+				$payment_sub2 = "style='display:block'";
+			};
+			?>
+
 			<li class="<?php echo $payment_li;?>">
 				<a href="#"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Bank Account</span></a>
 				<ul <?php echo $payment_sub1;?>>
 					<li>
 						<a href="<?php echo base_url("admin/bank_acc_create");?>">Add Bank Account</a>
+					</li>
+					<li>
+						<a href="<?php echo base_url("admin/bank_acc_create/bank_accc_list");?>">Bank Accounts List</a>
 					</li>
 					<li>
 						<a href="<?php echo base_url("admin/bank_transfer");?>">Transfer To Bank</a>

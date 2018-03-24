@@ -41,12 +41,12 @@ class Expense extends MY_Controller {
         $this->load->view($this->theme.'layout',$data);
     }
 
-    function save_payment_voucher()
+    public function save_payment_voucher()
     {
 
         $data = $this->input->post();
         $data['user_id']=$this->session->userdata("user_id");
-        unset($data['acc_number']);
+        // unset($data['acc_number']);
         $this->db->trans_start();
         $this->Expense_model->save_payment_voucher_info($data);
         if($data['payment_method'] == "cash"){
@@ -77,6 +77,61 @@ class Expense extends MY_Controller {
         redirect('/admin/common/add/expense');   
 
     }
+
+    public function update_payment_voucher()
+    {
+       $data= $this->input->post();
+       $voucher_id  =$data['id'];
+       $get_previous_amt = $this->Expense_model->get_invoice_info($voucher_id);
+       $diff_amt  = $get_previous_amt['amount'] - $data['amount'];
+       $data['user_id']=$this->session->userdata("user_id");
+        // unset($data['acc_number']);
+       $this->db->trans_start();
+       $this->Expense_model->update_receipts_voucher_info($voucher_id,$data);
+       if($data['payment_method'] == "cash"){
+        $current_cashbook_amt = $this->Expense_model->get_cashbook_amt();
+        $updated_data= array(
+            'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']+$diff_amt,
+        );
+        $this->Expense_model->update_cashbook_balance($updated_data);
+    }
+    else{
+        if($get_previous_amt['bank_acc_id'] == $data['bank_acc_id']){
+            $bank_acc_id= $data['bank_acc_id'];
+            $curr_acc_amt=  $this->Expense_model->get_bank_acc_amt($bank_acc_id);
+            $updated_data= array(
+                'balance' =>$curr_acc_amt['balance']+$diff_amt,
+            );
+            $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+        }
+        else{
+            $bank_acc_id= $data['bank_acc_id'];
+            $curr_acc_amt=  $this->Expense_model->get_bank_acc_amt($bank_acc_id);
+            $updated_data= array(
+                'balance' =>$curr_acc_amt['balance']-$data['amount'],
+            );
+            $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+            $previous_acc= $get_previous_amt['bank_acc_id'];
+            $prev_acc_amt=  $this->Expense_model->get_bank_acc_amt($previous_acc);
+
+            $previou_acc_data = array(
+                'balance' =>$prev_acc_amt['balance']+$get_previous_amt['amount'],
+            );
+            $this->Expense_model->update_prev_bank_acc_balance($previous_acc,$previou_acc_data);
+        }
+
+    }
+    $this->db->trans_complete();
+    if ($this->db->trans_status() === FALSE)
+    {
+        $this->session->set_flashdata('flashMessage', array('danger', "Sorry, Payable Voucher Update Failed."));                   
+    }
+    else
+    {
+        $this->session->set_flashdata('flashMessage', array('success', "Payable Voucher Updated Successfully."));                   
+    }
+    redirect('/admin/common/add/expense');  
+}
 
 }
 

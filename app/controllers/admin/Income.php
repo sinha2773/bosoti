@@ -38,7 +38,7 @@ class Income extends MY_Controller {
         $income_types = $this->master->get_all($this->income_type_table, array('output'=>'result_array'));
         $data['income_types'] = $this->master->buildTree($income_types, 'parent_id', 'id');
         $data['incomes'] = $this->income->get_incomes($inc_type, $from_date, $to_date);
-        //$this->pr($data['incomes']);exit;
+        // $this->pr($data['incomes']);exit;
         $data["content"] = $this->load->view($this->theme."income/report",$data,TRUE);
         $this->load->view($this->theme.'layout',$data);
     }
@@ -49,7 +49,7 @@ class Income extends MY_Controller {
 
         $data = $this->input->post();
         $data['user_id']=$this->session->userdata("user_id");
-        unset($data['acc_number']);
+        // unset($data['acc_number']);
         $this->db->trans_start();
         $this->Income_model->save_receipts_voucher_info($data);
         if($data['payment_method'] == "cash"){
@@ -79,6 +79,61 @@ class Income extends MY_Controller {
         }
         redirect('/admin/common/add/income');   
 
+    }
+
+    public function update_receipts_voucher()
+    {
+        $data= $this->input->post();
+        $voucher_id  =$data['id'];
+        $get_previous_amt = $this->Income_model->get_invoice_info($voucher_id);
+        $diff_amt  = $data['amount']- $get_previous_amt['amount'];
+        $data['user_id']=$this->session->userdata("user_id");
+        // unset($data['acc_number']);
+        $this->db->trans_start();
+        $this->Income_model->update_receipts_voucher_info($voucher_id,$data);
+        if($data['payment_method'] == "cash"){
+            $current_cashbook_amt = $this->Income_model->get_cashbook_amt();
+            $updated_data= array(
+                'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']+$diff_amt,
+            );
+            $this->Income_model->update_cashbook_balance($updated_data);
+        }
+        else{
+            if($get_previous_amt['bank_acc_id'] == $data['bank_acc_id']){
+                $bank_acc_id= $data['bank_acc_id'];
+                $curr_acc_amt=  $this->Income_model->get_bank_acc_amt($bank_acc_id);
+                $updated_data= array(
+                    'balance' =>$curr_acc_amt['balance']+$diff_amt,
+                );
+                $this->Income_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+            }
+            else{
+                $bank_acc_id= $data['bank_acc_id'];
+                $curr_acc_amt=  $this->Income_model->get_bank_acc_amt($bank_acc_id);
+                $updated_data= array(
+                    'balance' =>$curr_acc_amt['balance']+$data['amount'],
+                );
+                $this->Income_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+                $previous_acc= $get_previous_amt['bank_acc_id'];
+                $prev_acc_amt=  $this->Income_model->get_bank_acc_amt($previous_acc);
+
+                $previou_acc_data = array(
+                    'balance' =>$prev_acc_amt['balance']-$get_previous_amt['amount'],
+                );
+                $this->Income_model->update_prev_bank_acc_balance($previous_acc,$previou_acc_data);
+            }
+
+        }
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->session->set_flashdata('flashMessage', array('danger', "Sorry, Receipts Voucher Update Failed."));                   
+        }
+        else
+        {
+            $this->session->set_flashdata('flashMessage', array('success', "Receipts Voucher Updated Successfully."));                   
+        }
+        redirect('/admin/common/add/income');  
     }
 }
 

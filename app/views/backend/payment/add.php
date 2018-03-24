@@ -6,17 +6,6 @@
 
     <div class="col-sm-8">
         <div class="row">
-<!--             <div class="col-sm-12">
-                <div class="form-group">
-                    <label>Member ID</label>
-                    <select name="client_id" id="client_id" class="" onchange="clientDetails()" style="width: 100%;" required>
-                        <option value="">Select Member</option>
-                        <?php foreach($clients as $client){?>
-                        <option value="<?php echo $client->id;?>"><?php echo $client->client_id;?></option>
-                        <?php } ?>
-                    </select>
-                </div>
-            </div> -->
             <div class="col-sm-12">
                 <div class="form-group">
                     <label >Select Member <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup>
@@ -25,6 +14,19 @@
                     <span class="help-block" id="member_help_block" ></span>
                     <input type="hidden" autocomplete="off" name="client_id"  class="form-control">
                     <table class="table table-condensed table-hover table-bordered clickable" id="member_select_result" style="position: absolute;z-index: 10;background-color: #fff;width: 92%">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label >Select Collector <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup>
+                    </label>
+                    <input type="text" autocomplete="off" name="collector_name" placeholder="Select Collector" id="collector_select" class="form-control" required>
+                    <span class="help-block" id="collector_help_block" ></span>
+                    <input type="hidden" autocomplete="off" name="collector_id"  class="form-control">
+                    <table class="table table-condensed table-hover table-bordered clickable" id="collector_select_result" style="position: absolute;z-index: 10;background-color: #fff;width: 92%">
                     </table>
                 </div>
             </div>
@@ -92,8 +94,8 @@
     var timer;
     $("#member_select").keyup(function(event) 
     {
-        $("#memberacc_select_result").show();
-        $("#memberacc_select_result").html('');
+        $("#member_select_result").show();
+        $("#member_select_result").html('');
         clearTimeout(timer);
         timer = setTimeout(function() 
         {
@@ -106,12 +108,36 @@
                 });
                 $("#member_select_result").html(html);
             });
-        }, 500);
+        }, 200);
     });
     $("#member_select_result").on('click', 'td', function(event) {
         $('input[name="member_name"]').val($(this).text());
         $('input[name="client_id"]').val($(this).attr('data'));
         $("#member_select_result").hide();
+    });
+
+    $("#collector_select").keyup(function(event) 
+    {
+        $("#collector_select_result").show();
+        $("#collector_select_result").html('');
+        clearTimeout(timer);
+        timer = setTimeout(function() 
+        {
+            var search_collector = $("#collector_select").val();
+            var html = '';
+            $.post('<?php echo site_url(); ?>admin/Payment/search_collector_by_name',{q: search_collector}, function(data, textStatus, xhr) {
+                data = JSON.parse(data);
+                $.each(data, function(index, val) {
+                    html+= '<tr><td data="'+val.id+'">'+val.name+'</td></tr>';
+                });
+                $("#collector_select_result").html(html);
+            });
+        }, 200);
+    });
+    $("#collector_select_result").on('click', 'td', function(event) {
+        $('input[name="collector_name"]').val($(this).text());
+        $('input[name="collector_id"]').val($(this).attr('data'));
+        $("#collector_select_result").hide();
     });
     // To check payment is already paid this month or not
     var isAnyPaidThisMonth = 0;

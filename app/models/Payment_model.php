@@ -757,6 +757,19 @@ public function search_member_info($text)
     return $this->db->get()->result();
 }
 
+public function search_collector_info($text)
+{
+   $this->db->select('id,CONCAT(name," ",surname) as name', FALSE);
+   $this->db->from('tbl_users');
+   $this->db->where('user_role_id', 4);
+   $this->db->where('status', 1);
+   $this->db->like('name', $text, 'both');
+ // $this->db->or_like('surname', $text, 'both');
+ // $this->db->or_like('mobile', $text, 'both');
+   $this->db->limit(5);
+   return $this->db->get()->result();
+}
+
     // helping to debuging
 function pr($data){
     echo "<pre>";

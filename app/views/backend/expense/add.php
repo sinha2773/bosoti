@@ -104,10 +104,10 @@
 
                             <div class="form-group">
                                 <a href="<?php echo base_url($admin_path);?>/common/get_all/<?php echo $action;?>"><input type="button" class="btn btn-danger" value="Cancel"></a>
-
+<!-- 
                                 <?php if( $this->master->isPermission('save_expense') ){ ?>
                                 <input type="button" onclick="submitForm(0)" class="btn btn-info" value="Save">
-                                <?php } ?>
+                                <?php } ?> -->
 
                                 <?php if( $this->master->isPermission('add_expense') ){ ?>
                                 <input type="button" onclick="submitForm(1)" class="btn btn-primary" value="Add">

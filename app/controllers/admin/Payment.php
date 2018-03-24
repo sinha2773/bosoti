@@ -127,6 +127,17 @@ class Payment extends MY_Controller {
             echo json_encode($this->payment_model->search_member_info($text));
         }
     }
+
+    public function search_collector_by_name()
+    {
+        $text = $this->input->post('q');
+        if($text == null || $text=="") {
+            echo "input field empty";
+        }
+        else{
+            echo json_encode($this->payment_model->search_collector_info($text));
+        }
+    }
     
     
     public function bill($action="list", $id="", $from_date='', $to_date=''){        
@@ -157,6 +168,7 @@ class Payment extends MY_Controller {
 
          $p_data['client_id'] = $this->input->post('client_id');
          $p_data['amount'] = $this->input->post('amount');
+         $p_data['collector_id'] = $this->input->post('collector_id');
          $p_data['payment_type'] = $this->input->post('payment_type');
          $p_data['payment_date'] = date('Y-m-d', strtotime( $this->input->post('payment_date') ));
          $p_data['payment_year'] = date('Y', strtotime($p_data['payment_date']));

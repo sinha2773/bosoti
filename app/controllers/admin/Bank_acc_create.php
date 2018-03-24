@@ -45,7 +45,7 @@ class Bank_acc_create extends MY_Controller {
 			'branch_name' => trim($this->input->post('branch_name')),
 			'acc_name'=> trim($this->input->post('acc_name')),
 			'acc_number'=> trim($this->input->post('acc_number')),
-			);
+		);
 		$is_save = $this->Bank_model->save_bank_acc_info($bank_data);
 		if($is_save > 0){
 			echo json_encode("success");
@@ -53,6 +53,13 @@ class Bank_acc_create extends MY_Controller {
 		else{
 			echo json_encode("db_failed");	
 		}
+	}
+
+	function bank_accc_list()
+	{
+		$data = $this->init("Bank Accounts List");
+		$data["content"] = $this->load->view($this->theme."bank_acc_create/bank_acc_list",$data,TRUE);
+		$this->load->view($this->theme.'layout',$data);
 	}
 
 }

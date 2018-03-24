@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2018 at 09:33 PM
+-- Generation Time: Mar 24, 2018 at 10:00 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS `tbl_bank_account` (
 --
 
 INSERT INTO `tbl_bank_account` (`bank_acc_id`, `bank_name`, `branch_name`, `acc_name`, `acc_number`, `balance`, `created`, `updated`, `status`) VALUES
-(11, 'Dutch Bangla Bank Limited', 'Dhanmondi', 'Bosoti Sonchoy', '105.102.863254', 5000, '2018-03-20 13:18:30', '2018-03-23 20:32:34', 1),
-(12, 'Brac Bank', 'Khailgaoh', 'Bosoti', '105.236.12589', 500, '2018-03-21 19:33:00', '2018-03-21 19:33:23', 1);
+(11, 'Dutch Bangla Bank Limited', 'Dhanmondi', 'Bosoti Sonchoy', '105.102.863254', 5245, '2018-03-20 13:18:30', '2018-03-24 21:00:26', 1),
+(12, 'Brac Bank', 'Khailgaoh', 'Bosoti', '105.236.12589', 510, '2018-03-21 19:33:00', '2018-03-24 20:38:40', 1);
 
 -- --------------------------------------------------------
 
@@ -79,18 +79,19 @@ CREATE TABLE IF NOT EXISTS `tbl_expenses` (
   `expense_date` date NOT NULL,
   `remark` text NOT NULL,
   `status` tinyint(1) DEFAULT '0',
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  `bank_acc_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `bank_acc_id` int(11) DEFAULT NULL,
+  `acc_number` varchar(100) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_expenses`
 --
 
-INSERT INTO `tbl_expenses` (`id`, `user_id`, `invoice`, `extype_id`, `amount`, `payment_method`, `payment_to`, `expense_date`, `remark`, `status`, `created`, `updated`, `bank_acc_id`) VALUES
-(1, 8, 'bsrds_20180324_02322', 1, '1000.00', 'cheque', 'test', '2018-03-24', 'tett', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 11),
-(2, 8, 'bsrds_20180324_02323', 1, '40.00', 'cash', 'asdasdasd', '2018-03-24', 'asdasdad', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
+INSERT INTO `tbl_expenses` (`id`, `user_id`, `invoice`, `extype_id`, `amount`, `payment_method`, `payment_to`, `expense_date`, `remark`, `status`, `created`, `updated`, `bank_acc_id`, `acc_number`) VALUES
+(4, 8, 'bsrds_20180325_03000', 1, '200.00', 'cash', 'aaa', '2018-03-25', '', 1, '2018-03-25 03:00:12', '2018-03-25 03:00:12', 0, ''),
+(5, 8, 'bsrds_20180325_03001', 1, '799.00', 'cheque', '', '2018-03-25', 'test', 1, '2018-03-25 03:00:26', '2018-03-25 03:00:26', 11, 'Dutch Bangla Bank Limited -- 105.102.863254');
 
 -- --------------------------------------------------------
 
@@ -134,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `tbl_final_amount` (
 --
 
 INSERT INTO `tbl_final_amount` (`final_amount_id`, `total_amount`, `cashbook_amount`, `bank_amount`) VALUES
-(1, 0, 49900, 0);
+(1, 0, 49947, 0);
 
 -- --------------------------------------------------------
 
@@ -153,20 +154,21 @@ CREATE TABLE IF NOT EXISTS `tbl_incomes` (
   `income_date` date NOT NULL,
   `remark` text NOT NULL,
   `status` tinyint(1) DEFAULT '0',
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  `bank_acc_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `bank_acc_id` int(11) DEFAULT NULL,
+  `acc_number` varchar(100) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_incomes`
 --
 
-INSERT INTO `tbl_incomes` (`id`, `user_id`, `invoice`, `intype_id`, `amount`, `payment_method`, `payment_from`, `income_date`, `remark`, `status`, `created`, `updated`, `bank_acc_id`) VALUES
-(1, 8, 'bsrds_20180324_01443', 1, '5009.00', 'cash', 'Test', '2018-03-24', 'hello', 1, '2018-03-24 01:44:53', '2018-03-24 01:44:53', 0),
-(2, 8, 'bsrds_20180324_02214', 1, '23.00', 'cash', 'aaa', '2018-03-24', 'asdasd', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0),
-(3, 8, 'bsrds_20180324_02222', 1, '23.00', 'cash', 'aaa', '2018-03-24', 'asdasd', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0),
-(4, 8, 'bsrds_20180324_02232', 1, '4.00', 'cash', 'asdasd', '2018-03-24', 'asdasd', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
+INSERT INTO `tbl_incomes` (`id`, `user_id`, `invoice`, `intype_id`, `amount`, `payment_method`, `payment_from`, `income_date`, `remark`, `status`, `created`, `updated`, `bank_acc_id`, `acc_number`) VALUES
+(1, 8, 'bsrds_20180324_01443', 1, '5009.00', 'cash', 'Test', '2018-03-24', 'hello', 1, '2018-03-24 01:44:53', '2018-03-24 01:44:53', 0, ''),
+(10, 8, 'bsrds_20180325_02574', 2, '20.00', 'cash', 'asdasda', '2018-03-25', 'asdasdad', 1, '2018-03-25 02:57:53', '2018-03-25 02:57:53', 0, ''),
+(11, 8, 'bsrds_20180325_02580', 1, '50.00', 'cash', 'asdasdasd', '2018-03-25', '', 1, '2018-03-25 02:58:12', '2018-03-25 02:58:12', 0, ''),
+(12, 8, 'bsrds_20180325_02581', 2, '999.00', 'cheque', '', '2018-03-25', '', 1, '2018-03-25 02:58:28', '2018-03-25 02:58:28', 11, 'Dutch Bangla Bank Limited -- 105.102.863254');
 
 -- --------------------------------------------------------
 
@@ -183,14 +185,15 @@ CREATE TABLE IF NOT EXISTS `tbl_income_types` (
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_income_types`
 --
 
 INSERT INTO `tbl_income_types` (`id`, `parent_id`, `title`, `slug`, `order_id`, `status`, `created`, `updated`) VALUES
-(1, 0, 'Test', 'test', 0, 1, '2018-03-24 01:44:36', '2018-03-24 01:44:36');
+(1, 0, 'Test', 'test', 0, 1, '2018-03-24 01:44:36', '2018-03-24 01:44:36'),
+(2, 0, 'sell', 'sell', 0, 1, '2018-03-25 02:38:23', '2018-03-25 02:38:23');
 
 -- --------------------------------------------------------
 
@@ -288,8 +291,6 @@ INSERT INTO `tbl_members` (`id`, `client_id`, `name`, `mobile`, `email`, `gender
 (4, '', 'member 3', 'BOSOTI_3', NULL, 0, 'asda', 'sdas', 'asdas', '2018-03-12', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 0, 1, '2018-03-22 20:11:18', '2018-03-22 20:11:18', 0),
 (5, '', 'asdasd', 'BOSOTI_2', NULL, 0, 'asdas', 'dasd', 'asdasd', '2018-03-13', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 0, 1, '2018-03-22 20:15:27', '2018-03-22 20:15:27', 0),
 (6, 'BOSOTI_2', 'asdasd', '015', NULL, 0, 'asdasd', 'asdasd', 'asdasd', '2018-03-13', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '2018-03-13', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 0, 1, '2018-03-22 20:17:17', '2018-03-22 20:17:17', 0),
-(7, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, 0, 1, '2018-03-23 07:48:41', '2018-03-23 07:48:41', 0),
-(8, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, 0, 1, '2018-03-23 07:48:59', '2018-03-23 07:48:59', 0),
 (9, 'BOSOTI_4', 'Ref', '234234', NULL, 0, 'RRR', 'RRR', '', '2018-03-07', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 2),
 (10, 'BOSOTI_5', 'Ref 2 ', '123123', NULL, 0, '1232', '1233', '', '2018-03-21', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-03-23 18:49:44', '2018-03-23 18:50:21', 2),
 (11, 'BOSOTI_6', 'Test 5', '123123', NULL, 0, '12312', '31231', '', '2018-03-20', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-03-23 18:59:38', '2018-03-23 18:59:38', 1),
@@ -339,6 +340,7 @@ CREATE TABLE IF NOT EXISTS `tbl_payments` (
   `payment_type` varchar(50) NOT NULL,
   `discount` decimal(10,2) NOT NULL,
   `bill` decimal(10,2) NOT NULL,
+  `collector_id` int(11) NOT NULL,
   `billing_date` date NOT NULL,
   `payment_date` date NOT NULL,
   `payment_day` tinyint(4) NOT NULL,
@@ -351,24 +353,27 @@ CREATE TABLE IF NOT EXISTS `tbl_payments` (
   `client_status` tinyint(1) NOT NULL,
   `created` datetime NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_payments`
 --
 
-INSERT INTO `tbl_payments` (`id`, `client_id`, `amount`, `payment_type`, `discount`, `bill`, `billing_date`, `payment_date`, `payment_day`, `payment_month`, `payment_year`, `added_by`, `book_no`, `summary`, `bill_status`, `client_status`, `created`, `updated`) VALUES
-(1, 2, '200.00', '', '0.00', '0.00', '0000-00-00', '2018-03-10', 10, 3, 2018, 8, '', 'test', 0, 0, '2018-03-10 18:31:34', '2018-03-10 12:31:34'),
-(2, 2, '300.00', '', '0.00', '0.00', '0000-00-00', '2018-03-17', 17, 3, 2018, 8, '', '', 0, 0, '2018-03-17 16:37:52', '2018-03-17 10:37:52'),
-(3, 2, '599.00', '', '0.00', '0.00', '0000-00-00', '2018-03-19', 19, 3, 2018, 8, '', '', 0, 0, '2018-03-19 18:57:24', '2018-03-19 12:57:24'),
-(4, 2, '11.00', '', '0.00', '0.00', '0000-00-00', '2018-03-16', 16, 3, 2018, 8, '', '', 0, 0, '2018-03-19 20:27:35', '2018-03-19 14:27:35'),
-(5, 2, '500.00', 'Deposit', '0.00', '0.00', '0000-00-00', '2018-03-22', 22, 3, 2018, 8, '', 'test ', 0, 0, '2018-03-23 00:07:57', '2018-03-22 18:07:57'),
-(6, 2, '5000.00', 'Profit Distribution', '0.00', '0.00', '0000-00-00', '2018-03-22', 22, 3, 2018, 8, '', 'cash', 0, 0, '2018-03-23 00:08:35', '2018-03-22 18:08:35'),
-(7, 2, '1000.00', 'Credit Adjust', '0.00', '0.00', '0000-00-00', '2018-03-22', 22, 3, 2018, 8, '', '', 0, 0, '2018-03-23 00:09:01', '2018-03-22 18:09:01'),
-(8, 2, '2000.00', 'Debit Adjust', '0.00', '0.00', '0000-00-00', '2018-03-22', 22, 3, 2018, 8, '', 'tsttst', 0, 0, '2018-03-23 00:09:25', '2018-03-22 18:09:25'),
-(9, 2, '2000.00', 'Profit Distribution', '0.00', '0.00', '0000-00-00', '2018-03-23', 23, 3, 2018, 8, '', 'test', 0, 0, '2018-03-23 00:34:53', '2018-03-22 18:34:53'),
-(10, 2, '610.00', 'Debit Adjust', '0.00', '0.00', '0000-00-00', '2018-03-23', 23, 3, 2018, 8, '', 'test', 0, 0, '2018-03-23 01:12:14', '2018-03-22 19:12:14'),
-(11, 3, '500.00', 'Profit Distribution', '0.00', '0.00', '0000-00-00', '2018-03-23', 23, 3, 2018, 8, '', 'asdasd', 0, 0, '2018-03-23 01:39:54', '2018-03-22 19:39:54');
+INSERT INTO `tbl_payments` (`id`, `client_id`, `amount`, `payment_type`, `discount`, `bill`, `collector_id`, `billing_date`, `payment_date`, `payment_day`, `payment_month`, `payment_year`, `added_by`, `book_no`, `summary`, `bill_status`, `client_status`, `created`, `updated`) VALUES
+(1, 2, '200.00', '', '0.00', '0.00', 0, '0000-00-00', '2018-03-10', 10, 3, 2018, 8, '', 'test', 0, 0, '2018-03-10 18:31:34', '2018-03-10 12:31:34'),
+(2, 2, '300.00', '', '0.00', '0.00', 0, '0000-00-00', '2018-03-17', 17, 3, 2018, 8, '', '', 0, 0, '2018-03-17 16:37:52', '2018-03-17 10:37:52'),
+(3, 2, '599.00', '', '0.00', '0.00', 0, '0000-00-00', '2018-03-19', 19, 3, 2018, 8, '', '', 0, 0, '2018-03-19 18:57:24', '2018-03-19 12:57:24'),
+(4, 2, '11.00', '', '0.00', '0.00', 0, '0000-00-00', '2018-03-16', 16, 3, 2018, 8, '', '', 0, 0, '2018-03-19 20:27:35', '2018-03-19 14:27:35'),
+(5, 2, '500.00', 'Deposit', '0.00', '0.00', 0, '0000-00-00', '2018-03-22', 22, 3, 2018, 8, '', 'test ', 0, 0, '2018-03-23 00:07:57', '2018-03-22 18:07:57'),
+(6, 2, '5000.00', 'Profit Distribution', '0.00', '0.00', 0, '0000-00-00', '2018-03-22', 22, 3, 2018, 8, '', 'cash', 0, 0, '2018-03-23 00:08:35', '2018-03-22 18:08:35'),
+(7, 2, '1000.00', 'Credit Adjust', '0.00', '0.00', 0, '0000-00-00', '2018-03-22', 22, 3, 2018, 8, '', '', 0, 0, '2018-03-23 00:09:01', '2018-03-22 18:09:01'),
+(8, 2, '2000.00', 'Debit Adjust', '0.00', '0.00', 0, '0000-00-00', '2018-03-22', 22, 3, 2018, 8, '', 'tsttst', 0, 0, '2018-03-23 00:09:25', '2018-03-22 18:09:25'),
+(9, 2, '2000.00', 'Profit Distribution', '0.00', '0.00', 0, '0000-00-00', '2018-03-23', 23, 3, 2018, 8, '', 'test', 0, 0, '2018-03-23 00:34:53', '2018-03-22 18:34:53'),
+(10, 2, '610.00', 'Debit Adjust', '0.00', '0.00', 0, '0000-00-00', '2018-03-23', 23, 3, 2018, 8, '', 'test', 0, 0, '2018-03-23 01:12:14', '2018-03-22 19:12:14'),
+(11, 3, '500.00', 'Profit Distribution', '0.00', '0.00', 0, '0000-00-00', '2018-03-23', 23, 3, 2018, 8, '', 'asdasd', 0, 0, '2018-03-23 01:39:54', '2018-03-22 19:39:54'),
+(12, 2, '51.00', 'Deposit', '0.00', '0.00', 0, '0000-00-00', '2018-03-24', 24, 3, 2018, 8, '', 'test', 0, 0, '2018-03-24 23:56:01', '2018-03-24 17:56:01'),
+(13, 6, '99.00', 'Deposit', '0.00', '0.00', 0, '0000-00-00', '2018-03-25', 25, 3, 2018, 8, '', '', 0, 0, '2018-03-25 00:51:56', '2018-03-24 18:51:56'),
+(14, 6, '23.00', 'Deposit', '0.00', '0.00', 18, '0000-00-00', '2018-03-25', 25, 3, 2018, 8, '', 'tesr', 0, 0, '2018-03-25 00:56:00', '2018-03-24 18:56:00');
 
 -- --------------------------------------------------------
 
@@ -515,7 +520,7 @@ CREATE TABLE IF NOT EXISTS `tbl_users` (
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_users`
@@ -523,7 +528,8 @@ CREATE TABLE IF NOT EXISTS `tbl_users` (
 
 INSERT INTO `tbl_users` (`id`, `email`, `mobile`, `username`, `password`, `name`, `surname`, `gender`, `media_id`, `user_role_id`, `status`, `created`, `updated`) VALUES
 (8, 'info@sinhabd.com', '01738050950', 'bakulsinha', '$2y$11$Ev1aOsKdLt9r99tbVJyGtuAdU2pI1gN.xd0CMlh2TutbkaYvolhce', 'Super', 'Admin', 'male', 0, 1, 1, '0000-00-00 00:00:00', '2017-07-25 17:52:11'),
-(11, 'ziaulkhan7@gmail.com', '01552386124', 'ziaulkhan', '$2y$11$jGvzis5iHmr9p5GRcqXpGO2O0/oeU3V3Y.jjBuMthMOYog8OzrtOS', 'ziaul', 'khan', 'male', 0, 1, 1, '2017-03-13 18:45:11', '2017-04-26 21:59:20');
+(11, 'ziaulkhan7@gmail.com', '01552386124', 'ziaulkhan', '$2y$11$jGvzis5iHmr9p5GRcqXpGO2O0/oeU3V3Y.jjBuMthMOYog8OzrtOS', 'ziaul', 'khan', 'male', 0, 1, 1, '2017-03-13 18:45:11', '2017-04-26 21:59:20'),
+(18, 'jakir@gmail.com', '01677', 'jakir', '$2y$11$XwfCyvq9H/cqddN9avzFme01D0T.9B8JvKQUKs48EnPoZBTDpq1Om', 'Jakir', 'Habib', 'male', 0, 4, 1, '2018-03-24 23:30:24', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -535,7 +541,7 @@ CREATE TABLE IF NOT EXISTS `tbl_user_roles` (
 `user_role_id` int(11) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
   `permission` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_user_roles`
@@ -544,7 +550,8 @@ CREATE TABLE IF NOT EXISTS `tbl_user_roles` (
 INSERT INTO `tbl_user_roles` (`user_role_id`, `name`, `permission`) VALUES
 (1, 'Admin', 'a:2:{s:6:"access";a:21:{i:0;s:17:"super_admin_power";i:1;s:13:"manager_power";i:2;s:14:"dashboard_info";i:3;s:13:"manage_member";i:4;s:14:"manage_payment";i:5;s:11:"save_income";i:6;s:10:"add_income";i:7;s:15:"add_income_type";i:8;s:15:"see_income_list";i:9;s:17:"see_income_report";i:10;s:12:"save_expense";i:11;s:11:"add_expense";i:12;s:16:"add_expense_type";i:13;s:16:"see_expense_list";i:14;s:18:"see_expense_report";i:15;s:14:"account_access";i:16;s:8:"add_user";i:17;s:11:"update_user";i:18;s:13:"see_user_list";i:19;s:16:"access_user_role";i:20;s:8:"settings";}s:6:"modify";a:1:{i:0;s:8:"add_user";}}'),
 (2, 'Manager', 'a:2:{s:6:"access";a:23:{i:0;s:13:"manager_power";i:1;s:14:"dashboard_info";i:2;s:14:"access_package";i:3;s:19:"client_registration";i:4;s:15:"see_client_list";i:5;s:13:"update_client";i:6;s:20:"update_client_status";i:7;s:27:"update_client_status_active";i:8;s:20:"see_client_statement";i:9;s:8:"add_bill";i:10;s:11:"see_duelist";i:11;s:12:"see_paidlist";i:12;s:15:"see_bill_report";i:13;s:7:"see_log";i:14;s:17:"see_employee_list";i:15;s:10:"pay_salary";i:16;s:10:"add_income";i:17;s:11:"add_expense";i:18;s:16:"see_expense_list";i:19;s:18:"see_expense_report";i:20;s:14:"account_access";i:21;s:12:"send_message";i:22;s:15:"message_history";}s:6:"modify";N;}'),
-(3, 'User', 'a:2:{s:6:"access";a:2:{i:0;s:20:"see_client_statement";i:1;s:11:"see_duelist";}s:6:"modify";N;}');
+(3, 'User', 'a:2:{s:6:"access";a:2:{i:0;s:20:"see_client_statement";i:1;s:11:"see_duelist";}s:6:"modify";N;}'),
+(4, 'Collector', 'a:2:{s:6:"access";a:1:{i:0;s:11:"save_income";}s:6:"modify";N;}');
 
 --
 -- Indexes for dumped tables
@@ -664,7 +671,7 @@ MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `tbl_expenses`
 --
 ALTER TABLE `tbl_expenses`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `tbl_expense_types`
 --
@@ -679,12 +686,12 @@ MODIFY `final_amount_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT for table `tbl_incomes`
 --
 ALTER TABLE `tbl_incomes`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `tbl_income_types`
 --
 ALTER TABLE `tbl_income_types`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `tbl_medias`
 --
@@ -709,7 +716,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `tbl_payments`
 --
 ALTER TABLE `tbl_payments`
-MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `tbl_settings`
 --
@@ -724,12 +731,12 @@ MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT for table `tbl_user_roles`
 --
 ALTER TABLE `tbl_user_roles`
-MODIFY `user_role_id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+MODIFY `user_role_id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

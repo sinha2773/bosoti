@@ -52,7 +52,6 @@ class Income_model extends MY_Model {
                 $income_types[] = array('id'=>$income->id, 'name'=>$income->title);
             }
 
-
             if( !empty($income_types) ){
                 foreach($income_types as $income){
                     $this->db->select('*');
@@ -74,14 +73,14 @@ class Income_model extends MY_Model {
             return $income_list;
         }
 
-        function get_cashbook_amt()
+        public  function get_cashbook_amt()
         {
          $this->db->select('cashbook_amount');
          $this->db->from('tbl_final_amount');
          return $this->db->get()->row_array();
      }
 
-     function get_bank_acc_amt($bank_acc_id)
+     public function get_bank_acc_amt($bank_acc_id)
      {
         $this->db->select('balance');
         $this->db->from('tbl_bank_account');
@@ -89,32 +88,52 @@ class Income_model extends MY_Model {
         return $this->db->get()->row_array();
     }
 
-    function update_bank_acc_balance($bank_acc_id,$updated_data)
+    public function update_bank_acc_balance($bank_acc_id,$updated_data)
     {
         $this->db->where('bank_acc_id', $bank_acc_id)->update('tbl_bank_account', $updated_data);
         return $this->db->affected_rows();
     }
 
-    function update_cashbook_balance($updated_data)
+    public function update_prev_bank_acc_balance($previous_acc,$previou_acc_data)
     {
-        $this->db->update('tbl_final_amount', $updated_data);
-        return $this->db->affected_rows();
-    }
+       $this->db->where('bank_acc_id', $previous_acc)->update('tbl_bank_account', $previou_acc_data);
+       return $this->db->affected_rows();
+   }
 
-    function save_receipts_voucher_info($data)
-    {
-        $this->db->insert('tbl_incomes', $data);
-        return $this->db->affected_rows();
-    }
+   public function update_cashbook_balance($updated_data)
+   {
+    $this->db->update('tbl_final_amount', $updated_data);
+    return $this->db->affected_rows();
+}
+
+public function save_receipts_voucher_info($data)
+{
+    $this->db->insert('tbl_incomes', $data);
+    return $this->db->affected_rows();
+}
+
+public function get_invoice_info($voucher_id)
+{
+    $this->db->select('amount,bank_acc_id');
+    $this->db->from('tbl_incomes');
+    $this->db->where('id', $voucher_id);
+    return $this->db->get()->row_array();
+}
+
+function update_receipts_voucher_info($voucher_id,$data)
+{
+    $this->db->where('id', $voucher_id)->update('tbl_incomes', $data);
+    return $this->db->affected_rows();
+}
 
 
 
     // helping to debuging
-    function pr($data){
-        echo "<pre>";
-        print_r($data);
-        echo "</pre>";
-    }
+function pr($data){
+    echo "<pre>";
+    print_r($data);
+    echo "</pre>";
+}
 
 
 
