@@ -49,7 +49,7 @@ foreach($users as $obj){
                             <td><?php echo $values->updated; ?></td>
                             <td style="text-align: center">
                                 <a class="btn btn-xs btn-primary" href="<?php echo base_url($admin_path) ?>/common/edit/<?php echo $action;?>/<?php echo $values->id ?>">Edit</a> 
-                                <a class="btn btn-xs btn-danger" onclick="return confirm('Are you sure to Delete?')" href="<?php echo base_url($admin_path) ?>/common/delete/<?php echo $action;?>/<?php echo $values->id ?>">Delete</a>
+                                <a class="btn btn-xs btn-danger" onclick="return confirm('Are you sure to Delete?')" href="<?php echo base_url() ?>admin/expense/delete_expense/<?php echo $values->id ?>">Delete</a>
                             </td>
                         </tr>
                          <?php } ?>

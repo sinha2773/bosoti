@@ -52,9 +52,17 @@ class Payment_model extends MY_Model {
         */
         $client_ids = array();
 
-        $this->db->select('sum(amount) total_amount,sum(discount) total_discount, (select name from tbl_users u where u.id=p.added_by) as added_user, m.*');
-        // $this->db->select("sum(amount) as new_amt", FALSE);
+        $this->db->select('sum(discount) total_discount, (select name from tbl_users u where u.id=p.added_by) as added_user, m.*');
+        // $this->db->select("IF(payment_type = 'Deposit' )sum(amount) as new_amt", FALSE);
 
+        $this->db->select("SUM(IF(payment_type != 'Debit Adjust', amount, 0) - IF(payment_type = 'Debit Adjust', amount,0)) AS total_amount", FALSE);
+
+//         CASE
+//     WHEN Quantity > 30 THEN "The quantity is greater than 30"
+//     WHEN Quantity = 30 THEN "The quantity is 30"
+//     ELSE "The quantity is something else"
+// END
+// 
         $this->db->join('tbl_members m','p.client_id=m.id');
 
         // $this->db->where("cn.status>",0);
@@ -358,7 +366,7 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
         if( 
             ( isset($filter_data['together']) && !empty($filter_data['together']) ) ||
             ( isset($filter_data['all_sum']) && $filter_data['all_sum']==true )
-        )
+            )
         {
             //nothing $this->db->group_by("tbl_clients.id");
         }else{
@@ -516,7 +524,7 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
                 'billed_none_active_user_till_todate' => $billed_none_active_user_till_todate,
                 'paid_none_active_user_till_todate' => $paid_none_active_user_till_todate,
                 'due_adv_none_active_user_till_todate' => $due_adv_none_active_user_till_todate
-            );
+                );
 
         }
 

@@ -53,7 +53,7 @@ class Expense extends MY_Controller {
             $current_cashbook_amt = $this->Expense_model->get_cashbook_amt();
             $updated_data= array(
                 'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']-$data['amount']  ,
-            );
+                );
             $this->Expense_model->update_cashbook_balance($updated_data);
         }
         else{
@@ -61,7 +61,7 @@ class Expense extends MY_Controller {
             $curr_acc_amt=  $this->Expense_model->get_bank_acc_amt($bank_acc_id);
             $updated_data= array(
                 'balance' =>$curr_acc_amt['balance']-$data['amount']  ,
-            );
+                );
 
             $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
         }
@@ -92,7 +92,7 @@ class Expense extends MY_Controller {
         $current_cashbook_amt = $this->Expense_model->get_cashbook_amt();
         $updated_data= array(
             'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']+$diff_amt,
-        );
+            );
         $this->Expense_model->update_cashbook_balance($updated_data);
     }
     else{
@@ -101,7 +101,7 @@ class Expense extends MY_Controller {
             $curr_acc_amt=  $this->Expense_model->get_bank_acc_amt($bank_acc_id);
             $updated_data= array(
                 'balance' =>$curr_acc_amt['balance']+$diff_amt,
-            );
+                );
             $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
         }
         else{
@@ -109,14 +109,14 @@ class Expense extends MY_Controller {
             $curr_acc_amt=  $this->Expense_model->get_bank_acc_amt($bank_acc_id);
             $updated_data= array(
                 'balance' =>$curr_acc_amt['balance']-$data['amount'],
-            );
+                );
             $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
             $previous_acc= $get_previous_amt['bank_acc_id'];
             $prev_acc_amt=  $this->Expense_model->get_bank_acc_amt($previous_acc);
 
             $previou_acc_data = array(
                 'balance' =>$prev_acc_amt['balance']+$get_previous_amt['amount'],
-            );
+                );
             $this->Expense_model->update_prev_bank_acc_balance($previous_acc,$previou_acc_data);
         }
 
@@ -131,6 +131,40 @@ class Expense extends MY_Controller {
         $this->session->set_flashdata('flashMessage', array('success', "Payable Voucher Updated Successfully."));                   
     }
     redirect('/admin/common/add/expense');  
+}
+
+public function delete_expense($id)
+{
+    $exp_info = $this->Expense_model->get_income_details($id);
+    $this->db->trans_start();
+
+    if($exp_info['payment_method']== "cash"){
+        $current_cashbook_amt = $this->Expense_model->get_cashbook_amt();
+        $updated_data= array(
+            'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']+ $exp_info['amount'],
+            );
+        $this->Expense_model->update_cashbook_balance($updated_data);
+    }
+    else{
+     $bank_acc_id= $exp_info['bank_acc_id'];
+     $curr_acc_amt=  $this->Expense_model->get_bank_acc_amt($bank_acc_id);
+     $updated_data= array(
+        'balance' =>$curr_acc_amt['balance']+ $exp_info['amount'],
+        );
+     $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+ }
+ $this->Expense_model->delete_expense_voucher($id);
+
+ $this->db->trans_complete();
+ if ($this->db->trans_status() === FALSE)
+ {
+    $this->session->set_flashdata('flashMessage', array('danger', "Sorry, Payable Voucher Deleted Failed."));                   
+}
+else
+{
+    $this->session->set_flashdata('flashMessage', array('success', "Payable Voucher Deleted Successfully."));                   
+}
+redirect('/admin/common/get_all/expense');  
 }
 
 }

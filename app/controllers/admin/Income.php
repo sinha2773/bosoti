@@ -56,7 +56,7 @@ class Income extends MY_Controller {
             $current_cashbook_amt = $this->Income_model->get_cashbook_amt();
             $updated_data= array(
                 'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']+$data['amount']  ,
-            );
+                );
             $this->Income_model->update_cashbook_balance($updated_data);
         }
         else{
@@ -64,7 +64,7 @@ class Income extends MY_Controller {
             $curr_acc_amt=  $this->Income_model->get_bank_acc_amt($bank_acc_id);
             $updated_data= array(
                 'balance' =>$curr_acc_amt['balance']+$data['amount']  ,
-            );
+                );
 
             $this->Income_model->update_bank_acc_balance($bank_acc_id,$updated_data);
         }
@@ -95,7 +95,7 @@ class Income extends MY_Controller {
             $current_cashbook_amt = $this->Income_model->get_cashbook_amt();
             $updated_data= array(
                 'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']+$diff_amt,
-            );
+                );
             $this->Income_model->update_cashbook_balance($updated_data);
         }
         else{
@@ -104,7 +104,7 @@ class Income extends MY_Controller {
                 $curr_acc_amt=  $this->Income_model->get_bank_acc_amt($bank_acc_id);
                 $updated_data= array(
                     'balance' =>$curr_acc_amt['balance']+$diff_amt,
-                );
+                    );
                 $this->Income_model->update_bank_acc_balance($bank_acc_id,$updated_data);
             }
             else{
@@ -112,14 +112,14 @@ class Income extends MY_Controller {
                 $curr_acc_amt=  $this->Income_model->get_bank_acc_amt($bank_acc_id);
                 $updated_data= array(
                     'balance' =>$curr_acc_amt['balance']+$data['amount'],
-                );
+                    );
                 $this->Income_model->update_bank_acc_balance($bank_acc_id,$updated_data);
                 $previous_acc= $get_previous_amt['bank_acc_id'];
                 $prev_acc_amt=  $this->Income_model->get_bank_acc_amt($previous_acc);
 
                 $previou_acc_data = array(
                     'balance' =>$prev_acc_amt['balance']-$get_previous_amt['amount'],
-                );
+                    );
                 $this->Income_model->update_prev_bank_acc_balance($previous_acc,$previou_acc_data);
             }
 
@@ -135,6 +135,40 @@ class Income extends MY_Controller {
         }
         redirect('/admin/common/add/income');  
     }
+
+    public function delete_income($id)
+    {
+        $income_info = $this->Income_model->get_income_details($id);
+        $this->db->trans_start();
+
+        if($income_info['payment_method']== "cash"){
+            $current_cashbook_amt = $this->Income_model->get_cashbook_amt();
+            $updated_data= array(
+                'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']- $income_info['amount'],
+                );
+            $this->Income_model->update_cashbook_balance($updated_data);
+        }
+        else{
+           $bank_acc_id= $income_info['bank_acc_id'];
+           $curr_acc_amt=  $this->Income_model->get_bank_acc_amt($bank_acc_id);
+           $updated_data= array(
+            'balance' =>$curr_acc_amt['balance']- $income_info['amount'],
+            );
+           $this->Income_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+       }
+       $this->Income_model->delete_income_voucher($id);
+
+       $this->db->trans_complete();
+       if ($this->db->trans_status() === FALSE)
+       {
+        $this->session->set_flashdata('flashMessage', array('danger', "Sorry, Receipts Voucher Deleted Failed."));                   
+    }
+    else
+    {
+        $this->session->set_flashdata('flashMessage', array('success', "Receipts Voucher Deleted Successfully."));                   
+    }
+    redirect('/admin/common/get_all/income');  
+}
 }
 
 /* End of file welcome.php */
