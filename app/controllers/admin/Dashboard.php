@@ -25,6 +25,8 @@ class Dashboard extends MY_Controller {
 		$data = $this->init("Dashboard");
 		$data['total_cashbook']= $this->dashboard->get_cashbook_amt();
 		$data['total_bank_acc']= $this->dashboard->get_bank_acc_amt();
+		$data['total_expense']= $this->dashboard->get_expense_amt();
+
 		$data["content"] = $this->load->view($this->theme."dashboard/index",$data,TRUE);
 		$this->load->view($this->theme.'layout',$data);
 

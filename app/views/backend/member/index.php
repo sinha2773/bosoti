@@ -114,7 +114,7 @@
                 </td>
                 <td>
                     <table class="table">
-                         
+
                         <tr>
                             <td>Name:</td>
                             <td><?php echo $data->n_name;?></td>
@@ -177,5 +177,74 @@
         </table>
     </div>
 
+    <hr>
+    <div class="reference_section" style="margin-top: 20px;">
+        <h3>Reference Identity:</h3>
+        <?php if (empty($ref_data)) { ?>
+        <p>No Reference Avaialbe</p>
+        <?php } else {?>
+        <table class="table">
+            <tr>
+                <td>
+                    <table class="table">
+
+                        <tr>
+                            <td>Name:</td>
+                            <td><?php echo $ref_data->name;?></td>
+                        </tr>  
+                        <tr>
+                            <td>Father name:</td>
+                            <td><?php echo $ref_data->fathername;?></td>
+                        </tr> 
+                        <tr>
+                            <td>Mother name:</td>
+                            <td><?php echo $ref_data->mothername;?></td>
+                        </tr> 
+                        <tr>
+                            <td>Date of Birth:</td>
+                            <td><?php echo $ref_data->date_of_birth;?></td>
+                        </tr> 
+                        <tr>
+                            <td>National ID Card Number:</td>
+                            <td><?php echo $ref_data->nid;?></td>
+                        </tr>           
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <h3>Reference Permanent Address: </h3>
+        <table class="table">
+            <tr>
+                <td>Village:</td>
+                <td><?php echo $ref_data->village;?></td>
+                <td>Post Office:</td>
+                <td><?php echo $ref_data->post_office;?></td>
+            </tr>
+            <tr>
+                <td>Police station:</td>
+                <td><?php echo $ref_data->police_station;?></td>
+                <td>District:</td>
+                <td><?php echo $ref_data->district;?></td>
+            </tr>
+        </table>
+
+        <h3>Reference Present Address: </h3>
+        <table class="table">
+            <tr>
+                <td>Village:</td>
+                <td><?php echo $ref_data->p_village;?></td>
+                <td>Post Office:</td>
+                <td><?php echo $ref_data->p_post_office;?></td>
+            </tr>
+            <tr>
+                <td>Police station:</td>
+                <td><?php echo $ref_data->p_police_station;?></td>
+                <td>District:</td>
+                <td><?php echo $ref_data->p_district;?></td>
+            </tr>
+        </table>
+        <?php } ?>
+    </div>
 
 </div>

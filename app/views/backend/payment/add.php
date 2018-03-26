@@ -1,6 +1,15 @@
 <script type="text/javascript" src="<?php echo base_url('assets/_back/js/plugin/select2');?>/select2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/_back/js/plugin/select2');?>/select2.min.css">
-
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;    
+}
+</style>
 <form id="PaymentForm" name="form" method="post" action="<?php echo base_url($admin_path);?>/payment/bill/insert" enctype="multipart/form-data" onsubmit='return checkPayment()'>
 
 
@@ -92,17 +101,41 @@
         </div>
     </div>
 
-<!--     <div class="col-sm-4">
+    <div class="col-sm-4" id="details_div" style="display: none">
         <div class="payment_summary">
-            <h3>User Payment Details</h3>
-            <div class="payment_details"></div>
-        </div>
-    </div> -->
-    
+            <h3>Member Details</h3>
+            <div class="member_details_info">
+              <table>
+                  <tr>
+                    <th>Name</th>
+                    <td id="name"></td>
+                </tr>
+                <tr>
+                    <th>Father Name</th>
+                    <td id="father_name"></td>
+                </tr>
+                <tr>
+                  <th>Mother Name</th>
+                  <td id="mother_name"></td>
+              </tr>
+              <tr>
+                  <th>Mobile</th>
+                  <td id="mobile"></td>
+              </tr>
+              <tr>
+                 <th>Present Address</th>
+                 <td id="present_add"></td>
+             </tr>
+         </table>
+     </div>
+ </div>
+</div>
+
 </form>
 <div class="billing_table"></div>
 <script type="text/javascript">
     var timer;
+    var is_paid_today = false;
     $("#member_select").keyup(function(event) 
     {
         $("#member_select_result").show();
@@ -125,6 +158,20 @@
         $('input[name="member_name"]').val($(this).text());
         $('input[name="client_id"]').val($(this).attr('data'));
         $("#member_select_result").hide();
+        var member_id = $('input[name="client_id"]').val(); 
+        $.post('<?php echo site_url(); ?>admin/Payment/get_member_info',{id: member_id}, function(data, textStatus, xhr) {
+            member_data = JSON.parse(data);
+            $('#details_div').show();
+            $('#name').text(member_data['member_info']['name']);
+            $('#father_name').text(member_data['member_info']['fathername']);
+            $('#mother_name').text(member_data['member_info']['mothername']);
+            $('#mobile').text(member_data['member_info']['mobile']);
+            $('#present_add').text(member_data['member_info']['present_address']);
+            if(member_data['payment_info']['count_id'] > 0 ){
+                alert("This Member Already Paid Once Today");
+            }
+
+        });
     });
 
     $("#collector_select").keyup(function(event) 

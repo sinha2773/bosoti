@@ -6,7 +6,7 @@
             <table id="listTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>#ID</th>
+                        <th>Client ID</th>
                         <th>Name</th>
                         <th>Father Name</th>
                         <th>Address</th>
@@ -16,17 +16,30 @@
                     </tr>
                 </thead>               
                 <tbody>
-                 <?php foreach ($lists as $key => $value) { ?>
-                 <tr>
-                    <td><?php echo $value->id ?></td>
+                   <?php foreach ($lists as $key => $value) { ?>
+                   <tr>
+                    <td><?php echo $value->client_id ?></td>
                     <td><?php echo $value->name; ?></td>
                     <td><?php echo $value->fathername; ?></td>
                     <td><?php echo $value->present_address; ?></td>
                     <td><?php echo $value->mobile; ?></td> 
-                    <td style="text-align: center">
-                        <a class="btn btn-xs btn-primary" href="<?php echo base_url($admin_path) ?>/common/detail/<?php echo $action;?>/<?php echo $value->id ?>">Details</a> 
+<!--                     <td style="text-align: center">
+                        <a class="btn btn-xs btn-primary" href="<?php echo base_url()?>admin/member/member_details/<?php echo $value->id ?>">Details</a> 
                         <a class="btn btn-xs btn-primary" href="<?php echo base_url($admin_path) ?>/common/edit/<?php echo $action;?>/<?php echo $value->id ?>">Edit</a> 
                         <a class="btn btn-xs btn-danger" onclick="return confirm('Are you sure to Delete?')" href="<?php echo base_url($admin_path) ?>/common/delete/<?php echo $action;?>/<?php echo $value->id ?>">Delete</a>
+                    </td> -->
+                    <td style="text-align: center">
+                        <div class="dropdown">
+                          <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-cog" aria-hidden="true"></i>
+                              <span class="caret"></span></button>
+                              <ul class="dropdown-menu pull-right" style="min-width: auto;">
+                                <!-- <li><a class="" href="<?php echo base_url($admin_path) ?>/payment/bill/details/<?php echo $value->id ?>">Details</a> </li> -->
+                                <li> <a class="" href="<?php echo base_url()?>admin/member/member_details/<?php echo $value->id ?>">Details</a> </li>
+                                <li><a class="" href="<?php echo base_url($admin_path) ?>/common/edit/<?php echo $action;?>/<?php echo $value->id ?>">Edit</a> </li>
+                                <li> <a class="" onclick="return confirm('Are you sure to Delete?')" href="<?php echo base_url($admin_path) ?>/common/delete/<?php echo $action;?>/<?php echo $value->id ?>">Delete</a> </li>
+                            </ul>
+                        </div>                           
+
                     </td>
                 </tr>
                 <?php } ?>

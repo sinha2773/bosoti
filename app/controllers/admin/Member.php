@@ -66,6 +66,15 @@ class Member extends MY_Controller {
 
 	}
 
+	function member_details($id)
+	{
+		$data = $this->init("Bank Account Create");
+		$data['data'] = $this->Member_model->get_member_details($id);
+		$data['ref_data']= $this->Member_model->get_reference_details($id);
+		$data["content"] = $this->load->view($this->theme."member/index",$data,TRUE);
+		$this->load->view($this->theme.'layout',$data);
+	}
+
 }
 
 /* End of file Member.php */

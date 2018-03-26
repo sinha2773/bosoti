@@ -291,15 +291,15 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
         if( isset($filter_data['billing_type']) && !empty($filter_data['billing_type']) )
         {
 
-         $this->db->where("billing_type", $filter_data['billing_type']);
+           $this->db->where("billing_type", $filter_data['billing_type']);
         }// connection bill
         elseif ( isset($filter_data['billing_type']) && $filter_data['billing_type']=='0' ){
-         $this->db->where("billing_type=0");
-     }
+           $this->db->where("billing_type=0");
+       }
 
         // Package
-     if( isset($filter_data['package_id']) && !empty($filter_data['package_id']) )
-     {
+       if( isset($filter_data['package_id']) && !empty($filter_data['package_id']) )
+       {
         $this->db->join('tbl_client_packages pk','pk.client_id=cn.id', 'left');
         $this->db->where("package_id", $filter_data['package_id']);
     }
@@ -366,7 +366,7 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
         if( 
             ( isset($filter_data['together']) && !empty($filter_data['together']) ) ||
             ( isset($filter_data['all_sum']) && $filter_data['all_sum']==true )
-            )
+        )
         {
             //nothing $this->db->group_by("tbl_clients.id");
         }else{
@@ -524,7 +524,7 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
                 'billed_none_active_user_till_todate' => $billed_none_active_user_till_todate,
                 'paid_none_active_user_till_todate' => $paid_none_active_user_till_todate,
                 'due_adv_none_active_user_till_todate' => $due_adv_none_active_user_till_todate
-                );
+            );
 
         }
 
@@ -749,12 +749,12 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
 
   public function update_cashbook_amt($updated_amt)
   {
-   return $this->db->update('tbl_final_amount', $updated_amt);
+     return $this->db->update('tbl_final_amount', $updated_amt);
 
-}
+ }
 
-public function search_member_info($text)
-{
+ public function search_member_info($text)
+ {
     $this->db->select('id,CONCAT(client_id," -- ",name) as client_id', FALSE);
     $this->db->from('tbl_members');
     $this->db->like('client_id', $text, 'both');
@@ -767,15 +767,32 @@ public function search_member_info($text)
 
 public function search_collector_info($text)
 {
-   $this->db->select('id,CONCAT(name," ",surname) as name', FALSE);
-   $this->db->from('tbl_users');
-   $this->db->where('user_role_id', 4);
-   $this->db->where('status', 1);
-   $this->db->like('name', $text, 'both');
+ $this->db->select('id,CONCAT(name," ",surname) as name', FALSE);
+ $this->db->from('tbl_users');
+ $this->db->where('user_role_id', 4);
+ $this->db->where('status', 1);
+ $this->db->like('name', $text, 'both');
  // $this->db->or_like('surname', $text, 'both');
  // $this->db->or_like('mobile', $text, 'both');
-   $this->db->limit(5);
-   return $this->db->get()->result();
+ $this->db->limit(5);
+ return $this->db->get()->result();
+}
+
+function get_member_info($text)
+{
+    $this->db->select('*', FALSE);
+    $this->db->from('tbl_members');
+    $this->db->where('id', $text);
+    return $this->db->get()->row_array();
+}
+
+function todays_payment_info($text,$today_date)
+{
+    $this->db->select('count(id) as count_id', FALSE);
+    $this->db->from('tbl_payments');
+    $this->db->where('client_id', $text);
+    $this->db->where('payment_date', $today_date);
+    return $this->db->get()->row();
 }
 
     // helping to debuging

@@ -293,6 +293,14 @@ class Dashboard_model extends MY_Model{
 		$this->db->from('tbl_bank_account');
 		return $this->db->get()->row();
 	}
+
+	function get_expense_amt()
+	{
+		$this->db->select('sum(amount) as amount');
+		$this->db->from('tbl_expenses');
+		$this->db->where('status', 1);
+		return $this->db->get()->row();
+	}
 	
 	
 }?>

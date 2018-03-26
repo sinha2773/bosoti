@@ -51,4 +51,20 @@ class Member_model extends MY_Model {
         $this->db->where('id', $member_id)->update('tbl_members', $data);
         return $this->db->affected_rows();
     }
+
+    function get_member_details($id)
+    {
+        $this->db->select('*', FALSE);
+        $this->db->from('tbl_members');
+        $this->db->where('id', $id);
+        return $this->db->get()->row();
+    }
+
+    function get_reference_details($id)
+    {
+        $this->db->select('*', FALSE);
+        $this->db->from('tbl_reference_history');
+        $this->db->where('ref_id', $id);
+        return $this->db->get()->row();
+    }
 }

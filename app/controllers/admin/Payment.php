@@ -400,6 +400,18 @@ public function paymentSlip(){
         }
     }
 
+    function get_member_info()
+    {
+        date_default_timezone_set("Asia/Dhaka");
+        $today_date = date("Y-m-d");
+        $text = $this->input->post('id');
+        $return_data = array(
+            'member_info' =>$this->payment_model->get_member_info($text),
+            'payment_info' =>$this->payment_model->todays_payment_info($text,$today_date),
+        );
+        echo json_encode($return_data);
+    }
+
 }
 
 /* End of file welcome.php */
