@@ -166,47 +166,67 @@ class Payment extends MY_Controller {
         if ($this->form_validation->run() == TRUE) 
         {
 
-         $p_data['client_id'] = $this->input->post('client_id');
-         $p_data['amount'] = $this->input->post('amount');
-         $p_data['collector_id'] = $this->input->post('collector_id');
-         $p_data['payment_type'] = $this->input->post('payment_type');
-         $p_data['payment_date'] = date('Y-m-d', strtotime( $this->input->post('payment_date') ));
-         $p_data['payment_year'] = date('Y', strtotime($p_data['payment_date']));
-         $p_data['payment_month'] = date('m', strtotime($p_data['payment_date']));
-         $p_data['payment_day'] = date('d', strtotime($p_data['payment_date']));
-
-         $p_data['summary'] = $this->input->post('summary');
-         $p_data['added_by'] = $this->session->userdata('user_id');
-         $p_data['created'] = $this->now;
-         $this->db->trans_start();
-         $this->payment_model->add($p_data);
-         $current_cashbook_amt = $this->payment_model->get_cashbook_amount();
-         if($p_data['payment_type'] == "Deposit" || $p_data['payment_type'] == "Profit Distribution" || $p_data['payment_type'] == "Credit Adjust")
-         {
-             $updated_amt = array(
-                'cashbook_amount' => $current_cashbook_amt['cashbook_amount'] + $p_data['amount'],
-            );
+            if($this->input->post('collector_id') != ""){
+                $collector_data= array(
+                    'collector_name' => $this->input->post('collector_name'),
+                    'collector_id' =>$this->input->post('collector_id'),
+                );
+                $this->session->set_userdata($collector_data);
+            }
+            if($this->session->userdata("user_role")== 4){
+             $p_data['collector_id'] = $this->session->userdata("user_role");
          }
-         if($p_data['payment_type'] == "Debit Adjust"){
-            $updated_amt = array(
-                'cashbook_amount' => $current_cashbook_amt['cashbook_amount'] - $p_data['amount'],
-            );
+         else{
+            $p_data['collector_id'] = $this->input->post('collector_id');
         }
-        $this->payment_model->update_cashbook_amt($updated_amt);
-        $this->db->trans_complete();
-        if ($this->db->trans_status() === FALSE)
-        {
-            $this->session->set_flashdata('flashMessage', array('danger', "Sorry, payment adding failed."));                   
-        }
-        else
-        {
-           $this->session->set_flashdata('flashMessage', array('success', "Payment added successfully."));                   
-       }
+        $this->db->trans_start();
 
-       redirect($this->admin_path."payment/bill/add".$redirect_path, 'refresh');		
-   } 
-   else 
-   {
+        if( $p_data['collector_id'] == ""){
+            $this->db->trans_complete();
+            $this->db->trans_status() === FALSE;
+            $this->session->set_flashdata('flashMessage', array('danger', "Select Colletor Properly."));          
+            redirect($this->admin_path."payment/bill/add".$redirect_path, 'refresh');           
+        }
+        $p_data['client_id'] = $this->input->post('client_id');
+        $p_data['amount'] = $this->input->post('amount');
+           // $p_data['collector_id'] = $this->input->post('collector_id');
+        $p_data['payment_type'] = $this->input->post('payment_type');
+        $p_data['payment_date'] = date('Y-m-d', strtotime( $this->input->post('payment_date') ));
+        $p_data['payment_year'] = date('Y', strtotime($p_data['payment_date']));
+        $p_data['payment_month'] = date('m', strtotime($p_data['payment_date']));
+        $p_data['payment_day'] = date('d', strtotime($p_data['payment_date']));
+        $p_data['summary'] = $this->input->post('summary');
+        $p_data['added_by'] = $this->session->userdata('user_id');
+        $p_data['created'] = $this->now;
+
+        $this->payment_model->add($p_data);
+        $current_cashbook_amt = $this->payment_model->get_cashbook_amount();
+        if($p_data['payment_type'] == "Deposit" || $p_data['payment_type'] == "Profit Distribution" || $p_data['payment_type'] == "Credit Adjust")
+        {
+           $updated_amt = array(
+            'cashbook_amount' => $current_cashbook_amt['cashbook_amount'] + $p_data['amount'],
+        );
+       }
+       if($p_data['payment_type'] == "Debit Adjust"){
+        $updated_amt = array(
+            'cashbook_amount' => $current_cashbook_amt['cashbook_amount'] - $p_data['amount'],
+        );
+    }
+    $this->payment_model->update_cashbook_amt($updated_amt);
+    $this->db->trans_complete();
+    if ($this->db->trans_status() === FALSE)
+    {
+        $this->session->set_flashdata('flashMessage', array('danger', "Sorry, payment adding failed."));                   
+    }
+    else
+    {
+     $this->session->set_flashdata('flashMessage', array('success', "Payment added successfully."));                   
+ }
+
+ redirect($this->admin_path."payment/bill/add".$redirect_path, 'refresh');		
+} 
+else 
+{
     $re_call = true;
                 //$this->bill('add');
     $this->session->set_flashdata('flashMessage', array('danger', "Sorry, Something went wrong"));
@@ -223,10 +243,10 @@ elseif( $action == "delete" )
     $result = $this->master->delete($this->payment_table, $id, 'payment_id');
     if ( $result )
     {
-       $this->session->set_flashdata('flashMessage', array('success', "Payment deleted successfully."));                   
-   }
-   else
-   {
+     $this->session->set_flashdata('flashMessage', array('success', "Payment deleted successfully."));                   
+ }
+ else
+ {
     $this->session->set_flashdata('flashMessage', array('danger', "Sorry, payment deleting failed."));                   
 }     
 

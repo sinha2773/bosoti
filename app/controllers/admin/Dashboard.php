@@ -21,11 +21,13 @@ class Dashboard extends MY_Controller {
 	// Dashboard
 	public function index()
 	{	
-        $this->load->model('dashboard_model', 'dashboard');
+		$this->load->model('dashboard_model', 'dashboard');
 		$data = $this->init("Dashboard");
+		$data['total_cashbook']= $this->dashboard->get_cashbook_amt();
+		$data['total_bank_acc']= $this->dashboard->get_bank_acc_amt();
 		$data["content"] = $this->load->view($this->theme."dashboard/index",$data,TRUE);
 		$this->load->view($this->theme.'layout',$data);
-	
+
 	}
 
 	public function miniMonthlySummary(){

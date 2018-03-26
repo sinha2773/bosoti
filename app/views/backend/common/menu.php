@@ -223,8 +223,8 @@ $fetch_class = $this->router->fetch_class();
 					</li>	
 					<?php } ?>
 					
-					<!-- <li><a href="<?php echo base_url("admin/balance/cashbook");?>">Cash Book</a></li> -->
-					<!-- <li><a href="<?php echo base_url("admin/balance/sheet");?>">Balance Sheet</a></li> -->
+					<li><a href="<?php echo base_url("admin/balance/cashbook");?>">Cash Book</a></li> 
+					<!-- <li><a href="<?php echo base_url("admin/balance/sheet");?>">Balance Sheet</a></li>  -->
 				</ul>
 			</li>
 			<?php } ?>		
@@ -288,7 +288,7 @@ $fetch_class = $this->router->fetch_class();
 					
 				</ul>
 			</li>
-			<?php } ?>
+			<?php } */?>
 
 			<?php 
 			$message_sub1 = '';
@@ -318,7 +318,7 @@ $fetch_class = $this->router->fetch_class();
 					
 				</ul>
 			</li>
-			<?php } */ ?>
+			<?php }  ?>
 
 			<?php 
 			$setting_sub1 = '';

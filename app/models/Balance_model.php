@@ -25,7 +25,7 @@ class Balance_model extends MY_Model {
             $date_field = 'created';
         }
 
-        $this->db->select('sum(amount+discount) as total_amount, DATE_FORMAT(tbl_payments.'.$date_field.',"%Y-%m-%d") as billing_date, DATE_FORMAT(tbl_payments.'.$date_field.',"%Y-%m-%d") as created_date, max(billing_month) as billing_month, max(billing_year) as billing_year, bill_collector, (select name from tbl_users u where u.id=bill_collector) as collector');
+        $this->db->select('sum(amount+discount) as total_amount, DATE_FORMAT(tbl_payments.'.$date_field.',"%Y-%m-%d") as billing_date, DATE_FORMAT(tbl_payments.'.$date_field.',"%Y-%m-%d") as created_date, max(payment_month) as payment_month, max(payment_year) as payment_year, collector_id, (select name from tbl_users u where u.id=collector_id) as collector');
         
 
         // From Date/To Date
@@ -42,13 +42,13 @@ class Balance_model extends MY_Model {
 
         if( isset($filter_data['collector']) && !empty($filter_data['collector']) )
         {
-            $this->db->where("bill_collector", $filter_data['collector']);
+            $this->db->where("collector_id", $filter_data['collector']);
         }
 
         if ( isset($filter_data['all_sum']) && $filter_data['all_sum']==true ){
             // all together
         }else{
-            $this->db->group_by("bill_collector");
+            $this->db->group_by("collector_id");
             $this->db->group_by("created_date");
         }
 
@@ -79,7 +79,7 @@ class Balance_model extends MY_Model {
         if ( isset($filter_data['all_sum']) && $filter_data['all_sum']==true ){
             // all together
         }else
-            $this->db->group_by('invoice');
+        $this->db->group_by('invoice');
 
         $this->db->order_by('created_date');
 
@@ -90,41 +90,41 @@ class Balance_model extends MY_Model {
         return $query->result();
     }
 
-    function expenseFromSalary($filter_data=array()){
-        $this->db->select('sum(amount+adjustment_amount) as total_amount, DATE_FORMAT(created,"%Y-%m-%d") as billing_date, DATE_FORMAT(created,"%Y-%m-%d") as created_date, max(billing_month) as billing_month, max(billing_year) as billing_year, employee_id, (select full_name from tbl_employees e where e.id=employee_id) as employee');
-        
-        // From Date/To Date
-        if( isset($filter_data['from_date']) && !empty($filter_data['from_date']) )
-        {
-            // $this->db->where("billing_date>=", $filter_data['from_date']);
-            $this->db->where("DATE_FORMAT(created,'%Y-%m-%d') >=", $filter_data['from_date']);
-        }
-        if( isset($filter_data['to_date']) && !empty($filter_data['to_date']) )
-        {
-            // $this->db->where("billing_date<=", $filter_data['to_date']);
-            $this->db->where("DATE_FORMAT(created,'%Y-%m-%d') <=", $filter_data['to_date']);
-        }
+    // function expenseFromSalary($filter_data=array()){
+    //     $this->db->select('sum(amount+adjustment_amount) as total_amount, DATE_FORMAT(created,"%Y-%m-%d") as billing_date, DATE_FORMAT(created,"%Y-%m-%d") as created_date, max(payment_month) as payment_month, max(payment_year) as payment_year, employee_id, (select full_name from tbl_employees e where e.id=employee_id) as employee');
+    
+    //     // From Date/To Date
+    //     if( isset($filter_data['from_date']) && !empty($filter_data['from_date']) )
+    //     {
+    //         // $this->db->where("billing_date>=", $filter_data['from_date']);
+    //         $this->db->where("DATE_FORMAT(created,'%Y-%m-%d') >=", $filter_data['from_date']);
+    //     }
+    //     if( isset($filter_data['to_date']) && !empty($filter_data['to_date']) )
+    //     {
+    //         // $this->db->where("billing_date<=", $filter_data['to_date']);
+    //         $this->db->where("DATE_FORMAT(created,'%Y-%m-%d') <=", $filter_data['to_date']);
+    //     }
 
-        if( isset($filter_data['employee']) && !empty($filter_data['employee']) )
-        {
-            $this->db->where("employee_id", $filter_data['employee']);
-        }
+    //     if( isset($filter_data['employee']) && !empty($filter_data['employee']) )
+    //     {
+    //         $this->db->where("employee_id", $filter_data['employee']);
+    //     }
 
-        if ( isset($filter_data['all_sum']) && $filter_data['all_sum']==true ){
-            // all together
-        }else{
-            $this->db->group_by("employee_id");
-            $this->db->group_by("created_date");
-        }
+    //     if ( isset($filter_data['all_sum']) && $filter_data['all_sum']==true ){
+    //         // all together
+    //     }else{
+    //         $this->db->group_by("employee_id");
+    //         $this->db->group_by("created_date");
+    //     }
 
-        $this->db->order_by('created_date', 'ASC');
+    //     $this->db->order_by('created_date', 'ASC');
 
-        $this->db->having('total_amount>0');
-        $query = $this->db->get($this->salary_table);
-        //echo $this->db->last_query();exit;
+    //     $this->db->having('total_amount>0');
+    //     $query = $this->db->get($this->salary_table);
+    //     //echo $this->db->last_query();exit;
 
-        return $query->result();
-    }
+    //     return $query->result();
+    // }
     function expenseFromOthers($filter_data=array()){
         $this->db->select('sum(amount) as total_amount, payment_method, payment_to, DATE_FORMAT(created,"%Y-%m-%d") as expense_date, DATE_FORMAT(created,"%Y-%m-%d") as created_date, invoice, extype_id, remark');
         
@@ -145,7 +145,7 @@ class Balance_model extends MY_Model {
         if ( isset($filter_data['all_sum']) && $filter_data['all_sum']==true ){
             // all together
         }else
-            $this->db->group_by('invoice');
+        $this->db->group_by('invoice');
 
         $this->db->order_by('created_date');
 
@@ -161,7 +161,7 @@ class Balance_model extends MY_Model {
         $incomeFromMonthlyBill = $this->incomeFromMonthlyBill($filter_data);
         $incomeFromOthers = $this->incomeFromOthers($filter_data);
 
-        $expenseFromSalary = $this->expenseFromSalary($filter_data);
+        // $expenseFromSalary = $this->expenseFromSalary($filter_data);
         $expenseFromOthers = $this->expenseFromOthers($filter_data);
 
         $cashBookArray = array(); 
@@ -179,14 +179,14 @@ class Balance_model extends MY_Model {
             }
         }
 
-        // marge expense of salary
-        if ( !empty($expenseFromSalary) ){
-            foreach ( $expenseFromSalary as $expense ){
-                $cashBookArray[$expense->billing_date]['expense_salary'][] = $expense;
-            }
-        }
+        // // marge expense of salary
+        // if ( !empty($expenseFromSalary) ){
+        //     foreach ( $expenseFromSalary as $expense ){
+        //         $cashBookArray[$expense->billing_date]['expense_salary'][] = $expense;
+        //     }
+        // }
 
-        // marge expense of others
+        // // marge expense of others
         if ( !empty($expenseFromOthers) ){
             foreach ( $expenseFromOthers as $expense ){
                 $cashBookArray[$expense->expense_date]['expense_other'][] = $expense;
@@ -222,12 +222,12 @@ class Balance_model extends MY_Model {
             $output['billing'][$year.$month] = $this->getPayment( array('from_date'=>$startEndDate['start'], 'to_date'=>$startEndDate['end'], 'all_sum'=>true, 'status'=>2) );
             $output['voucher']['receive_billing'][$year.$month] = $this->incomeFromMonthlyBill( array('from_date'=>$startEndDate['start'], 'to_date'=>$startEndDate['end'], 'created'=>false, 'all_sum'=>false) );
             $output['voucher']['receive_other'][$year.$month] = $this->incomeFromOthers( array('from_date'=>$startEndDate['start'], 'to_date'=>$startEndDate['end'], 'all_sum'=>true) );
-            $output['voucher']['payment_salary'][$year.$month] = $this->expenseFromSalary( array('from_date'=>$startEndDate['start'], 'to_date'=>$startEndDate['end'], 'all_sum'=>true) );
+            // $output['voucher']['payment_salary'][$year.$month] = $this->expenseFromSalary( array('from_date'=>$startEndDate['start'], 'to_date'=>$startEndDate['end'], 'all_sum'=>true) );
             $output['voucher']['payment_other'][$year.$month] = $this->expenseFromOthers( array('from_date'=>$startEndDate['start'], 'to_date'=>$startEndDate['end'], 'all_sum'=>true) );
         }
 
         // $this->pr($output);exit;
         return $output;
     }
-   
+    
 }

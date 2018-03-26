@@ -3,76 +3,76 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 <!DOCTYPE html>
 <html lang="en-us">
-	<head>
-		<meta charset="utf-8">
-		<title><?php echo $title;?></title>
-		<meta name="description" content="Opensource eBiliing, Client Management, Employee Management Software, Customer Management, Office Staff and House Rent Management Software.">
-		<meta name="keywords" content="cable newwork application, ebilling software, client management software, customer management software.">
-		<meta name="author" content="Bakul Sinha">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-		
-		<script type="text/javascript">var base_url = "<?php echo base_url();?>"; </script>
-		<?php $base_url = base_url()."assets/_back/";?>
-		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_url;?>css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_url;?>css/font-awesome.min.css">
+<head>
+	<meta charset="utf-8">
+	<title><?php echo $title;?></title>
+	<meta name="description" content="Opensource eBiliing, Client Management, Employee Management Software, Customer Management, Office Staff and House Rent Management Software.">
+	<meta name="keywords" content="cable newwork application, ebilling software, client management software, customer management software.">
+	<meta name="author" content="Bakul Sinha">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	
+	<script type="text/javascript">var base_url = "<?php echo base_url();?>"; </script>
+	<?php $base_url = base_url()."assets/_back/";?>
+	<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_url;?>css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_url;?>css/font-awesome.min.css">
 
 
-		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_url;?>css/smartadmin-production.min.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_url;?>css/smartadmin-skins.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_url;?>css/smartadmin-production.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_url;?>css/smartadmin-skins.min.css">
 
 
-		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_url;?>css/demo.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_url;?>css/demo.min.css">
 
-		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_url;?>css/my_style.css">
-		<!-- #FAVICONS -->
-		<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
-		<link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_url;?>css/my_style.css">
+	<!-- #FAVICONS -->
+	<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
 
-		<!-- #GOOGLE FONT -->
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+	<!-- #GOOGLE FONT -->
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
 
-		<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
-		<script data-pace-options='{ "restartOnRequestAfter": true }' src="<?php echo $base_url;?>js/plugin/pace/pace.min.js"></script>
+	<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+	<script data-pace-options='{ "restartOnRequestAfter": true }' src="<?php echo $base_url;?>js/plugin/pace/pace.min.js"></script>
 
-		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-		<script>
-			if (!window.jQuery) {
-				document.write('<script src="<?php echo $base_url;?>js/libs/jquery-2.0.2.min.js"><\/script>');
-			}
-		</script>
+	<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+	<script>
+		if (!window.jQuery) {
+			document.write('<script src="<?php echo $base_url;?>js/libs/jquery-2.0.2.min.js"><\/script>');
+		}
+	</script>
 
-		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-		<script>
-			if (!window.jQuery.ui) {
-				document.write('<script src="<?php echo $base_url;?>js/libs/jquery-ui-1.10.3.min.js"><\/script>');
-			}
-		</script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+	<script>
+		if (!window.jQuery.ui) {
+			document.write('<script src="<?php echo $base_url;?>js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+		}
+	</script>
 
-		<!-- plugin-->
-		<script src="<?php echo $base_url;?>/js/plugin/tags/tagmanager.js"></script>
-		<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>/js/plugin/tags/tagmanager.css">
+	<!-- plugin-->
+	<script src="<?php echo $base_url;?>/js/plugin/tags/tagmanager.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>/js/plugin/tags/tagmanager.css">
 
-		<!-- EDITOR -->
-		<script src="<?php echo $base_url;?>js/plugin/ckeditor/ckeditor.js"></script>
-		<!-- COLOR PICKER PLUGIN-->
-		<script src="<?php echo $base_url;?>js/plugin/colorpicker/bootstrap-colorpicker.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>js/plugin/colorpicker/css/bootstrap-colorpicker.min.css">
+	<!-- EDITOR -->
+	<script src="<?php echo $base_url;?>js/plugin/ckeditor/ckeditor.js"></script>
+	<!-- COLOR PICKER PLUGIN-->
+	<script src="<?php echo $base_url;?>js/plugin/colorpicker/bootstrap-colorpicker.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>js/plugin/colorpicker/css/bootstrap-colorpicker.min.css">
 
-		<!--datatable-->
-		<script src="<?php echo $base_url;?>/js/plugin/datatables/jquery.dataTables.min.js"></script>
-		<script src="<?php echo $base_url;?>/js/plugin/datatables/dataTables.bootstrap.min.js"></script>
-		<script src="<?php echo $base_url;?>/js/plugin/datatables/dataTables.tableTools.min.js"></script>
+	<!--datatable-->
+	<script src="<?php echo $base_url;?>/js/plugin/datatables/jquery.dataTables.min.js"></script>
+	<script src="<?php echo $base_url;?>/js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="<?php echo $base_url;?>/js/plugin/datatables/dataTables.tableTools.min.js"></script>
 
-		<!-- by template -->
-		<script src="<?php echo $base_url;?>js/plugin/datatables/jquery.dataTables.min.js"></script>
-		<script src="<?php echo $base_url;?>js/plugin/datatables/dataTables.colVis.min.js"></script>
-		<script src="<?php echo $base_url;?>js/plugin/datatables/dataTables.tableTools.min.js"></script>
-		<script src="<?php echo $base_url;?>js/plugin/datatables/dataTables.bootstrap.min.js"></script>
-		<script src="<?php echo $base_url;?>js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
-		<!--/by template-->
+	<!-- by template -->
+	<script src="<?php echo $base_url;?>js/plugin/datatables/jquery.dataTables.min.js"></script>
+	<script src="<?php echo $base_url;?>js/plugin/datatables/dataTables.colVis.min.js"></script>
+	<script src="<?php echo $base_url;?>js/plugin/datatables/dataTables.tableTools.min.js"></script>
+	<script src="<?php echo $base_url;?>js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="<?php echo $base_url;?>js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+	<!--/by template-->
 
-		<!--default-->
+	<!--default-->
 		<!-- <script src="<?php echo $base_url;?>/js/plugin/datatable-responsive/jquery.dataTables.min.js"></script>
 		<script src="<?php echo $base_url;?>js/plugin/datatable-responsive/dataTables.buttons.min.js"></script>
 		<script src="<?php echo $base_url;?>js/plugin/datatable-responsive/buttons.flash.min.js"></script>
@@ -111,7 +111,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				</div>
 				<!-- end collapse menu -->
 				
-			
+				
 
 				<!-- logout button -->
 				<div id="logout" class="btn-header transparent pull-right">

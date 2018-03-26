@@ -48,21 +48,36 @@ class Expense extends MY_Controller {
         $data['user_id']=$this->session->userdata("user_id");
         // unset($data['acc_number']);
         $this->db->trans_start();
-        $this->Expense_model->save_payment_voucher_info($data);
         if($data['payment_method'] == "cash"){
             $current_cashbook_amt = $this->Expense_model->get_cashbook_amt();
-            $updated_data= array(
-                'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']-$data['amount']  ,
+            if($data['amount'] > $current_cashbook_amt['cashbook_amount']){
+                $this->db->trans_complete();
+                $this->db->trans_status() === FALSE;
+                $this->session->set_flashdata('flashMessage', array('danger', "Insufficient Amount In Cashbook."));    
+                redirect('/admin/common/add/expense');   
+            }
+            else{
+                $updated_data= array(
+                    'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']-$data['amount']  ,
                 );
-            $this->Expense_model->update_cashbook_balance($updated_data);
+                $this->Expense_model->save_payment_voucher_info($data);
+                $this->Expense_model->update_cashbook_balance($updated_data);
+            }
         }
         else{
             $bank_acc_id= $data['bank_acc_id'];
             $curr_acc_amt=  $this->Expense_model->get_bank_acc_amt($bank_acc_id);
+            if($data['amount'] > $curr_acc_amt['balance']){
+                $this->db->trans_complete();
+                $this->db->trans_status() === FALSE;
+                $this->session->set_flashdata('flashMessage', array('danger', "Insufficient Amount In Bank Account."));    
+                redirect('/admin/common/add/expense');   
+
+            }
             $updated_data= array(
                 'balance' =>$curr_acc_amt['balance']-$data['amount']  ,
-                );
-
+            );
+            $this->Expense_model->save_payment_voucher_info($data);
             $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
         }
         $this->db->trans_complete();
@@ -80,43 +95,70 @@ class Expense extends MY_Controller {
 
     public function update_payment_voucher()
     {
-       $data= $this->input->post();
-       $voucher_id  =$data['id'];
-       $get_previous_amt = $this->Expense_model->get_invoice_info($voucher_id);
-       $diff_amt  = $get_previous_amt['amount'] - $data['amount'];
-       $data['user_id']=$this->session->userdata("user_id");
+     $data= $this->input->post();
+     $voucher_id  =$data['id'];
+     $get_previous_amt = $this->Expense_model->get_invoice_info($voucher_id);
+     $diff_amt  = $get_previous_amt['amount'] - $data['amount'];
+     $data['user_id']=$this->session->userdata("user_id");
         // unset($data['acc_number']);
-       $this->db->trans_start();
-       $this->Expense_model->update_receipts_voucher_info($voucher_id,$data);
-       if($data['payment_method'] == "cash"){
+     $this->db->trans_start();
+     if($data['payment_method'] == "cash"){
         $current_cashbook_amt = $this->Expense_model->get_cashbook_amt();
-        $updated_data= array(
-            'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']+$diff_amt,
+        if($diff_amt > $current_cashbook_amt['cashbook_amount']){
+            $this->db->trans_complete();
+            $this->db->trans_status() === FALSE;
+            $this->session->set_flashdata('flashMessage', array('danger', "Insufficient Amount In Cashbook."));    
+            redirect('/admin/common/add/expense');   
+        }
+        else{
+            $updated_data= array(
+                'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']+$diff_amt,
             );
-        $this->Expense_model->update_cashbook_balance($updated_data);
+            $this->Expense_model->update_receipts_voucher_info($voucher_id,$data);
+            $this->Expense_model->update_cashbook_balance($updated_data);
+        }
     }
     else{
         if($get_previous_amt['bank_acc_id'] == $data['bank_acc_id']){
             $bank_acc_id= $data['bank_acc_id'];
             $curr_acc_amt=  $this->Expense_model->get_bank_acc_amt($bank_acc_id);
-            $updated_data= array(
-                'balance' =>$curr_acc_amt['balance']+$diff_amt,
+            if($diff_amt > $curr_acc_amt['balance']){
+                $this->db->trans_complete();
+                $this->db->trans_status() === FALSE;
+                $this->session->set_flashdata('flashMessage', array('danger', "Insufficient Amount In Bank Account."));    
+                redirect('/admin/common/add/expense');   
+
+            }
+            else{
+                $updated_data= array(
+                    'balance' =>$curr_acc_amt['balance']+$diff_amt,
                 );
-            $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+                $this->Expense_model->update_receipts_voucher_info($voucher_id,$data);
+                $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+            }
         }
         else{
             $bank_acc_id= $data['bank_acc_id'];
             $curr_acc_amt=  $this->Expense_model->get_bank_acc_amt($bank_acc_id);
-            $updated_data= array(
-                'balance' =>$curr_acc_amt['balance']-$data['amount'],
+            if($data['amount'] > $curr_acc_amt['balance']){
+                $this->db->trans_complete();
+                $this->db->trans_status() === FALSE;
+                $this->session->set_flashdata('flashMessage', array('danger', "Insufficient Amount In Bank Account."));    
+                redirect('/admin/common/add/expense');  
+            }
+            else{
+                $updated_data= array(
+                    'balance' =>$curr_acc_amt['balance']-$data['amount'],
                 );
-            $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+                $this->Expense_model->update_receipts_voucher_info($voucher_id,$data);
+                $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+            }
             $previous_acc= $get_previous_amt['bank_acc_id'];
             $prev_acc_amt=  $this->Expense_model->get_bank_acc_amt($previous_acc);
 
             $previou_acc_data = array(
                 'balance' =>$prev_acc_amt['balance']+$get_previous_amt['amount'],
-                );
+            );
             $this->Expense_model->update_prev_bank_acc_balance($previous_acc,$previou_acc_data);
         }
 
@@ -142,22 +184,22 @@ public function delete_expense($id)
         $current_cashbook_amt = $this->Expense_model->get_cashbook_amt();
         $updated_data= array(
             'cashbook_amount' =>$current_cashbook_amt['cashbook_amount']+ $exp_info['amount'],
-            );
+        );
         $this->Expense_model->update_cashbook_balance($updated_data);
     }
     else{
-     $bank_acc_id= $exp_info['bank_acc_id'];
-     $curr_acc_amt=  $this->Expense_model->get_bank_acc_amt($bank_acc_id);
-     $updated_data= array(
+       $bank_acc_id= $exp_info['bank_acc_id'];
+       $curr_acc_amt=  $this->Expense_model->get_bank_acc_amt($bank_acc_id);
+       $updated_data= array(
         'balance' =>$curr_acc_amt['balance']+ $exp_info['amount'],
-        );
-     $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
- }
- $this->Expense_model->delete_expense_voucher($id);
+    );
+       $this->Expense_model->update_bank_acc_balance($bank_acc_id,$updated_data);
+   }
+   $this->Expense_model->delete_expense_voucher($id);
 
- $this->db->trans_complete();
- if ($this->db->trans_status() === FALSE)
- {
+   $this->db->trans_complete();
+   if ($this->db->trans_status() === FALSE)
+   {
     $this->session->set_flashdata('flashMessage', array('danger', "Sorry, Payable Voucher Deleted Failed."));                   
 }
 else

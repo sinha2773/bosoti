@@ -1,4 +1,4 @@
-<div id="widget-grid" class="col-sm-12">       
+<!-- <div id="widget-grid" class="col-sm-12">       
     <div class="section">
         <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-deletebutton="false">
             <header>
@@ -30,7 +30,7 @@
             </div>
         </div>    
     </div>
-</div>
+</div> -->
 
 <section class="content">
     <div class="box">

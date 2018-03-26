@@ -59,6 +59,14 @@ class Bank_model extends MY_Model {
 		return $this->db->affected_rows();
 	}
 
+	function get_all_bank_acc_info()
+	{
+		$this->db->select('*', FALSE);
+		$this->db->from('tbl_bank_account');
+		$this->db->where('status', 1);
+		return $this->db->get()->result();
+	}
+
 }
 
 /* End of file Bank_model.php */

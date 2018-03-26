@@ -1,54 +1,35 @@
+      <div class="row">
+        <div class="col-xl-3 col-sm-4 mb-3">
+          <div class="card text-white bg-primary o-hidden h-100">
+            <div class="card-body">Cashbook Balance
+              <div class="card-body-icon">
+               <i class="fa fa-fw fa-list"></i>
+             </div>
+             <div class="mr-5"><?php echo number_format($total_cashbook->cashbook_amount)?></div>
+           </div>
 
-<div class="quick_report">
-	<div class="panel panel-ingo">
-		<div class="panel-heading">
-			<span style="font-size: 20px">Quick Report</span>
-		</div>
-		<div class="panel-body">
-			Year: 
-			<select name="year" id="year">
-				<option>2017</option>
-				<option>2018</option>
-				<option>2019</option>
-			</select>
-			<table class="table">
-				<?php 
-				for($i=1; $i<=33; $i++)
-				{
-				?>
-				<tr>
-					<td>
-						<?php 
-						if($i==1)
-						{
-							// nothing
-						}
-						elseif($i==33)
-						{
-							echo 'Total';
-						}
-						else
-						{
-							echo $i-1;
-						}
-						?>			
-					</td>
-					<td>January</td>
-					<td>February</td>
-					<td>March</td>
-					<td>April</td>
-					<td>May</td>
-					<td>June</td>
-					<td>July</td>
-					<td>August</td>
-					<td>September</td>
-					<td>October</td>
-					<td>November</td>
-					<td>December</td>
-					<td>Total</td>
-				</tr>
-				<?php } ?>
-			</table>
-		</div>
-	</div>
-</div>
+         </div>
+       </div>
+       <div class="col-xl-3 col-sm-4 mb-3">
+        <div class="card text-white bg-warning o-hidden h-100">
+          <div class="card-body">Bank Account Balance
+            <div class="card-body-icon">
+              <i class="fa fa-fw fa-list"></i>
+            </div>
+            <div class="mr-5"><?php echo number_format($total_bank_acc->balance)?></div>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-xl-3 col-sm-4 mb-3">
+        <div class="card text-white bg-success o-hidden h-100">
+          <div class="card-body">Total Balance
+            <div class="card-body-icon">
+             <i class="fa fa-fw fa-list"></i>
+           </div>
+           <div class="mr-5"><?php echo number_format($total_cashbook->cashbook_amount+ $total_bank_acc->balance)  ?></div>
+         </div>
+
+       </div>
+     </div>
+   </div>

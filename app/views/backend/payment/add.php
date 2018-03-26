@@ -18,19 +18,30 @@
                 </div>
             </div>
         </div>
+        <?php if ($this->session->userdata("user_role") != 4) { ?>
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
                     <label >Select Collector <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup>
                     </label>
-                    <input type="text" autocomplete="off" name="collector_name" placeholder="Select Collector" id="collector_select" class="form-control" required>
+                    <?php if($this->session->userdata('collector_id')) { ?>
+                    <input type="text" autocomplete="off" name="collector_name" placeholder="Select Collector" id="collector_select" class="form-control" value="<?php echo $this->session->userdata('collector_name')?>" >
+                    <span class="help-block" id="collector_help_block" ></span>
+                    <input type="hidden" autocomplete="off" name="collector_id" value="<?php echo $this->session->userdata('collector_id')?>"  class="form-control">
+                    <table class="table table-condensed table-hover table-bordered clickable" id="collector_select_result" style="position: absolute;z-index: 10;background-color: #fff;width: 92%">
+                    </table>
+                    <?php  } else{ ?>
+                    <input type="text" autocomplete="off" name="collector_name" placeholder="Select Collector" id="collector_select" class="form-control" >
                     <span class="help-block" id="collector_help_block" ></span>
                     <input type="hidden" autocomplete="off" name="collector_id"  class="form-control">
                     <table class="table table-condensed table-hover table-bordered clickable" id="collector_select_result" style="position: absolute;z-index: 10;background-color: #fff;width: 92%">
                     </table>
+                    <?php }?>
+
                 </div>
             </div>
         </div>
+        <?php }?>
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
@@ -81,12 +92,12 @@
         </div>
     </div>
 
-    <div class="col-sm-4">
+<!--     <div class="col-sm-4">
         <div class="payment_summary">
             <h3>User Payment Details</h3>
             <div class="payment_details"></div>
         </div>
-    </div>
+    </div> -->
     
 </form>
 <div class="billing_table"></div>

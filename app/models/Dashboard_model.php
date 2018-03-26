@@ -142,24 +142,24 @@ class Dashboard_model extends MY_Model{
 	function client_payment_summary(){
 		$this->load->model('balance_model', 'balance');
 		$incomeFromMonthlyBill = $this->get_total_client_payment();
-        $incomeFromOthers = $this->get_total_other_payment();
+		$incomeFromOthers = $this->get_total_other_payment();
 
-        $expenseFromSalary = $this->get_total_salary_paid();
-        $expenseFromOthers = $this->get_total_other_paid();
+		$expenseFromSalary = $this->get_total_salary_paid();
+		$expenseFromOthers = $this->get_total_other_paid();
 
         // $this->pr($incomeFromMonthlyBill);
         // $this->pr($incomeFromOthers);
         // $this->pr($expenseFromSalary);
         // $this->pr($expenseFromOthers);exit;
 
-        $result = array(
-        	'incomeFromMonthlyBill'	=>$incomeFromMonthlyBill,
-        	'incomeFromOthers'		=>$incomeFromOthers,
-        	'expenseFromSalary'		=>$expenseFromSalary,
-        	'expenseFromOthers'		=>$expenseFromOthers,
-        );
+		$result = array(
+			'incomeFromMonthlyBill'	=>$incomeFromMonthlyBill,
+			'incomeFromOthers'		=>$incomeFromOthers,
+			'expenseFromSalary'		=>$expenseFromSalary,
+			'expenseFromOthers'		=>$expenseFromOthers,
+		);
 
-        return $result;
+		return $result;
 	}
 
 	function monthly_payment_summary($month='', $year='', $all=false){
@@ -183,7 +183,7 @@ class Dashboard_model extends MY_Model{
 		$result = $this->db->get()->result();
 		// echo $this->db->last_query();exit;
 		$summary = array();	
-	
+
 
 		if ( !empty($result) ){
 			foreach($result as $data){
@@ -251,7 +251,7 @@ class Dashboard_model extends MY_Model{
 				unset($details_monthly['adj_adv_paid_alias']);
 				foreach ($details_monthly as $id=>$value) {
 					if ( !is_array($id) )
-					@$sumArray[$id]+=$value;
+						@$sumArray[$id]+=$value;
 				}
 			}
 			$sumArray['monthly_paid_with_discount_alias'] = $sumArray['monthly_paid'] .'('. $sumArray['monthly_discount'] .')';
@@ -272,12 +272,26 @@ class Dashboard_model extends MY_Model{
 
 		$dates = $this->master->rangeMonth($year.'-'.$month.'-01');
         // together payment only status 2(active clients)
-        $results = $this->payment->get_payments_report(['from_date'=>$dates['start'], 'to_date'=>$dates['end'], 'status'=>2, 'together' => 1]);
+		$results = $this->payment->get_payments_report(['from_date'=>$dates['start'], 'to_date'=>$dates['end'], 'status'=>2, 'together' => 1]);
         // $this->pr($results);exit;
-        return (array)end($results);
+		return (array)end($results);
 
         // return $this->payment->footer_payment_calculation($results);
 
+	}
+
+	function get_cashbook_amt()
+	{
+		$this->db->select('cashbook_amount');
+		$this->db->from('tbl_final_amount');
+		return $this->db->get()->row();
+	}
+
+	function get_bank_acc_amt()
+	{
+		$this->db->select('sum(balance) as balance');
+		$this->db->from('tbl_bank_account');
+		return $this->db->get()->row();
 	}
 	
 	

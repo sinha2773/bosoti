@@ -9,6 +9,7 @@ class Bank_acc_create extends MY_Controller {
 			redirect($this->admin_path, "refresh");
 		}
 		$this->load->model('Bank_model');
+		$this->load->model('payment_model');
 	}
 
 	public function index()
@@ -58,8 +59,15 @@ class Bank_acc_create extends MY_Controller {
 	function bank_accc_list()
 	{
 		$data = $this->init("Bank Accounts List");
+		$data['lists'] = $this->Bank_model->get_all_bank_acc_info(); 
 		$data["content"] = $this->load->view($this->theme."bank_acc_create/bank_acc_list",$data,TRUE);
 		$this->load->view($this->theme.'layout',$data);
+	}
+
+	function test()
+	{
+		echo "<pre>";
+		print_r($_SESSION);
 	}
 
 }
