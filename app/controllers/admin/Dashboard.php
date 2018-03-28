@@ -9,6 +9,8 @@ class Dashboard extends MY_Controller {
 			redirect($this->admin_path, "refresh");
 		}
 
+		$this->load->model('payment_model');
+
         //$this->load->driver("cache", array("adapter"=>"file"));
 	}	
 
@@ -26,6 +28,8 @@ class Dashboard extends MY_Controller {
 		$data['total_cashbook']= $this->dashboard->get_cashbook_amt();
 		$data['total_bank_acc']= $this->dashboard->get_bank_acc_amt();
 		$data['total_expense']= $this->dashboard->get_expense_amt();
+
+		// $data['members'] = 
 
 		$data["content"] = $this->load->view($this->theme."dashboard/index",$data,TRUE);
 		$this->load->view($this->theme.'layout',$data);

@@ -60,7 +60,7 @@ class Balance_model extends MY_Model {
         return $query->result();
     }
     function incomeFromOthers($filter_data=array()){
-        $this->db->select('sum(amount) as total_amount, payment_method, payment_from, DATE_FORMAT(created,"%Y-%m-%d") as income_date, DATE_FORMAT(created,"%Y-%m-%d") as created_date, invoice, intype_id, remark');
+        $this->db->select('sum(amount) as total_amount, payment_method, payment_from, DATE_FORMAT(created,"%Y-%m-%d") as income_date, DATE_FORMAT(created,"%Y-%m-%d") as created_date, invoice, intype_id, max(remark) remark');
         
         // From Date/To Date
         if( isset($filter_data['from_date']) && !empty($filter_data['from_date']) )
@@ -81,11 +81,18 @@ class Balance_model extends MY_Model {
         }else
         $this->db->group_by('invoice');
 
+        
+        $this->db->group_by('payment_method');
+        $this->db->group_by('created_date');
+        $this->db->group_by('payment_from');
+        $this->db->group_by('income_date');
+        $this->db->group_by('intype_id');
+
         $this->db->order_by('created_date');
 
         $this->db->having('total_amount>0');
         $query = $this->db->get($this->income_table);
-        //echo $this->db->last_query();exit;
+        // echo $this->db->last_query();exit;
 
         return $query->result();
     }
@@ -126,7 +133,7 @@ class Balance_model extends MY_Model {
     //     return $query->result();
     // }
     function expenseFromOthers($filter_data=array()){
-        $this->db->select('sum(amount) as total_amount, payment_method, payment_to, DATE_FORMAT(created,"%Y-%m-%d") as expense_date, DATE_FORMAT(created,"%Y-%m-%d") as created_date, invoice, extype_id, remark');
+        $this->db->select('sum(amount) as total_amount, payment_method, payment_to, DATE_FORMAT(created,"%Y-%m-%d") as expense_date, DATE_FORMAT(created,"%Y-%m-%d") as created_date, invoice, extype_id, max(remark) remark');
         
         // From Date/To Date
         if( isset($filter_data['from_date']) && !empty($filter_data['from_date']) )
@@ -147,11 +154,17 @@ class Balance_model extends MY_Model {
         }else
         $this->db->group_by('invoice');
 
+        $this->db->group_by('payment_method');
+        $this->db->group_by('payment_to');
+        $this->db->group_by('expense_date');
+        $this->db->group_by('created_date');
+        $this->db->group_by('extype_id');
+
         $this->db->order_by('created_date');
 
         $this->db->having('total_amount>0');
         $query = $this->db->get($this->expense_table);
-        //echo $this->db->last_query();exit;
+        // echo $this->db->last_query();exit;
 
         return $query->result();
     }

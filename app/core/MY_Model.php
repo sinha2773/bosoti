@@ -51,7 +51,7 @@ class MY_Model extends CI_Model {
         $this->address_table = "tbl_addresss";
         $this->floor_table = "tbl_floors";
         $this->zone_table = "tbl_zones";
-        $this->client_table = "tbl_clients";
+        $this->client_table = "tbl_members";
         $this->payment_table = "tbl_payments";
         $this->package_table = "tbl_packages";
         $this->client_history_table = "tbl_client_histories";

@@ -5,6 +5,12 @@ class Payment_model extends MY_Model {
     protected $table = 'tbl_payments';
     protected $id = 'id';
 
+    public $DIPOSIT = 1;
+    public $PROFIT_DISTRIBUTION = 2;
+    public $ADJUSTMENT_CREDIT = 3;
+    public $ADJUSTMENT_DEBIT = 4;
+
+
     function __construct() {
         parent::__construct();
     }
@@ -26,6 +32,19 @@ class Payment_model extends MY_Model {
             $format_amount = number_format($amount, 2).' '.$this->settings['currency'];
         
         return $format_amount;
+    }
+
+    function getPaymentTypes(){
+        return [
+            $this->DIPOSIT => 'Deposit',
+            $this->PROFIT_DISTRIBUTION => 'Profit Distribution',
+            $this->ADJUSTMENT_CREDIT => 'Adjustment (Credit)',
+            $this->ADJUSTMENT_DEBIT => 'Adjustment (Debit)'
+        ];
+    }
+
+    function getPaymentType($index){
+        return $this->getPaymentTypes()[$index];
     }
 
     function getByClientAndDate($clientId, $date)
@@ -667,7 +686,7 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
     // Due and Paid List
     public function paymentLog($from_date='', $to_date='', $collector='')
     {
-        $this->db->select('*, (amount + discount) as amount_discount, billing_year, billing_month, collection_date, (select name from tbl_users u where u.id=tbl_payments.added_by) as added_by, (select name from tbl_users u where u.id=bill_collector) as collector, tbl_clients.full_name, tbl_clients.resident, tbl_payments.created');
+        $this->db->select('*, amount, (select name from tbl_users u where u.id=tbl_payments.added_by) as added_by, (select name from tbl_users u where u.id=collector_id) as collector, tbl_members.name, tbl_payments.created');
         
 
         if ($from_date != ''){
@@ -682,9 +701,8 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
             $this->db->where("bill_collector", $collector);
         }
 
-        $this->db->join('tbl_clients','tbl_payments.client_id=tbl_clients.id');
-        $this->db->order_by('billing_date', 'ASC');
-        $this->db->having('amount_discount>0 or billing_type<>2');
+        $this->db->join('tbl_members','tbl_payments.client_id=tbl_members.id');
+        $this->db->order_by('payment_date', 'ASC');
         $query = $this->db->get($this->payment_table);
         //echo $this->db->last_query();exit;
 

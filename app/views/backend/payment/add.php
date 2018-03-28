@@ -69,6 +69,20 @@
                         <?php if( $this->master->isPermission('save_debit_adjust') ){?>
                         <option value="Debit Adjust">Adjust (Debit)</option>
                         <?php } ?>
+
+                        <?php /* if( $this->master->isPermission('save_deposit') ){?>
+                        <option value="<?php echo $this->payment_model->DIPOSIT;?>">Deposit</option>
+                        <?php } ?>
+                        <?php if( $this->master->isPermission('save_profit_distribution') ){?>
+                        <option value="<?php echo $this->payment_model->DIPOSIT;?>">Profit Distribution</option>
+                        <?php } ?>
+                        <?php if( $this->master->isPermission('save_credit_adjust') ){?>
+                        <option value="<?php echo $this->payment_model->DIPOSIT;?>">Adjust (Credit)</option>
+                        <?php } ?>
+                        <?php if( $this->master->isPermission('save_debit_adjust') ){?>
+                        <option value="<?php echo $this->payment_model->DIPOSIT;?>">Adjust (Debit)</option>
+                        <?php } */?>
+
                     </select>
                 </div>
             </div>

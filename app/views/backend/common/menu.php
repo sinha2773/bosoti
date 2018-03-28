@@ -55,12 +55,22 @@ $fetch_class = $this->router->fetch_class();
 					<li>
 						<a href="<?php echo base_url("admin/payment/bill/add");?>">Pay Bill</a>
 					</li>
+					<?php if( $this->master->isPermission('see_payment_report') ){?>
 					<li>
 						<a href="<?php echo base_url("admin/payment/bill/list");?>">Payment Report</a>
 					</li>
+					<?php } ?>
+					<?php if( $this->master->isPermission('see_statement') ){?>
 					<li>
 						<a href="<?php echo base_url("admin/payment/statement");?>">Statement</a>
 					</li>
+					<?php } ?>
+					
+					<?php if( $this->master->isPermission('see_payment_log') ){?>
+					<li>
+						<a href="<?php echo base_url("admin/payment/log");?>">Payment Log</a>
+					</li>
+					<?php } ?>
 					
 				</ul>
 			</li>
@@ -99,34 +109,6 @@ $fetch_class = $this->router->fetch_class();
 				</ul>
 			</li>
 			<?php } ?>
-
-
-			<?php 
-			$message_sub1 = '';
-			$message_sub2 = '';
-			$message_li   = '';
-			if($fetch_class=='message' || $param2=='message'){
-				$message_sub1 = "style='display:block'";
-				$message_li = "active open";				
-				$message_sub2 = "style='display:block'";
-			};
-			?>
-			<li class="<?php echo $message_li;?>">
-				<a href="#"><i class="fa fa-lg fa-fw fa-envelope"></i> <span class="menu-item-parent">Messages</span></a>
-				<ul <?php echo $message_sub1;?>>
-					<?php if( $this->master->isPermission('send_message') ){?>
-					<li>
-						<a href="<?php echo base_url("admin/message");?>">Send Message</a>
-					</li>
-					<?php } ?>
-					<?php if( $this->master->isPermission('message_history') ){?>
-					<li>
-						<a href="<?php echo base_url("admin/message/history");?>">Message History</a>
-					</li>
-					<?php } ?>
-					
-				</ul>
-			</li>
 
 
 			<?php 
@@ -318,7 +300,7 @@ $fetch_class = $this->router->fetch_class();
 			</li>
 			<?php } */?>
 
-<!-- 			<?php 
+			<?php 
 			$message_sub1 = '';
 			$message_sub2 = '';
 			$message_li   = '';
@@ -327,10 +309,9 @@ $fetch_class = $this->router->fetch_class();
 				$message_li = "active open";				
 				$message_sub2 = "style='display:block'";
 			};
-			?> -->
-
-			<!-- 			<?php if( $this->master->isPermission('send_message') || $this->master->isPermission('message_history') ){?> -->
-<!-- 			<li class="<?php echo $message_li;?>">
+			?>
+			<?php if( $this->master->isPermission('send_message') ){?>
+			<li class="<?php echo $message_li;?>">
 				<a href="#"><i class="fa fa-lg fa-fw fa-envelope"></i> <span class="menu-item-parent">Messages</span></a>
 				<ul <?php echo $message_sub1;?>>
 					<?php if( $this->master->isPermission('send_message') ){?>
@@ -345,8 +326,9 @@ $fetch_class = $this->router->fetch_class();
 					<?php } ?>
 					
 				</ul>
-			</li> -->
-			<!-- <?php }  ?> -->
+			</li>
+			<?php } ?>
+
 
 			<?php 
 			$setting_sub1 = '';

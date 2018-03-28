@@ -17,8 +17,9 @@ class Payment extends MY_Controller {
 
     public function statement(){
 
-        // if( !$this->master->isPermission('see_client_statement') )
-        //     show_404();
+        if( !$this->master->isPermission('see_statement') )
+            show_404();
+
         $client_info = array();
         $payment_info = array();
         $client_id = 0;
@@ -35,7 +36,7 @@ class Payment extends MY_Controller {
 
         //$this->pr($payment_info);exit;
 
-        $title = "Client Statement";
+        $title = "Member Statement";
         $data = $this->init($title);
         $data['clients'] = $this->member_model->all();
         $data['client_id'] = $client_id;
@@ -322,11 +323,11 @@ public function check_amount($client_id){
 
 
 public function log(){
-    if( !$this->master->isPermission('see_log') )
+    if( !$this->master->isPermission('see_payment_log') )
         show_404();
 
     $this->load->model('payment_model', 'payment');
-    $this->load->model('client_model', 'client');
+    $this->load->model('member_model', 'client');
 
     $title = "LOG";
     $data = $this->init($title);
