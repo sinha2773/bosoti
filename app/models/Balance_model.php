@@ -25,7 +25,8 @@ class Balance_model extends MY_Model {
             $date_field = 'created';
         }
 
-        $this->db->select('sum(amount+discount) as total_amount, DATE_FORMAT(tbl_payments.'.$date_field.',"%Y-%m-%d") as billing_date, DATE_FORMAT(tbl_payments.'.$date_field.',"%Y-%m-%d") as created_date, max(payment_month) as payment_month, max(payment_year) as payment_year, collector_id, (select name from tbl_users u where u.id=collector_id) as collector');
+        $this->db->select('DATE_FORMAT(tbl_payments.'.$date_field.',"%Y-%m-%d") as billing_date, DATE_FORMAT(tbl_payments.'.$date_field.',"%Y-%m-%d") as created_date, max(payment_month) as payment_month, max(payment_year) as payment_year, collector_id, (select name from tbl_users u where u.id=collector_id) as collector');
+        $this->db->select("SUM(IF(payment_type != 4, amount, 0) - IF(payment_type = 4, amount,0)) AS total_amount", FALSE);
         
 
         // From Date/To Date

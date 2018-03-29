@@ -1,14 +1,14 @@
 <script type="text/javascript" src="<?php echo base_url('assets/_back/js/plugin/select2');?>/select2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/_back/js/plugin/select2');?>/select2.min.css">
 <style>
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-    th, td {
-        padding: 5px;
-        text-align: left;    
-    }
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;    
+}
 </style>
 <form id="PaymentForm" name="form" method="post" action="<?php echo base_url($admin_path);?>/payment/bill/insert" enctype="multipart/form-data" onsubmit='return checkPayment()'>
 
@@ -58,16 +58,16 @@
                     <select name="payment_type"  class="form-control" style="width: 100%;" required>
                         <!-- <option value="">Select Typr</option> -->
                         <?php if( $this->master->isPermission('save_deposit') ){?>
-                        <option value="Deposit">Deposit</option>
+                        <option value="1">Deposit</option>
                         <?php } ?>
                         <?php if( $this->master->isPermission('save_profit_distribution') ){?>
-                        <option value="Profit Distribution">Profit Distribution</option>
+                        <option value="2">Profit Distribution</option>
                         <?php } ?>
                         <?php if( $this->master->isPermission('save_credit_adjust') ){?>
-                        <option value="Credit Adjust">Adjust (Credit)</option>
+                        <option value="3">Adjust (Credit)</option>
                         <?php } ?>
                         <?php if( $this->master->isPermission('save_debit_adjust') ){?>
-                        <option value="Debit Adjust">Adjust (Debit)</option>
+                        <option value="4">Adjust (Debit)</option>
                         <?php } ?>
 
                         <?php /* if( $this->master->isPermission('save_deposit') ){?>
@@ -291,8 +291,8 @@
 </script>
 <style type="text/css">
 
-    .payment_summary { width: 100%; height: 100%; background-color: #fff; color: #000; min-height: 200px; padding:10px; }
-    .payment_summary h3 { margin: 0 0 5px 0; padding-top: 0; }
-    .payment_details h5 { margin:1px; }
+.payment_summary { width: 100%; height: 100%; background-color: #fff; color: #000; min-height: 200px; padding:10px; }
+.payment_summary h3 { margin: 0 0 5px 0; padding-top: 0; }
+.payment_details h5 { margin:1px; }
 
 </style>

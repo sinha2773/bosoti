@@ -38,7 +38,7 @@ class Balance extends MY_Controller {
 
         $data['data'] = $filter_data;
         $data['cashbook'] = $this->balance->getCashBook($filter_data);
-        //$this->pr($data['cashbook']);exit;
+        // $this->pr($data['cashbook']);exit;
 
         if( isset($_GET['print']) && $_GET['print']=='true' ){ // for print only
             $this->load->view($this->theme."balance/print_cashbook",$data);
@@ -82,7 +82,7 @@ class Balance extends MY_Controller {
         }  
     }    
 
-	
+    
 }
 
 /* End of file welcome.php */

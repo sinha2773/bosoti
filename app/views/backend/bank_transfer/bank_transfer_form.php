@@ -28,13 +28,13 @@ echo form_open('',  $form_attrib, '');?>
             </div>
         </div>
         <div class="col-sm-12">
-         <div class="form-group">
+           <div class="form-group">
             <label class="amount_label">Amount <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup></label>
             <input type="number" name="amount" id="amount" class="form-control" step="any" required>
         </div>
     </div>
     <div class="col-sm-12">
-     <div class="form-group">
+       <div class="form-group">
         <label>Payment Date <sup><i class="fa fa-star" style="color: red; font-size: 8px"></i></sup></label>
         <input type="text" name="payment_date" id="payment_date" placeholder="Enter payment date" class="form-control" value="<?php echo isset($_GET['payment_date'])?$_GET['payment_date']:date('Y-m-d');?>" required>
     </div>                
@@ -50,8 +50,8 @@ echo form_open('',  $form_attrib, '');?>
 </div>
 <div class="row">
   <div class="form-group text-right">
-    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
     <button type="reset" class="btn btn-danger btn-lg">Cancel</button>
+    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
 </div>
 </div>
 </div>

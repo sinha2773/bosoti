@@ -1,51 +1,51 @@
 <?php if($this->master->isPermission('dashboard_info')){ ?>
 <style type="text/css">
-  .card { padding: 10px; }
+.card { padding: 10px; }
 </style>
-  <div class="row">
-    <div class="col-xl-3 col-sm-3 mb-3">
-      <div class="card text-white bg-primary o-hidden h-100">
-        <div class="card-body">Cashbook Balance
-          <div class="card-body-icon">
-           <i class="fa fa-fw fa-list"></i>
-          </div>
-         <div class="mr-5"><?php echo $this->payment_model->currencyFormat($total_cashbook->cashbook_amount)?></div>
-       </div>
-
-     </div>
-   </div>
-   <div class="col-xl-3 col-sm-3 mb-3">
-    <div class="card text-white bg-warning o-hidden h-100">
-      <div class="card-body">Bank Account Balance
-        <div class="card-body-icon">
-          <i class="fa fa-fw fa-list"></i>
-        </div>
-        <div class="mr-5"><?php echo $this->payment_model->currencyFormat($total_bank_acc->balance)?></div>
-      </div>
-
-    </div>
-  </div>
+<div class="row">
   <div class="col-xl-3 col-sm-3 mb-3">
-    <div class="card text-white bg-danger o-hidden h-100">
-      <div class="card-body">Total Expense
-        <div class="card-body-icon">
-          <i class="fa fa-fw fa-list"></i>
-        </div>
-        <div class="mr-5"><?php echo $this->payment_model->currencyFormat($total_expense->amount)?></div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-sm-3 mb-3">
-    <div class="card text-white bg-success o-hidden h-100">
-      <div class="card-body">Total Balance
+    <div class="card text-white bg-primary o-hidden h-100">
+      <div class="card-body">Cashbook Balance
         <div class="card-body-icon">
          <i class="fa fa-fw fa-list"></i>
        </div>
-       <div class="mr-5"><?php echo $this->payment_model->currencyFormat($total_cashbook->cashbook_amount+ $total_bank_acc->balance - $total_expense->amount)  ?></div>
+       <div class="mr-5"><?php echo $this->payment_model->currencyFormat($total_cashbook->cashbook_amount)?></div>
      </div>
 
    </div>
  </div>
+ <div class="col-xl-3 col-sm-3 mb-3">
+  <div class="card text-white bg-warning o-hidden h-100">
+    <div class="card-body">Bank Account Balance
+      <div class="card-body-icon">
+        <i class="fa fa-fw fa-list"></i>
+      </div>
+      <div class="mr-5"><?php echo $this->payment_model->currencyFormat($total_bank_acc->balance)?></div>
+    </div>
+
+  </div>
+</div>
+<div class="col-xl-3 col-sm-3 mb-3">
+  <div class="card text-white bg-danger o-hidden h-100">
+    <div class="card-body">Total Expense
+      <div class="card-body-icon">
+        <i class="fa fa-fw fa-list"></i>
+      </div>
+      <div class="mr-5"><?php echo $this->payment_model->currencyFormat($total_expense->amount)?></div>
+    </div>
+  </div>
+</div>
+<div class="col-xl-3 col-sm-3 mb-3">
+  <div class="card text-white bg-success o-hidden h-100">
+    <div class="card-body">Total Balance
+      <div class="card-body-icon">
+       <i class="fa fa-fw fa-list"></i>
+     </div>
+     <div class="mr-5"><?php echo $this->payment_model->currencyFormat($total_cashbook->cashbook_amount+ $total_bank_acc->balance)  ?></div>
+   </div>
+
+ </div>
+</div>
 </div>
 
 
@@ -86,43 +86,43 @@
 </div>
 
 <script type="text/javascript">
-    var timer;
-    $("#member_select").keyup(function(event) 
+  var timer;
+  $("#member_select").keyup(function(event) 
+  {
+    $("#member_select_result").show();
+    $("#member_select_result").html('');
+    clearTimeout(timer);
+    timer = setTimeout(function() 
     {
-        $("#member_select_result").show();
-        $("#member_select_result").html('');
-        clearTimeout(timer);
-        timer = setTimeout(function() 
-        {
-            var search_member = $("#member_select").val();
-            var html = '';
-            if(search_member!='')
-            {
-              $.post('<?php echo site_url(); ?>admin/Payment/search_member_by_name',{q: search_member}, function(data, textStatus, xhr) {
-                  data = JSON.parse(data);
-                  $.each(data, function(index, val) {
-                      html+= '<tr><td data="'+val.id+'">'+val.client_id+'</td></tr>';
-                  });
-                  $("#member_select_result").html(html);
-              });
-            }else{
-              $('input[name="client_id"]').val('');
-            }
-        }, 200);
-    });    
-    $("#member_select_result").on('click', 'td', function(event) {
-        $('input[name="member_name"]').val($(this).text());
-        $('input[name="client_id"]').val($(this).attr('data'));
-        $("#member_select_result").hide();
-    });
+      var search_member = $("#member_select").val();
+      var html = '';
+      if(search_member!='')
+      {
+        $.post('<?php echo site_url(); ?>admin/Payment/search_member_by_name',{q: search_member}, function(data, textStatus, xhr) {
+          data = JSON.parse(data);
+          $.each(data, function(index, val) {
+            html+= '<tr><td data="'+val.id+'">'+val.client_id+'</td></tr>';
+          });
+          $("#member_select_result").html(html);
+        });
+      }else{
+        $('input[name="client_id"]').val('');
+      }
+    }, 200);
+  });    
+  $("#member_select_result").on('click', 'td', function(event) {
+    $('input[name="member_name"]').val($(this).text());
+    $('input[name="client_id"]').val($(this).attr('data'));
+    $("#member_select_result").hide();
+  });
 
-    $("#get_calender_report").on('click', function(){
-      var client_id = $('input[name="client_id"]').val();
-      var year = $('#year').val();
-      callHttp('dashboard/dashboard_calander', {client_id: client_id, year:year}, function(html){
-        $('#calander_report').html(html);
-      },'html');
-    });
+  $("#get_calender_report").on('click', function(){
+    var client_id = $('input[name="client_id"]').val();
+    var year = $('#year').val();
+    callHttp('dashboard/dashboard_calander', {client_id: client_id, year:year}, function(html){
+      $('#calander_report').html(html);
+    },'html');
+  });
 
 </script>
 <?php } ?>
