@@ -23,7 +23,10 @@ $fetch_class = $this->router->fetch_class();
 				<span>
 					<?php echo $this->session->userdata("user_full_name");?>
 				</span>
-				<i class="fa fa-angle-down"></i>
+				
+				<div id="logout" class="transparent pull-right" style="font-size: 24px">
+					<span> <a href="<?php echo base_url("login/logout");?>" title="Sign Out" data-action="userLogout" data-logout-msg="You can improve your security further after logging out by closing this opened browser"><i class="fa fa-sign-out"></i></a> </span>
+				</div>
 			</a> 
 			
 		</span>

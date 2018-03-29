@@ -145,12 +145,12 @@ th, td {
                   <td id="mobile"></td>
               </tr>
               <tr>
-               <th>Present Address</th>
-               <td id="present_add"></td>
-           </tr>
-       </table>
-   </div>
-</div>
+                 <th>Present Address</th>
+                 <td id="present_add"></td>
+             </tr>
+         </table>
+     </div>
+ </div>
 </div>
 
 </form>
@@ -190,7 +190,7 @@ th, td {
             $('#mobile').text(member_data['member_info']['mobile']);
             $('#present_add').text(member_data['member_info']['present_address']);
             if(member_data['payment_info']['count_id'] > 0 ){
-                alert("This Member Already Paid Once Today");
+                alert("You Have Already Paid This Day");
             }
 
         });
