@@ -120,6 +120,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<!-- end logout button -->
 
 				<!-- search mobile button (this is hidden till mobile view port) -->
+				<?php /*
 				<div id="search-mobile" class="btn-header transparent pull-right">
 					<span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>
 				</div>
@@ -134,6 +135,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					</button>
 					<a href="javascript:void(0);" id="cancel-search-js" title="Cancel Search"><i class="fa fa-times"></i></a>
 				</form>
+				*/?>
 				<!-- end input: search field -->
 
 				<!-- fullscreen button -->

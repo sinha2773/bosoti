@@ -302,5 +302,44 @@ class Dashboard_model extends MY_Model{
 		return $this->db->get()->row();
 	}
 	
+
+	// function dashboard_report($client_id='', $from_date, $to_date){
+	function dashboard_report($client_id='', $year='2018'){
+		$this->db->select('sum(amount) total_amount, payment_day, payment_month, payment_year');
+		// $this->db->where('payment_date>=', $from_date);
+		// $this->db->where('payment_date<=', $to_date);
+		$this->db->where('payment_year', $year);
+		if((int)$client_id>0){
+			$this->db->where('client_id',$client_id);
+		}
+
+		$this->db->group_by('payment_day');
+		$this->db->group_by('payment_month');
+		$this->db->group_by('payment_year');
+
+		$this->db->order_by('payment_day');
+		$this->db->order_by('payment_month');
+		$this->db->order_by('payment_year');
+
+		$results = $this->db->get('tbl_payments')->result();
+		// echo $this->db->last_query();exit;
+		$report = [];
+		$monthly = [];
+		$total = 0;
+		foreach ($results as $obj) {
+			$key = $obj->payment_day.'_'.$obj->payment_month;
+			$report[$key] = $obj->total_amount;
+
+			$month_key = $obj->payment_month;
+			$monthly[$month_key] = isset($monthly[$month_key]) ? $monthly[$month_key] : 0;
+			$monthly[$month_key] = $monthly[$month_key] + $obj->total_amount;
+
+			$total = $total + $obj->total_amount;
+		}
+		// dd($report, false);
+		// dd($monthly);
+
+		return ['calander'=>$report, 'monthly_total'=>$monthly, 'total'=>$total];
+	}
 	
 }?>

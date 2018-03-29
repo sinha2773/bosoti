@@ -10,6 +10,7 @@ class Dashboard extends MY_Controller {
 		}
 
 		$this->load->model('payment_model');
+		$this->load->model('dashboard_model', 'dashboard');
 
         //$this->load->driver("cache", array("adapter"=>"file"));
 	}	
@@ -23,17 +24,29 @@ class Dashboard extends MY_Controller {
 	// Dashboard
 	public function index()
 	{	
-		$this->load->model('dashboard_model', 'dashboard');
+		
 		$data = $this->init("Dashboard");
 		$data['total_cashbook']= $this->dashboard->get_cashbook_amt();
 		$data['total_bank_acc']= $this->dashboard->get_bank_acc_amt();
 		$data['total_expense']= $this->dashboard->get_expense_amt();
 
-		// $data['members'] = 
+		// $client_id = 2;
+		// $from_date = '2018-01-01';
+		// $to_date = '2018-03-30';
+		// $data['dashboard_report'] = $this->dashboard->dashboard_report($client_id, $from_date, $to_date); 
+		// dd($data['dashboard_report']);
 
 		$data["content"] = $this->load->view($this->theme."dashboard/index",$data,TRUE);
 		$this->load->view($this->theme.'layout',$data);
 
+	}
+
+	public function dashboard_calander(){
+		$client_id = $this->input->post('client_id', true);
+		$year = $this->input->post('year', true);
+		$data['dashboard_report'] = $this->dashboard->dashboard_report($client_id, $year);
+		echo $this->load->view($this->theme."dashboard/calander_report",$data, TRUE);
+		exit;
 	}
 
 	public function miniMonthlySummary(){

@@ -6,10 +6,24 @@ class Member extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		// if($this->session->userdata("user_id")==""){
-		// 	redirect($this->admin_path, "refresh");
-		// }
+		if($this->session->userdata("user_id")==""){
+			redirect($this->admin_path, "refresh");
+		}
 		$this->load->model('Member_model');
+	}
+
+	public function allMembers()
+	{
+		$data = $this->init("All Members");
+        $data['lists'] = $this->Member_model->all();
+        $data['action'] = 'member';
+        if(isset($_GET['print']) && $_GET['print']=='true'){
+			$data["content"] = $this->load->view($this->theme."member/list_print",$data);
+        }
+		else{
+			$data["content"] = $this->load->view($this->theme."member/list",$data,TRUE);
+			$this->load->view($this->theme.'layout',$data);
+		}
 	}
 
 	public function index()
@@ -17,9 +31,35 @@ class Member extends MY_Controller {
 		
 	}
 
+	public function addMember() {        
+        $title = "Create New Member";
+        $data = $this->init($title);
+        $data['action'] = 'member';
+		$data["content"] = $this->load->view($this->theme."member/add",$data,TRUE);
+		$this->load->view($this->theme.'layout',$data);
+    }
+
 	function save_member()
 	{
 		$data = $this->input->post();
+
+		if(!isset($data["media_id"]) || empty($data["media_id"]))
+        if (isset($_FILES['image']) && !empty($_FILES["image"]["name"]) && $_FILES["image"]["size"]>0) {
+            $image_name = isset($data["image_name"]) ? $data["image_name"] : "Unknown";
+            $data['media_id'] = $this->master->fileUpload($_FILES['image'], 'member', array("action"=>"insert","name"=>$image_name));
+        }
+        unset($data["image"]);
+        unset($data["image_name"]);
+
+        if(!isset($data["media_id2"]) || empty($data["media_id2"]))
+        if (isset($_FILES['image2']) && !empty($_FILES["image2"]["name"]) && $_FILES["image2"]["size"]>0) {
+            $image_name = isset($data["image_name2"]) ? $data["image_name2"] : "Unknown";
+            $data['media_id2'] = $this->master->fileUpload($_FILES['image2'], 'member', array("action"=>"insert","name"=>$image_name));
+        }
+        unset($data["image2"]);
+        unset($data["image_name2"]);
+
+
 		$this->db->trans_start();
 		if($data['membership_type'] == "1"){
 			$data['added_by'] = $this->session->userdata("user_id");
@@ -74,6 +114,26 @@ class Member extends MY_Controller {
 		$data["content"] = $this->load->view($this->theme."member/index",$data,TRUE);
 		$this->load->view($this->theme.'layout',$data);
 	}
+
+	public function memberDeactive($id='', $status='') {
+
+		if((int)$id>0){
+
+			$status = $status==1?0:1;
+
+	        $this->db->trans_start();
+	        $this->Member_model->_update($id, ['status'=>$status]);
+
+	        $this->db->trans_complete();
+	        if ($this->db->trans_status() === FALSE){
+	            $this->session->set_flashdata('flashMessage', array('danger', "Sorry, member status updating failed."));
+	        } else {
+	            $this->session->set_flashdata('flashMessage', array('success', "Member status updated successfully."));
+	        }
+	    }
+
+        redirect('admin/member/allMembers', 'refresh');
+    }
 
 }
 

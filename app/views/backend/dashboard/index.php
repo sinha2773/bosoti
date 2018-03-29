@@ -59,14 +59,15 @@
         <div class="col-sm-2 col-md-1">
           <label>Year: </label>
           <select class="form-control" name="year" id="year">
-            <option>2017</option>
+            <!-- <option>2017</option> -->
             <option>2018</option>
             <option>2019</option>
+            <option>2020</option>
           </select>
         </div>
         <div class="col-sm-2 col-md-2">
           <label>Member: </label>
-          <input type="text" autocomplete="off" name="member_name" placeholder="Select Member" id="member_select" class="form-control" required>
+          <input type="text" autocomplete="off" name="member_name" placeholder="All" id="member_select" class="form-control" required>
           <span class="help-block" id="member_help_block" ></span>
           <input type="hidden" autocomplete="off" name="client_id"  class="form-control">
           <table class="table table-condensed table-hover table-bordered clickable" id="member_select_result" style="position: absolute;z-index: 10;background-color: #fff;width: 92%">
@@ -74,64 +75,12 @@
         </div>
         <div class="col-sm-2 col-md-1">
           <label style="width: 100%;">&nbsp;</label>
-          <button class="btn btn-primary" type="submit">Go</button>
+          <button class="btn btn-primary" id="get_calender_report" type="button">Go</button>
         </div>
       </form>
 
-      <table class="table">
-        <?php 
-        for($i=0; $i<=33; $i++)
-        {
-        ?>
-        <tr>
-          <td>
-            <?php 
-            if($i==0)
-            {
-              // nothing
-            }
-            elseif($i==33)
-            {
-              echo 'Total';
-            }
-            else
-            {
-              echo $i;
-            }
-            ?>      
-          </td>
-        <?php
-        if($i==0)
-        {
-        ?>
-              <td>January</td>
-              <td>February</td>
-              <td>March</td>
-              <td>April</td>
-              <td>May</td>
-              <td>June</td>
-              <td>July</td>
-              <td>August</td>
-              <td>September</td>
-              <td>October</td>
-              <td>November</td>
-              <td>December</td>
-              <!-- <td>Total</td> -->
-          <?php
-        }
-        else
-        {
-            for($mon=1; $mon<=12; $mon++)
-            {?>
-                <td><?php echo $i,'-'.$mon;?></td>
-            <?php 
-            } 
-        }
-        ?>
-          
-        </tr>
-        <?php } ?>
-      </table>
+      <div id="calander_report"></div>
+      
     </div>
   </div>
 </div>
@@ -147,19 +96,33 @@
         {
             var search_member = $("#member_select").val();
             var html = '';
-            $.post('<?php echo site_url(); ?>admin/Payment/search_member_by_name',{q: search_member}, function(data, textStatus, xhr) {
-                data = JSON.parse(data);
-                $.each(data, function(index, val) {
-                    html+= '<tr><td data="'+val.id+'">'+val.client_id+'</td></tr>';
-                });
-                $("#member_select_result").html(html);
-            });
+            if(search_member!='')
+            {
+              $.post('<?php echo site_url(); ?>admin/Payment/search_member_by_name',{q: search_member}, function(data, textStatus, xhr) {
+                  data = JSON.parse(data);
+                  $.each(data, function(index, val) {
+                      html+= '<tr><td data="'+val.id+'">'+val.client_id+'</td></tr>';
+                  });
+                  $("#member_select_result").html(html);
+              });
+            }else{
+              $('input[name="client_id"]').val('');
+            }
         }, 200);
-    });
+    });    
     $("#member_select_result").on('click', 'td', function(event) {
         $('input[name="member_name"]').val($(this).text());
         $('input[name="client_id"]').val($(this).attr('data'));
         $("#member_select_result").hide();
     });
+
+    $("#get_calender_report").on('click', function(){
+      var client_id = $('input[name="client_id"]').val();
+      var year = $('#year').val();
+      callHttp('dashboard/dashboard_calander', {client_id: client_id, year:year}, function(html){
+        $('#calander_report').html(html);
+      },'html');
+    });
+
 </script>
 <?php } ?>

@@ -127,10 +127,10 @@ $fetch_class = $this->router->fetch_class();
 				<a href="#"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Members</span></a>
 				<ul <?php echo $employe_sub1;?>>
 					<li>
-						<a href="<?php echo base_url("admin/common/add/member");?>">Add Member</a>
+						<a href="<?php echo base_url("admin/member/addMember");?>">Add Member</a>
 					</li>
 					<li>
-						<a href="<?php echo base_url("admin/common/get_all/member");?>">Member List</a>
+						<a href="<?php echo base_url("admin/member/allMembers");?>">Member List</a>
 					</li>
 					
 				</ul>
