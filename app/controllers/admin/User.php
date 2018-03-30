@@ -46,7 +46,7 @@ class User extends MY_Controller {
             'send_message',
             'message_history',
             'settings',
-            );
+        );
     }
 
     // USER MANAGEMENT
@@ -62,6 +62,7 @@ class User extends MY_Controller {
         $this->load->view($this->theme.'layout',$data);
     }
     public function save_user() {
+        $this->load->model('user_role_model', 'user_role');
 
         if( !$this->master->isPermission('add_user') )
             show_404();
@@ -74,7 +75,18 @@ class User extends MY_Controller {
         $this->form_validation->set_rules('re_password', 'Re-Password', 'required|min_length[6]|matches[password]');
         if ($this->form_validation->run() == FALSE) { //if validation not passed or default view page
          $this->add_user();
-     } else {
+     }
+     $user_role = $this->input->post('user_role_id', true);
+     if($user_role == 5){
+        $email = $this->input->post('email', true);
+        $mobile = $this->input->post('mobile', true);
+        $member_id = $this->user_role->get_member_id($email,$mobile);
+        if(empty($member_id)){
+         $this->session->set_flashdata('flashMessage', array('danger', "Sorry, No Member Found.Enter Member Email or Mobile Correctly"));
+         redirect($this->admin_path."user/add_user", 'refresh'); 
+     }
+ }
+   // else {
             $password = $this->input->post('password', true); // getting the password from the field
             // generating the password cimbining the cost parameter and salt here
             $hashPass = $this->master->get_has_password($password);
@@ -97,8 +109,9 @@ class User extends MY_Controller {
                 'media_id' => $media_id,
                 'password' => $hashPass,
                 'created' => $this->now,
-                'status' => $this->input->post("status")
-                );
+                'status' => $this->input->post("status"),
+                'member_id'=> $member_id,
+            );
             $this->db->trans_start();
             $this->master->insert($this->user_table, $data); 
             $this->db->trans_complete();
@@ -107,50 +120,50 @@ class User extends MY_Controller {
             else
                 $this->session->set_flashdata('flashMessage', array('danger', "Sorry, user adding failed."));
             redirect($this->admin_path."user/add_user", 'refresh'); 
+        // }
+
         }
-        
-    }
-    public function edit_user($id=null){
+        public function edit_user($id=null){
 
-        if( !$this->master->isPermission('update_user') )
-            show_404();
+            if( !$this->master->isPermission('update_user') )
+                show_404();
 
-        $this->load->model('user_role_model', 'user_role');
-        if($id==null || !is_numeric($id))
-            redirect($this->admin_path."user/users", 'refresh'); 
+            $this->load->model('user_role_model', 'user_role');
+            if($id==null || !is_numeric($id))
+                redirect($this->admin_path."user/users", 'refresh'); 
 
-        $data = $this->init("Edit User");
-        $userdetails = $this->master->get_all_by_id($this->user_table, $id);
-        
-        if(empty($userdetails))
-            redirect($this->admin_path."user/users", 'refresh'); 
+            $data = $this->init("Edit User");
+            $userdetails = $this->master->get_all_by_id($this->user_table, $id);
 
-        $data['user_roles'] = $this->user_role->get_all();
-        $data["data"] = $userdetails[0];
-        $data["content"] = $this->load->view($this->theme."user/edit",$data,TRUE);
-        $this->load->view($this->theme.'layout',$data);
-    }
-    public function update_user() {
+            if(empty($userdetails))
+                redirect($this->admin_path."user/users", 'refresh'); 
 
-        if( !$this->master->isPermission('update_user') )
-            show_404();
+            $data['user_roles'] = $this->user_role->get_all();
+            $data["data"] = $userdetails[0];
+            $data["content"] = $this->load->view($this->theme."user/edit",$data,TRUE);
+            $this->load->view($this->theme.'layout',$data);
+        }
+        public function update_user() {
 
-        $this->load->library("MY_Form_Validation","form_validation");
+            if( !$this->master->isPermission('update_user') )
+                show_404();
 
-        $id = $this->input->post("id", TRUE);
-        if(empty($id) || !is_numeric($id))
-            redirect($this->admin_path."users", 'refresh'); 
+            $this->load->library("MY_Form_Validation","form_validation");
 
-        $this->form_validation->set_rules('fname', 'First Name', 'trim|required');
-        $this->form_validation->set_rules('surname', 'Surname', 'trim|required');
+            $id = $this->input->post("id", TRUE);
+            if(empty($id) || !is_numeric($id))
+                redirect($this->admin_path."users", 'refresh'); 
+
+            $this->form_validation->set_rules('fname', 'First Name', 'trim|required');
+            $this->form_validation->set_rules('surname', 'Surname', 'trim|required');
         //$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|callback_edit_unique_email');
         // $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|edit_unique[tbl_users.email.'. $id .']');
-        
-        $password = $this->input->post("password", TRUE);
-        if(!empty($password)){
-            $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
-            $this->form_validation->set_rules('re_password', 'Re-Password', 'required|min_length[6]|matches[password]');
-        }
+
+            $password = $this->input->post("password", TRUE);
+            if(!empty($password)){
+                $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
+                $this->form_validation->set_rules('re_password', 'Re-Password', 'required|min_length[6]|matches[password]');
+            }
         if ($this->form_validation->run() == FALSE) { //if validation not passed or default view page
          $this->edit_user($id);
      } else {
@@ -166,7 +179,7 @@ class User extends MY_Controller {
             'user_role_id' => $this->input->post('user_role_id', true),                
             'updated' => $this->now,
             'status' => $this->input->post("status")
-            );
+        );
 
         if(!empty($password)){
            $hashPass = $this->master->get_has_password($password);
@@ -263,7 +276,7 @@ public function save_user_role() {
     $data = array(
         'name' => $this->input->post('name', true),
         'permission' => serialize($permission),
-        );
+    );
     $this->db->trans_start();
     $this->master->insert($this->user_role_table, $data); 
     $this->db->trans_complete();
@@ -320,7 +333,7 @@ public function update_user_role() {
     $data = array(
         'name' => $this->input->post('name', true),
         'permission' => serialize($permission)
-        );
+    );
 
     $this->db->trans_start();
     $this->master->update($this->user_role_table, $id, $data, 'user_role_id'); 
@@ -342,7 +355,7 @@ public function user_roles(){
     $this->load->view($this->theme.'layout',$data);
 }
 public function delete_user_role($id=null){
-    
+
     if( !$this->master->isPermission('access_user_role') )
         show_404();
 

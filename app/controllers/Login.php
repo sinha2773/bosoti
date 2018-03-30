@@ -39,7 +39,7 @@ class Login extends CI_Controller {
         $data["title"] = "Login - ".$this->app_title;
         $this->load->view($this->theme."/login/login_form",$data);
     }
- 
+    
     public function do_login()
     {       
         $data = array(
@@ -66,32 +66,33 @@ class Login extends CI_Controller {
                     'user_role'  => $data['user_role_id'],
                     'user_name'  => $data['name'],
                     'user_full_name'  => $data['name'].' '.$data['surname'],
+                    'member_id' => $data['member_id'],
                     'session_id' => session_id(),
                 );
                 $this->session->set_userdata($session_data); 
                 redirect($this->admin_path.'dashboard');
             }else{
-                 $this->session->set_flashdata('flashMessage', array('danger', "Invalid username or password."));
-                redirect($this->admin_path,"refresh");
-            }
-        }
-        else
-        {
-            $this->session->set_flashdata('flashMessage', array('danger', "Invalid username or password."));
-            redirect($this->admin_path,"refresh");
-        }
+               $this->session->set_flashdata('flashMessage', array('danger', "Invalid username or password."));
+               redirect($this->admin_path,"refresh");
+           }
+       }
+       else
+       {
+        $this->session->set_flashdata('flashMessage', array('danger', "Invalid username or password."));
+        redirect($this->admin_path,"refresh");
+    }
 
     }//signin;
 
     public function logout()
     {
     	$session_data = array(
-	        'user_id'    => "",
-	        'user_email' => "",
-	        'user_role'  => "",
-	        'user_name'  => "",
-	        'session_id' => "",
-	    );
+           'user_id'    => "",
+           'user_email' => "",
+           'user_role'  => "",
+           'user_name'  => "",
+           'session_id' => "",
+       );
     	$this->session->set_userdata($session_data);
     	$this->session->sess_destroy();
     	redirect($this->admin_path,"refresh");
@@ -139,142 +140,142 @@ class Login extends CI_Controller {
                 $status = array("status"=>"error", "msg"=>"Sorry, you didn't fill out all the fields!");
             }else{
                 if($this->is_uniqe_email($email)===FALSE){
-                   $status = array("status"=>"error", "msg"=>"Sorry, email already exists!");  
-                }
-                elseif($this->is_uniqe_username($username)===FALSE){
-                   $status = array("status"=>"error", "msg"=>"Sorry, username already exists!");  
+                 $status = array("status"=>"error", "msg"=>"Sorry, email already exists!");  
+             }
+             elseif($this->is_uniqe_username($username)===FALSE){
+                 $status = array("status"=>"error", "msg"=>"Sorry, username already exists!");  
+             }else{
+                $data = array(
+                    "first_name" => $first_name,
+                    "surname" => $surname,
+                    "email" => $email,
+                    "username" => $username,
+                    "phone" => $phone,
+                    "status" => 1,
+                    "created" => $this->now
+                );
+                $data["password"] = $this->master->get_has_password($password);
+                $this->db->trans_start();
+                $this->master->insert($this->member_table, $data);
+                $this->db->trans_complete();
+                if($this->db->trans_status() === FALSE){
+                    $status = array("status"=>"error", "msg"=>"Sorry, something went wrong!");  
                 }else{
-                    $data = array(
-                        "first_name" => $first_name,
-                        "surname" => $surname,
-                        "email" => $email,
-                        "username" => $username,
-                        "phone" => $phone,
-                        "status" => 1,
-                        "created" => $this->now
-                    );
-                    $data["password"] = $this->master->get_has_password($password);
-                    $this->db->trans_start();
-                    $this->master->insert($this->member_table, $data);
-                    $this->db->trans_complete();
-                    if($this->db->trans_status() === FALSE){
-                        $status = array("status"=>"error", "msg"=>"Sorry, something went wrong!");  
-                    }else{
                         //$status = array("status"=>"ok","msg"=>"Signup successfully. please check your email to active your account, Thanks.");
-                        $status = array("status"=>"ok","msg"=>"Signup successfully, Thanks.");
-                    }
+                    $status = array("status"=>"ok","msg"=>"Signup successfully, Thanks.");
                 }
             }
         }
-
-        echo json_encode($status);
     }
 
-    private function send_email($to_email, $msg){
-        $this->load->library('email');
+    echo json_encode($status);
+}
 
-        $this->email->from("info@banglacable.com", "Bangla Cable");
-        $this->email->to($to_email);
+private function send_email($to_email, $msg){
+    $this->load->library('email');
+
+    $this->email->from("info@banglacable.com", "Bangla Cable");
+    $this->email->to($to_email);
         //$this->email->cc('another@another-example.com');
         //$this->email->bcc('them@their-example.com');
 
-        $this->email->subject('Active Account');
-        $this->email->message($msg);
-        $this->email->set_mailtype("html");
-        $this->email->send();
-    }
+    $this->email->subject('Active Account');
+    $this->email->message($msg);
+    $this->email->set_mailtype("html");
+    $this->email->send();
+}
 
-    public function do_member_login(){
-        $data = array(
-            'username'   => $this->input->post('username', true)
-        );      
+public function do_member_login(){
+    $data = array(
+        'username'   => $this->input->post('username', true)
+    );      
 
-        $password = $this->input->post('password', true);
+    $password = $this->input->post('password', true);
 
-        $this->db->select('*');
-        $this->db->from($this->member_table);
-        $this->db->where('status', 1); 
-        $this->db->where('username', trim($data['username'])); 
-        $this->db->or_where('email', trim($data['username'])); 
-        $query = $this->db->get();
-        if ( $query->num_rows() == 1 )
-        {
-            if(password_verify($password, $query->row()->password)){
-                $data = $query->row_array();
-                
-                $session_data = array(
-                    'customer_id'    => $data['id'],
-                    'customer_email'    => $data['email'],
-                    'customer_type'  => $data['user_type'],
-                    'customer_name'  => $data['first_name'],
-                    'customer_session_id' => session_id(),
-                );
-                $this->session->set_userdata($session_data);                
-                $status = array("status"=>"ok","msg"=>"Login successfully.");
-            }else{
-                 $status = array("status"=>"error","msg"=>"Invalid username or password.");
-            }
-        }
-        else
-        {
-            $status = array("status"=>"error","msg"=>"Invalid username or password.");
-        }
-
-        echo json_encode($status);
-    }
-
-    public function retrive_member_login(){
-        echo json_encode(array("status"=>"ok","msg"=>"Password has been sent to your email. please check your email."));
-    }
-
-    public function customerLogout()
+    $this->db->select('*');
+    $this->db->from($this->member_table);
+    $this->db->where('status', 1); 
+    $this->db->where('username', trim($data['username'])); 
+    $this->db->or_where('email', trim($data['username'])); 
+    $query = $this->db->get();
+    if ( $query->num_rows() == 1 )
     {
-        $session_data = array(
-            'customer_id'    => "",
-            'customer_email' => "",
-            'customer_type'  => "",
-            'customer_name'  => "",
-            'customer_session_id' => "",
-        );
-        $this->session->set_userdata($session_data);
-        $this->session->sess_destroy();
-        redirect(base_url(),"refresh");
-    }
+        if(password_verify($password, $query->row()->password)){
+            $data = $query->row_array();
+            
+            $session_data = array(
+                'customer_id'    => $data['id'],
+                'customer_email'    => $data['email'],
+                'customer_type'  => $data['user_type'],
+                'customer_name'  => $data['first_name'],
+                'customer_session_id' => session_id(),
+            );
+            $this->session->set_userdata($session_data);                
+            $status = array("status"=>"ok","msg"=>"Login successfully.");
+        }else{
+           $status = array("status"=>"error","msg"=>"Invalid username or password.");
+       }
+   }
+   else
+   {
+    $status = array("status"=>"error","msg"=>"Invalid username or password.");
+}
+
+echo json_encode($status);
+}
+
+public function retrive_member_login(){
+    echo json_encode(array("status"=>"ok","msg"=>"Password has been sent to your email. please check your email."));
+}
+
+public function customerLogout()
+{
+    $session_data = array(
+        'customer_id'    => "",
+        'customer_email' => "",
+        'customer_type'  => "",
+        'customer_name'  => "",
+        'customer_session_id' => "",
+    );
+    $this->session->set_userdata($session_data);
+    $this->session->sess_destroy();
+    redirect(base_url(),"refresh");
+}
 
 
-    private function is_uniqe_email($email, $id=""){
-        $this->db->select("email");
-        $this->db->from($this->member_table);
-        $this->db->where("email", $email);
-        if($id != "")
+private function is_uniqe_email($email, $id=""){
+    $this->db->select("email");
+    $this->db->from($this->member_table);
+    $this->db->where("email", $email);
+    if($id != "")
         $this->db->where("id !=", $id);
-        $query = $this->db->get();
+    $query = $this->db->get();
         //echo $this->db->last_query(); exit;
         //print_r($query->num_rows());exit;
-        if ($query->num_rows() > 0)
-        {
-            return FALSE;
-        }
-        else
-        {
-            return TRUE;
-        }
+    if ($query->num_rows() > 0)
+    {
+        return FALSE;
     }
+    else
+    {
+        return TRUE;
+    }
+}
 
-    private function is_uniqe_username($username){
-        $this->db->select("username");
-        $this->db->from($this->member_table);
-        $this->db->where("username", $username);
-        $query = $this->db->get();
-        if ($query->num_rows() > 0)
-        {
-            return FALSE;
-        }
-        else
-        {
-            return TRUE;
-        }
+private function is_uniqe_username($username){
+    $this->db->select("username");
+    $this->db->from($this->member_table);
+    $this->db->where("username", $username);
+    $query = $this->db->get();
+    if ($query->num_rows() > 0)
+    {
+        return FALSE;
     }
+    else
+    {
+        return TRUE;
+    }
+}
 
 
 }

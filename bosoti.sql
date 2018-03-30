@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2018 at 09:27 PM
+-- Generation Time: Mar 30, 2018 at 08:25 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -334,7 +334,7 @@ CREATE TABLE IF NOT EXISTS `tbl_payments` (
 `id` bigint(20) NOT NULL,
   `client_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
-  `payment_type` varchar(50) NOT NULL,
+  `payment_type` tinyint(1) NOT NULL,
   `discount` decimal(10,2) NOT NULL,
   `bill` decimal(10,2) NOT NULL,
   `collector_id` int(11) NOT NULL,
@@ -357,11 +357,11 @@ CREATE TABLE IF NOT EXISTS `tbl_payments` (
 --
 
 INSERT INTO `tbl_payments` (`id`, `client_id`, `amount`, `payment_type`, `discount`, `bill`, `collector_id`, `billing_date`, `payment_date`, `payment_day`, `payment_month`, `payment_year`, `added_by`, `book_no`, `summary`, `bill_status`, `client_status`, `created`, `updated`) VALUES
-(31, 6, '500.00', '1', '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'test', 0, 0, '2018-03-30 00:46:46', '2018-03-29 18:46:46'),
-(32, 6, '200.00', '2', '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'test', 0, 0, '2018-03-30 00:47:15', '2018-03-29 18:47:15'),
-(33, 6, '300.00', '3', '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'test', 0, 0, '2018-03-30 00:47:41', '2018-03-29 18:47:41'),
-(34, 6, '200.00', '1', '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'test', 0, 0, '2018-03-30 00:48:05', '2018-03-29 18:48:05'),
-(35, 6, '400.00', '4', '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'tetat', 0, 0, '2018-03-30 00:49:06', '2018-03-29 18:49:06');
+(31, 6, '500.00', 1, '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'test', 0, 0, '2018-03-30 00:46:46', '2018-03-29 18:46:46'),
+(32, 6, '200.00', 2, '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'test', 0, 0, '2018-03-30 00:47:15', '2018-03-29 18:47:15'),
+(33, 6, '300.00', 3, '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'test', 0, 0, '2018-03-30 00:47:41', '2018-03-29 18:47:41'),
+(34, 6, '200.00', 1, '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'test', 0, 0, '2018-03-30 00:48:05', '2018-03-29 18:48:05'),
+(35, 6, '400.00', 4, '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'tetat', 0, 0, '2018-03-30 00:49:06', '2018-03-29 18:49:06');
 
 -- --------------------------------------------------------
 
@@ -505,18 +505,20 @@ CREATE TABLE IF NOT EXISTS `tbl_users` (
   `user_role_id` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `created` datetime NOT NULL,
-  `updated` datetime NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+  `updated` datetime NOT NULL,
+  `member_id` int(11) DEFAULT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_users`
 --
 
-INSERT INTO `tbl_users` (`id`, `email`, `mobile`, `username`, `password`, `name`, `surname`, `gender`, `media_id`, `user_role_id`, `status`, `created`, `updated`) VALUES
-(8, 'info@sinhabd.com', '01738050950', 'bakulsinha', '$2y$11$Ev1aOsKdLt9r99tbVJyGtuAdU2pI1gN.xd0CMlh2TutbkaYvolhce', 'Super', 'Admin', 'male', 0, 1, 1, '0000-00-00 00:00:00', '2017-07-25 17:52:11'),
-(11, 'ziaulkhan7@gmail.com', '01552386124', 'ziaulkhan', '$2y$11$jGvzis5iHmr9p5GRcqXpGO2O0/oeU3V3Y.jjBuMthMOYog8OzrtOS', 'ziaul', 'khan', 'male', 0, 1, 1, '2017-03-13 18:45:11', '2017-04-26 21:59:20'),
-(18, 'jakir@gmail.com', '01677', 'jakir', '$2y$11$XwfCyvq9H/cqddN9avzFme01D0T.9B8JvKQUKs48EnPoZBTDpq1Om', 'Jakir', 'Habib', 'male', 0, 4, 1, '2018-03-24 23:30:24', '0000-00-00 00:00:00'),
-(19, 's@ghmail.com', '01677', 's@gmail.com', '$2y$11$eGP2LKfBAlWMAJnSQ0Zob.QaKtVabshgUCQe414mD1cPEgqWn3eWC', 'Shofik', 'Shoaib', 'male', 0, 1, 1, '2018-03-26 10:52:27', '2018-03-26 10:56:02');
+INSERT INTO `tbl_users` (`id`, `email`, `mobile`, `username`, `password`, `name`, `surname`, `gender`, `media_id`, `user_role_id`, `status`, `created`, `updated`, `member_id`) VALUES
+(8, 'info@sinhabd.com', '01738050950', 'bakulsinha', '$2y$11$Ev1aOsKdLt9r99tbVJyGtuAdU2pI1gN.xd0CMlh2TutbkaYvolhce', 'Super', 'Admin', 'male', 0, 1, 1, '0000-00-00 00:00:00', '2017-07-25 17:52:11', 0),
+(11, 'ziaulkhan7@gmail.com', '01552386124', 'ziaulkhan', '$2y$11$jGvzis5iHmr9p5GRcqXpGO2O0/oeU3V3Y.jjBuMthMOYog8OzrtOS', 'ziaul', 'khan', 'male', 0, 1, 1, '2017-03-13 18:45:11', '2017-04-26 21:59:20', 0),
+(18, 'jakir@gmail.com', '01677', 'jakir', '$2y$11$XwfCyvq9H/cqddN9avzFme01D0T.9B8JvKQUKs48EnPoZBTDpq1Om', 'Jakir', 'Habib', 'male', 0, 4, 1, '2018-03-24 23:30:24', '0000-00-00 00:00:00', 0),
+(19, 's@ghmail.com', '01677', 's@gmail.com', '$2y$11$eGP2LKfBAlWMAJnSQ0Zob.QaKtVabshgUCQe414mD1cPEgqWn3eWC', 'Shofik', 'Shoaib', 'male', 0, 1, 1, '2018-03-26 10:52:27', '2018-03-26 10:56:02', 0),
+(20, 'm@gmail.com', '015', 'm', '$2y$11$BmGk.5gFO9dAK2a7y7czveP86Jd0QDtQ5f4iaE1v1z/qG71PaH7Fu', 'test', 'member', 'male', 0, 5, 1, '2018-03-30 23:38:45', '0000-00-00 00:00:00', 6);
 
 -- --------------------------------------------------------
 
@@ -528,7 +530,7 @@ CREATE TABLE IF NOT EXISTS `tbl_user_roles` (
 `user_role_id` int(11) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
   `permission` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_user_roles`
@@ -538,7 +540,8 @@ INSERT INTO `tbl_user_roles` (`user_role_id`, `name`, `permission`) VALUES
 (1, 'Admin', 'a:2:{s:6:"access";a:27:{i:0;s:17:"super_admin_power";i:1;s:13:"manager_power";i:2;s:14:"dashboard_info";i:3;s:13:"manage_member";i:4;s:14:"manage_payment";i:5;s:12:"save_deposit";i:6;s:24:"save_profit_distribution";i:7;s:18:"save_credit_adjust";i:8;s:17:"save_debit_adjust";i:9;s:18:"see_payment_report";i:10;s:13:"see_statement";i:11;s:11:"save_income";i:12;s:10:"add_income";i:13;s:15:"add_income_type";i:14;s:15:"see_income_list";i:15;s:17:"see_income_report";i:16;s:12:"save_expense";i:17;s:11:"add_expense";i:18;s:16:"add_expense_type";i:19;s:16:"see_expense_list";i:20;s:18:"see_expense_report";i:21;s:14:"account_access";i:22;s:8:"add_user";i:23;s:11:"update_user";i:24;s:13:"see_user_list";i:25;s:16:"access_user_role";i:26;s:8:"settings";}s:6:"modify";a:1:{i:0;s:8:"add_user";}}'),
 (2, 'Manager', 'a:2:{s:6:"access";a:23:{i:0;s:13:"manager_power";i:1;s:14:"dashboard_info";i:2;s:14:"access_package";i:3;s:19:"client_registration";i:4;s:15:"see_client_list";i:5;s:13:"update_client";i:6;s:20:"update_client_status";i:7;s:27:"update_client_status_active";i:8;s:20:"see_client_statement";i:9;s:8:"add_bill";i:10;s:11:"see_duelist";i:11;s:12:"see_paidlist";i:12;s:15:"see_bill_report";i:13;s:7:"see_log";i:14;s:17:"see_employee_list";i:15;s:10:"pay_salary";i:16;s:10:"add_income";i:17;s:11:"add_expense";i:18;s:16:"see_expense_list";i:19;s:18:"see_expense_report";i:20;s:14:"account_access";i:21;s:12:"send_message";i:22;s:15:"message_history";}s:6:"modify";N;}'),
 (3, 'User', 'a:2:{s:6:"access";a:2:{i:0;s:20:"see_client_statement";i:1;s:11:"see_duelist";}s:6:"modify";N;}'),
-(4, 'Collector', 'a:2:{s:6:"access";a:2:{i:0;s:14:"manage_payment";i:1;s:11:"save_income";}s:6:"modify";N;}');
+(4, 'Collector', 'a:2:{s:6:"access";a:2:{i:0;s:14:"manage_payment";i:1;s:11:"save_income";}s:6:"modify";N;}'),
+(5, 'Member', 'a:2:{s:6:"access";a:1:{i:0;s:14:"dashboard_info";}s:6:"modify";N;}');
 
 --
 -- Indexes for dumped tables
@@ -718,12 +721,12 @@ MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT for table `tbl_user_roles`
 --
 ALTER TABLE `tbl_user_roles`
-MODIFY `user_role_id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `user_role_id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

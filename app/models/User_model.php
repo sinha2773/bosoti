@@ -27,5 +27,7 @@ class User_model extends MY_Model{
 	function getOperators(){
 		return $this->db->get($this->user_table)->result();
 	}
+
+
 	
 }?>

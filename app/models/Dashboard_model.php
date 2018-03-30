@@ -305,7 +305,9 @@ class Dashboard_model extends MY_Model{
 
 	// function dashboard_report($client_id='', $from_date, $to_date){
 	function dashboard_report($client_id='', $year='2018'){
-		$this->db->select('sum(amount) total_amount, payment_day, payment_month, payment_year');
+		$this->db->select('payment_day, payment_month, payment_year');
+		$this->db->select("SUM(IF(payment_type != 4, amount, 0) - IF(payment_type = 4, amount,0)) AS total_amount", FALSE);
+
 		// $this->db->where('payment_date>=', $from_date);
 		// $this->db->where('payment_date<=', $to_date);
 		$this->db->where('payment_year', $year);
@@ -340,6 +342,14 @@ class Dashboard_model extends MY_Model{
 		// dd($monthly);
 
 		return ['calander'=>$report, 'monthly_total'=>$monthly, 'total'=>$total];
+	}
+
+	function get_member_deposit_amt($member_id)
+	{
+		$this->db->select("SUM(IF(payment_type != 4, amount, 0) - IF(payment_type = 4, amount,0)) AS total_amount", FALSE);
+		$this->db->from('tbl_payments');
+		$this->db->where('client_id', $member_id);
+		return $this->db->get()->row();
 	}
 	
 }?>

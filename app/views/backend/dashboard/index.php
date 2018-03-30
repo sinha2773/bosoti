@@ -3,18 +3,30 @@
 .card { padding: 10px; }
 </style>
 <div class="row">
+  <?php if($this->session->userdata("user_role")== 5){ ?>
   <div class="col-xl-3 col-sm-3 mb-3">
     <div class="card text-white bg-primary o-hidden h-100">
-      <div class="card-body">Cashbook Balance
+      <div class="card-body">Total Deposit
         <div class="card-body-icon">
          <i class="fa fa-fw fa-list"></i>
        </div>
-       <div class="mr-5"><?php echo $this->payment_model->currencyFormat($total_cashbook->cashbook_amount)?></div>
+       <div class="mr-5"><?php echo $this->payment_model->currencyFormat($deposit_by_member->total_amount)?></div>
      </div>
-
    </div>
  </div>
+ <?php } else {?>
  <div class="col-xl-3 col-sm-3 mb-3">
+  <div class="card text-white bg-primary o-hidden h-100">
+    <div class="card-body">Cashbook Balance
+      <div class="card-body-icon">
+       <i class="fa fa-fw fa-list"></i>
+     </div>
+     <div class="mr-5"><?php echo $this->payment_model->currencyFormat($total_cashbook->cashbook_amount)?></div>
+   </div>
+
+ </div>
+</div>
+<div class="col-xl-3 col-sm-3 mb-3">
   <div class="card text-white bg-warning o-hidden h-100">
     <div class="card-body">Bank Account Balance
       <div class="card-body-icon">
@@ -46,6 +58,7 @@
 
  </div>
 </div>
+<?php }?>
 </div>
 
 
@@ -67,11 +80,19 @@
         </div>
         <div class="col-sm-2 col-md-2">
           <label>Member: </label>
+          <?php if($this->session->userdata("user_role")== 5){ ?>
+          <input type="text" autocomplete="off" name="member_name" value="<?php echo $this->session->userdata("user_full_name") ?>" disabled placeholder="All" id="member_select" class="form-control" required>
+          <span class="help-block" id="member_help_block" ></span>
+          <input type="hidden" autocomplete="off" name="client_id" value="<?php echo $this->session->userdata("member_id")?>" class="form-control">
+          <table class="table table-condensed table-hover table-bordered clickable" id="member_select_result" style="position: absolute;z-index: 10;background-color: #fff;width: 92%">
+          </table>
+          <?php } else { ?>
           <input type="text" autocomplete="off" name="member_name" placeholder="All" id="member_select" class="form-control" required>
           <span class="help-block" id="member_help_block" ></span>
           <input type="hidden" autocomplete="off" name="client_id"  class="form-control">
           <table class="table table-condensed table-hover table-bordered clickable" id="member_select_result" style="position: absolute;z-index: 10;background-color: #fff;width: 92%">
           </table>
+          <?php }?>
         </div>
         <div class="col-sm-2 col-md-1">
           <label style="width: 100%;">&nbsp;</label>

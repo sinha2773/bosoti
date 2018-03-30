@@ -26,6 +26,10 @@ class Dashboard extends MY_Controller {
 	{	
 		
 		$data = $this->init("Dashboard");
+		$member_id = $this->session->userdata("member_id");
+		if(!empty($member_id)){
+			$data['deposit_by_member']= $this->dashboard->get_member_deposit_amt($member_id);
+		}
 		$data['total_cashbook']= $this->dashboard->get_cashbook_amt();
 		$data['total_bank_acc']= $this->dashboard->get_bank_acc_amt();
 		$data['total_expense']= $this->dashboard->get_expense_amt();
@@ -77,4 +81,10 @@ class Dashboard extends MY_Controller {
 		else
 			exit('404');
 	}
+
+	// function test()
+	// {
+	// 	echo "<pre>";
+	// 	print_r($_SESSION);
+	// }
 }
