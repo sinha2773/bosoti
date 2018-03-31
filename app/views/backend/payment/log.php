@@ -77,19 +77,27 @@
                
                 <tbody>
                     <?php 
-                    $total_paid = 0;
+                    $total_balance = 0;
 
                     foreach ($lists as $key => $value) { ?>
                     <?php                              
-                        $total_paid += $value->amount;             
+                        if($value->payment_type != $this->payment_model->ADJUSTMENT_DEBIT){
+                            $total_balance = $total_balance + $value->amount;
+                        }
+                        if($value->payment_type == $this->payment_model->ADJUSTMENT_DEBIT){
+                            $total_balance -= $value->amount;
+                        }           
                     ?>
                     <tr class="">
                         <td><?php echo $value->client_id ?></td>
                         <td><?php echo $value->name; ?></td>
-                        <td><?php echo $value->payment_type; ?></td>
+                        <td><?php echo $this->payment_model->getPaymentType($value->payment_type);?></td>
                         <td><?php echo $value->added_by; ?></td>
                         <td><?php echo $value->collector; ?></td>
-                        <td><?php echo $this->payment->currencyFormat($value->amount); ?></td>
+                        <td>
+                            <?php echo ($value->payment_type == $this->payment_model->ADJUSTMENT_DEBIT) ? '-':'';?>
+                            <?php echo $this->payment->currencyFormat($value->amount); ?>
+                        </td>
                         <td><?php echo date('l, d F Y', strtotime($value->payment_date)); ?></td>
                         <td><?php echo date('l, d F Y h:s A', strtotime($value->created)); ?></td>
                     </tr>
@@ -102,7 +110,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th><?php echo $this->payment->currencyFormat($total_paid);?></th>
+                        <th><?php echo $this->payment->currencyFormat($total_balance);?></th>
                         <th></th>
                         <th></th>
                     </tr>

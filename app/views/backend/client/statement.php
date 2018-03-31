@@ -40,7 +40,6 @@
 
 <?php if( isset($client_id) && (int)$client_id>0 ){ ?>
 
-<?php //include(dirname(__dir__).'/common/page_part/all_status_title.php');?>
 
 <div class="client_statement">
     <?php if( !empty($client_info)){ ?>

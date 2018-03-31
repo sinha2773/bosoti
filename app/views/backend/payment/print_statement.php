@@ -26,13 +26,21 @@
         $total_balance = 0;
         foreach ($payment_info as $key => $value) { ?>
         <?php 
-            $total_balance = $total_balance + $value->amount;
+            if($value->payment_type != $this->payment_model->ADJUSTMENT_DEBIT){
+                $total_balance = $total_balance + $value->amount;
+            }
+            if($value->payment_type == $this->payment_model->ADJUSTMENT_DEBIT){
+                $total_balance -= $value->amount;
+            }
         ?>
         
         <tr class="">
             <td><?php echo date('d-m-Y', strtotime($value->payment_date)); ?></td>
             <td><?php echo $value->added_user; ?></td>
-            <td><?php echo $value->amount; ?></td> 
+            <td>
+                <?php echo ($value->payment_type == $this->payment_model->ADJUSTMENT_DEBIT) ? '-':'';?>
+                <?php echo $this->payment_model->currencyFormat($value->amount); ?>
+            </td>
             <td><?php echo date('Y-m-d h:s A', strtotime($value->created));?></td>                             
         </tr>
         <?php } ?>  
