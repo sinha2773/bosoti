@@ -51,7 +51,7 @@ class Login extends CI_Controller {
         $this->db->select('*');
         $this->db->from($this->user_table);
         $this->db->where('email', trim($data['user_id'])); 
-        //$this->db->where('password', $data['password']); 
+        $this->db->or_where('client_id', trim($data['user_id'])); 
         $this->db->where('status', 1); 
         $query = $this->db->get();
         if ( $query->num_rows() == 1 )

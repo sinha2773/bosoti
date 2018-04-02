@@ -19,3 +19,6 @@ alter table `tbl_expenses` add column payment_to varchar(60) default null after 
 
 done
 ALTER TABLE `tbl_billgenerates` ADD `client_history` VARCHAR(255) NULL DEFAULT NULL AFTER `clients`;
+
+new:
+ALTER TABLE `tbl_users` ADD `client_id` VARCHAR(15) NULL ;

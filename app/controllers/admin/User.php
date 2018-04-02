@@ -81,7 +81,7 @@ class User extends MY_Controller {
         $email = $this->input->post('email', true);
         $mobile = $this->input->post('mobile', true);
         $member_id = $this->user_role->get_member_id($email,$mobile);
-        if(empty($member_id)){
+        if(empty($member_id['id'])){
          $this->session->set_flashdata('flashMessage', array('danger', "Sorry, No Member Found.Enter Member Email or Mobile Correctly"));
          redirect($this->admin_path."user/add_user", 'refresh'); 
      }
@@ -110,7 +110,8 @@ class User extends MY_Controller {
                 'password' => $hashPass,
                 'created' => $this->now,
                 'status' => $this->input->post("status"),
-                'member_id'=> $member_id,
+                'member_id'=> $member_id['id'],
+                'client_id'=> $member_id['client_id'],
             );
             $this->db->trans_start();
             $this->master->insert($this->user_table, $data); 

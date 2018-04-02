@@ -17,12 +17,12 @@ class User_role_model extends MY_Model{
 	}
 	function get_member_id($email,$mobile)
 	{
-		$this->db->select('id');
+		$this->db->select('id,client_id');
 		$this->db->from('tbl_members');
 		$this->db->where('email', $email);
 		$this->db->or_where('mobile', $mobile);
-		$result = $this->db->get()->row_array();
-		return $result['id'];
+		return $this->db->get()->row_array();
+		// return $result['id'];
 	}
 }
 ?>
