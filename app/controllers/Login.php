@@ -54,6 +54,8 @@ class Login extends CI_Controller {
         $this->db->or_where('client_id', trim($data['user_id'])); 
         $this->db->where('status', 1); 
         $query = $this->db->get();
+        // echo $this->db->last_query();
+        // exit();
         if ( $query->num_rows() == 1 )
         {
 
@@ -72,12 +74,12 @@ class Login extends CI_Controller {
                 $this->session->set_userdata($session_data); 
                 redirect($this->admin_path.'dashboard');
             }else{
-               $this->session->set_flashdata('flashMessage', array('danger', "Invalid username or password."));
-               redirect($this->admin_path,"refresh");
-           }
-       }
-       else
-       {
+             $this->session->set_flashdata('flashMessage', array('danger', "Invalid username or password."));
+             redirect($this->admin_path,"refresh");
+         }
+     }
+     else
+     {
         $this->session->set_flashdata('flashMessage', array('danger', "Invalid username or password."));
         redirect($this->admin_path,"refresh");
     }
@@ -87,12 +89,12 @@ class Login extends CI_Controller {
     public function logout()
     {
     	$session_data = array(
-           'user_id'    => "",
-           'user_email' => "",
-           'user_role'  => "",
-           'user_name'  => "",
-           'session_id' => "",
-       );
+         'user_id'    => "",
+         'user_email' => "",
+         'user_role'  => "",
+         'user_name'  => "",
+         'session_id' => "",
+     );
     	$this->session->set_userdata($session_data);
     	$this->session->sess_destroy();
     	redirect($this->admin_path,"refresh");
@@ -140,11 +142,11 @@ class Login extends CI_Controller {
                 $status = array("status"=>"error", "msg"=>"Sorry, you didn't fill out all the fields!");
             }else{
                 if($this->is_uniqe_email($email)===FALSE){
-                 $status = array("status"=>"error", "msg"=>"Sorry, email already exists!");  
-             }
-             elseif($this->is_uniqe_username($username)===FALSE){
-                 $status = array("status"=>"error", "msg"=>"Sorry, username already exists!");  
-             }else{
+                   $status = array("status"=>"error", "msg"=>"Sorry, email already exists!");  
+               }
+               elseif($this->is_uniqe_username($username)===FALSE){
+                   $status = array("status"=>"error", "msg"=>"Sorry, username already exists!");  
+               }else{
                 $data = array(
                     "first_name" => $first_name,
                     "surname" => $surname,
@@ -213,11 +215,11 @@ public function do_member_login(){
             $this->session->set_userdata($session_data);                
             $status = array("status"=>"ok","msg"=>"Login successfully.");
         }else{
-           $status = array("status"=>"error","msg"=>"Invalid username or password.");
-       }
-   }
-   else
-   {
+         $status = array("status"=>"error","msg"=>"Invalid username or password.");
+     }
+ }
+ else
+ {
     $status = array("status"=>"error","msg"=>"Invalid username or password.");
 }
 

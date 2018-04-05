@@ -22,3 +22,5 @@ ALTER TABLE `tbl_billgenerates` ADD `client_history` VARCHAR(255) NULL DEFAULT N
 
 new:
 ALTER TABLE `tbl_users` ADD `client_id` VARCHAR(15) NULL ;
+ALTER TABLE `tbl_users` CHANGE `created` `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE `tbl_users` CHANGE `updated` `updated` DATETIME on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;

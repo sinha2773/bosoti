@@ -74,18 +74,18 @@ class User extends MY_Controller {
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
         $this->form_validation->set_rules('re_password', 'Re-Password', 'required|min_length[6]|matches[password]');
         if ($this->form_validation->run() == FALSE) { //if validation not passed or default view page
-         $this->add_user();
-     }
-     $user_role = $this->input->post('user_role_id', true);
-     if($user_role == 5){
+           $this->add_user();
+       }
+       $user_role = $this->input->post('user_role_id', true);
+       if($user_role == 5){
         $email = $this->input->post('email', true);
         $mobile = $this->input->post('mobile', true);
         $member_id = $this->user_role->get_member_id($email,$mobile);
         if(empty($member_id['id'])){
-         $this->session->set_flashdata('flashMessage', array('danger', "Sorry, No Member Found.Enter Member Email or Mobile Correctly"));
-         redirect($this->admin_path."user/add_user", 'refresh'); 
-     }
- }
+           $this->session->set_flashdata('flashMessage', array('danger', "Sorry, No Member Found.Enter Member Email or Mobile Correctly"));
+           redirect($this->admin_path."user/add_user", 'refresh'); 
+       }
+   }
    // else {
             $password = $this->input->post('password', true); // getting the password from the field
             // generating the password cimbining the cost parameter and salt here
@@ -166,8 +166,8 @@ class User extends MY_Controller {
                 $this->form_validation->set_rules('re_password', 'Re-Password', 'required|min_length[6]|matches[password]');
             }
         if ($this->form_validation->run() == FALSE) { //if validation not passed or default view page
-         $this->edit_user($id);
-     } else {
+           $this->edit_user($id);
+       } else {
 
             // putting all the fields into array for inserting in to DB
         $data = array(
@@ -183,13 +183,13 @@ class User extends MY_Controller {
         );
 
         if(!empty($password)){
-           $hashPass = $this->master->get_has_password($password);
-           $data["password"] = $hashPass;
-       }
+         $hashPass = $this->master->get_has_password($password);
+         $data["password"] = $hashPass;
+     }
 
             // image upload
-       $media_id = "";
-       if(isset($_FILES['image']) && $_FILES['image']["size"]>0){
+     $media_id = "";
+     if(isset($_FILES['image']) && $_FILES['image']["size"]>0){
         $media_id = $this->master->image_upload($_FILES['image'],"user", array("action"=>"insert","name"=>$this->input->post('fname',TRUE)));
         $data["media_id"] = $media_id;
     }
@@ -269,8 +269,8 @@ public function save_user_role() {
     $this->form_validation->set_rules('name', 'Name', 'trim|required');
     $this->form_validation->set_rules('permission_access[]', 'Permission', 'trim|required');
     if ($this->form_validation->run() == FALSE) { 
-     $this->add_user_role();
- } else {          
+       $this->add_user_role();
+   } else {          
     $permission = array();
     $permission['access'] = $this->input->post('permission_access', true); 
     $permission['modify'] = $this->input->post('permission_modify', true); 
@@ -325,8 +325,8 @@ public function update_user_role() {
     $this->form_validation->set_rules('name', 'Name', 'trim|required');
     $this->form_validation->set_rules('permission_access[]', 'Permission', 'trim|required');
     if ($this->form_validation->run() == FALSE) { 
-     $this->edit_user_role($id);
- } else {
+       $this->edit_user_role($id);
+   } else {
     $permission = array();
     $permission['access'] = $this->input->post('permission_access', true); 
     $permission['modify'] = $this->input->post('permission_modify', true); 

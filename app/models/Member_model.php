@@ -28,7 +28,8 @@ class Member_model extends MY_Model {
     public function save_new_member($data)
     {
         $this->db->insert('tbl_members', $data);
-        return $this->db->affected_rows();
+        return $this->db->insert_id();
+        // return $this->db->affected_rows();
     }
 
     public function collect_all_info($member_id)
@@ -67,4 +68,10 @@ class Member_model extends MY_Model {
         $this->db->where('ref_id', $id);
         return $this->db->get()->row();
     }
+
+    function save_as_user($user_data)
+    {
+      $this->db->insert('tbl_users', $user_data);
+      return $this->db->insert_id();
+  }
 }

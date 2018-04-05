@@ -16,6 +16,21 @@
         </div>
 
         <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Enter Password" class="form-control"  required>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Re-type Password</label>
+                    <input type="password" name="re_password" placeholder="Re-type Password" class="form-control" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
                     <label>Father Name</label>
