@@ -202,7 +202,7 @@ class Payment extends MY_Controller {
 
 				$this->payment_model->add($p_data);
 				$current_cashbook_amt = $this->payment_model->get_cashbook_amount();
-				if($p_data['payment_type'] == 1 || $p_data['payment_type'] == 2 || $p_data['payment_type'] == 3)
+				if($p_data['payment_type'] == 1 || $p_data['payment_type'] == 3)
 				{
 					$updated_amt = array(
 						'cashbook_amount' => $current_cashbook_amt['cashbook_amount'] + $p_data['amount'],
