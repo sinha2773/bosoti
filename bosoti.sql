@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 30, 2018 at 08:25 PM
+-- Generation Time: Apr 13, 2018 at 11:13 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -61,6 +61,55 @@ CREATE TABLE IF NOT EXISTS `tbl_client_histories` (
   `comment` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `added_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_due`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_due` (
+`due_id` int(11) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `due_amt` double NOT NULL DEFAULT '0',
+  `last_calculate_date` date NOT NULL,
+  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tbl_due`
+--
+
+INSERT INTO `tbl_due` (`due_id`, `member_id`, `due_amt`, `last_calculate_date`, `date_created`, `date_updated`) VALUES
+(1, 2, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(2, 3, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(3, 4, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(4, 5, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(5, 6, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(7, 10, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(8, 11, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(9, 12, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(10, 13, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(11, 14, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(12, 15, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(13, 16, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(14, 17, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(15, 18, 0, '2018-04-14', '2018-04-13 19:47:13', '2018-04-13 21:04:20'),
+(16, 2, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(17, 3, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(18, 4, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(19, 5, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(20, 6, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(22, 10, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(23, 11, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(24, 12, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(25, 13, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(26, 14, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(27, 15, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(28, 16, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(29, 17, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20'),
+(30, 18, 0, '2018-04-14', '2018-04-13 20:27:00', '2018-04-13 21:04:20');
 
 -- --------------------------------------------------------
 
@@ -134,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `tbl_final_amount` (
 --
 
 INSERT INTO `tbl_final_amount` (`final_amount_id`, `total_amount`, `cashbook_amount`, `bank_amount`) VALUES
-(1, 0, 700, 0);
+(1, 0, 600, 0);
 
 -- --------------------------------------------------------
 
@@ -275,25 +324,30 @@ CREATE TABLE IF NOT EXISTS `tbl_members` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `membership_type` tinyint(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+  `membership_type` tinyint(1) NOT NULL,
+  `due_calculate` enum('yes','no') NOT NULL DEFAULT 'no'
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_members`
 --
 
-INSERT INTO `tbl_members` (`id`, `client_id`, `name`, `mobile`, `email`, `gender`, `fathername`, `mothername`, `spousename`, `date_of_birth`, `nid`, `occupation`, `education`, `religion`, `nationality`, `admission_date`, `blood_group`, `permanent_address`, `village`, `post_office`, `police_station`, `district`, `present_address`, `p_village`, `p_post_office`, `p_police_station`, `p_district`, `nominee_identity`, `n_name`, `n_fathername`, `n_mothername`, `n_date_of_birth`, `n_nid`, `n_permanent_address`, `n_village`, `n_post_office`, `n_police_station`, `n_district`, `n_present_address`, `np_village`, `np_post_office`, `np_police_station`, `np_district`, `nominee_relationship`, `summary`, `media_id`, `media_id2`, `added_by`, `status`, `created`, `updated`, `membership_type`) VALUES
-(2, 'BOSOTI_1', 'aaa', 'aaa', NULL, 0, 'aaa', 'aaa', '', '2018-03-14', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-03-03 13:56:23', '2018-03-23 19:09:47', 2),
-(3, '', 'Test Member Ahmed', 'BOSOTI_2', NULL, 0, 'A', 'B', 'B', '2018-03-13', 'asdasdasd', 'sdasd', 'asda', 'dasd', 'asdas', '2018-03-13', 'asdasd', NULL, 'asdas', 'dasd', 'asdasd', 'asd', NULL, 'asda', 'sdas', 'sdasd', 'da', NULL, 'asda', 'sda', 'asdas', '2018-03-06', 'asdasd', NULL, 'asdas', 'dasd', 'asd', 'asd', NULL, 'asdas', 'dasd', 'sdasd', 'asda', 'asdasd', '', 0, 0, 0, 1, '2018-03-22 19:39:39', '2018-03-22 19:39:39', 0),
-(4, '', 'member 3', 'BOSOTI_3', NULL, 0, 'asda', 'sdas', 'asdas', '2018-03-12', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 0, 1, '2018-03-22 20:11:18', '2018-03-22 20:11:18', 0),
-(5, '', 'asdasd', 'BOSOTI_2', NULL, 0, 'asdas', 'dasd', 'asdasd', '2018-03-13', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 0, 1, '2018-03-22 20:15:27', '2018-03-22 20:15:27', 0),
-(6, 'BOSOTI_2', 'asdasd', '015', NULL, 0, 'asdasd', 'asdasd', 'asdasd', '2018-03-13', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '2018-03-13', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 0, 1, '2018-03-22 20:17:17', '2018-03-22 20:17:17', 0),
-(9, 'BOSOTI_4', 'Ref', '234234', NULL, 0, 'RRR', 'RRR', '', '2018-03-07', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 2),
-(10, 'BOSOTI_5', 'Ref 2 ', '123123', NULL, 0, '1232', '1233', '', '2018-03-21', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-03-23 18:49:44', '2018-03-23 18:50:21', 2),
-(11, 'BOSOTI_6', 'Test 5', '123123', NULL, 0, '12312', '31231', '', '2018-03-20', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-03-23 18:59:38', '2018-03-23 18:59:38', 1),
-(12, 'BOSOTI_7', 'Hello', '1234567', NULL, 0, 'MR W', 'MRS Q', '', '2018-03-15', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-03-23 19:20:24', '2018-03-23 19:20:24', 1),
-(13, 'BOSOTI_8', 'qqq', 'qqq', NULL, 0, 'qqq', 'qqq', '', '2018-03-13', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-03-23 19:32:53', '2018-03-23 19:32:53', 1),
-(14, 'BOSOTI_9', 'erwe', 'rwer', NULL, 0, 'werwer', 'werw', 'rwerwer', '2018-03-15', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', NULL, 0, 8, 1, '2018-03-23 19:42:43', '2018-03-23 19:42:43', 1);
+INSERT INTO `tbl_members` (`id`, `client_id`, `name`, `mobile`, `email`, `gender`, `fathername`, `mothername`, `spousename`, `date_of_birth`, `nid`, `occupation`, `education`, `religion`, `nationality`, `admission_date`, `blood_group`, `permanent_address`, `village`, `post_office`, `police_station`, `district`, `present_address`, `p_village`, `p_post_office`, `p_police_station`, `p_district`, `nominee_identity`, `n_name`, `n_fathername`, `n_mothername`, `n_date_of_birth`, `n_nid`, `n_permanent_address`, `n_village`, `n_post_office`, `n_police_station`, `n_district`, `n_present_address`, `np_village`, `np_post_office`, `np_police_station`, `np_district`, `nominee_relationship`, `summary`, `media_id`, `media_id2`, `added_by`, `status`, `created`, `updated`, `membership_type`, `due_calculate`) VALUES
+(2, 'BOSOTI_1', 'aaa', 'aaa', NULL, 0, 'aaa', 'aaa', '', '2018-03-14', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-03-03 13:56:23', '2018-04-13 20:27:00', 2, 'yes'),
+(3, '', 'Test Member Ahmed', 'BOSOTI_2', NULL, 0, 'A', 'B', 'B', '2018-03-13', 'asdasdasd', 'sdasd', 'asda', 'dasd', 'asdas', '2018-03-13', 'asdasd', NULL, 'asdas', 'dasd', 'asdasd', 'asd', NULL, 'asda', 'sdas', 'sdasd', 'da', NULL, 'asda', 'sda', 'asdas', '2018-03-06', 'asdasd', NULL, 'asdas', 'dasd', 'asd', 'asd', NULL, 'asdas', 'dasd', 'sdasd', 'asda', 'asdasd', '', 0, 0, 0, 1, '2018-03-22 19:39:39', '2018-04-13 20:27:01', 0, 'yes'),
+(4, '', 'member 3', 'BOSOTI_3', NULL, 0, 'asda', 'sdas', 'asdas', '2018-03-12', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 0, 1, '2018-03-22 20:11:18', '2018-04-13 20:27:01', 0, 'yes'),
+(5, '', 'asdasd', 'BOSOTI_2', NULL, 0, 'asdas', 'dasd', 'asdasd', '2018-03-13', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 0, 1, '2018-03-22 20:15:27', '2018-04-13 20:27:01', 0, 'yes'),
+(6, 'BOSOTI_2', 'asdasd', '015', NULL, 0, 'asdasd', 'asdasd', 'asdasd', '2018-03-13', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '2018-03-13', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 0, 1, '2018-03-22 20:17:17', '2018-04-13 20:27:01', 0, 'yes'),
+(9, 'BOSOTI_4', 'Ref', '234234', NULL, 0, 'RRR', 'RRR', '', '2018-03-07', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '0000-00-00 00:00:00', '2018-04-13 20:27:01', 2, 'yes'),
+(10, 'BOSOTI_5', 'Ref 2 ', '123123', NULL, 0, '1232', '1233', '', '2018-03-21', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-03-23 18:49:44', '2018-04-13 20:27:01', 2, 'yes'),
+(11, 'BOSOTI_6', 'Test 5', '123123', NULL, 0, '12312', '31231', '', '2018-03-20', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-03-23 18:59:38', '2018-04-13 20:27:01', 1, 'yes'),
+(12, 'BOSOTI_7', 'Hello', '1234567', NULL, 0, 'MR W', 'MRS Q', '', '2018-03-15', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-03-23 19:20:24', '2018-04-13 20:27:01', 1, 'yes'),
+(13, 'BOSOTI_8', 'qqq', 'qqq', NULL, 0, 'qqq', 'qqq', '', '2018-03-13', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-03-23 19:32:53', '2018-04-13 20:27:01', 1, 'yes'),
+(14, 'BOSOTI_9', 'erwe', 'rwer', NULL, 0, 'werwer', 'werw', 'rwerwer', '2018-03-15', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', NULL, 0, 8, 1, '2018-03-23 19:42:43', '2018-04-13 20:27:01', 1, 'yes'),
+(15, 'BOSOTI_10', 'Shofik', '01677778888', NULL, 0, 'aaa', 'aaa', '', '2018-04-09', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-04-05 19:50:49', '2018-04-13 20:27:01', 1, 'yes'),
+(16, 'BOSOTI_11', 'Final Check', '0170585258', NULL, 0, 'aaa', 'mmm', '', '2018-04-18', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-04-05 19:54:05', '2018-04-13 20:27:01', 1, 'yes'),
+(17, 'BOSOTI_12', 'Test 2', '01562123456', NULL, 0, 'aa', 'asdasd', '', '2018-04-25', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-04-05 19:57:36', '2018-04-13 20:27:01', 1, 'yes'),
+(18, 'BOSOTI_13', 'New Member', '017450585452', NULL, 0, 'asdas', 'dasdasd', '', '2018-04-25', '', '', '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', NULL, '', '', '', '0000-00-00', '', NULL, '', '', '', '', NULL, '', '', '', '', '', '', 0, 0, 8, 1, '2018-04-05 20:04:45', '2018-04-13 20:27:01', 1, 'yes');
 
 -- --------------------------------------------------------
 
@@ -350,7 +404,7 @@ CREATE TABLE IF NOT EXISTS `tbl_payments` (
   `client_status` tinyint(1) NOT NULL,
   `created` datetime NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_payments`
@@ -361,7 +415,8 @@ INSERT INTO `tbl_payments` (`id`, `client_id`, `amount`, `payment_type`, `discou
 (32, 6, '200.00', 2, '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'test', 0, 0, '2018-03-30 00:47:15', '2018-03-29 18:47:15'),
 (33, 6, '300.00', 3, '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'test', 0, 0, '2018-03-30 00:47:41', '2018-03-29 18:47:41'),
 (34, 6, '200.00', 1, '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'test', 0, 0, '2018-03-30 00:48:05', '2018-03-29 18:48:05'),
-(35, 6, '400.00', 4, '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'tetat', 0, 0, '2018-03-30 00:49:06', '2018-03-29 18:49:06');
+(35, 6, '400.00', 4, '0.00', '0.00', 18, '0000-00-00', '2018-03-30', 30, 3, 2018, 8, '', 'tetat', 0, 0, '2018-03-30 00:49:06', '2018-03-29 18:49:06'),
+(36, 16, '100.00', 2, '0.00', '0.00', 18, '0000-00-00', '2018-04-09', 9, 4, 2018, 8, '', '', 0, 0, '2018-04-09 00:53:17', '2018-04-08 18:53:17');
 
 -- --------------------------------------------------------
 
@@ -504,21 +559,27 @@ CREATE TABLE IF NOT EXISTS `tbl_users` (
   `media_id` int(11) DEFAULT NULL,
   `user_role_id` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  `member_id` int(11) DEFAULT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `member_id` int(11) DEFAULT NULL,
+  `client_id` varchar(15) DEFAULT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tbl_users`
 --
 
-INSERT INTO `tbl_users` (`id`, `email`, `mobile`, `username`, `password`, `name`, `surname`, `gender`, `media_id`, `user_role_id`, `status`, `created`, `updated`, `member_id`) VALUES
-(8, 'info@sinhabd.com', '01738050950', 'bakulsinha', '$2y$11$Ev1aOsKdLt9r99tbVJyGtuAdU2pI1gN.xd0CMlh2TutbkaYvolhce', 'Super', 'Admin', 'male', 0, 1, 1, '0000-00-00 00:00:00', '2017-07-25 17:52:11', 0),
-(11, 'ziaulkhan7@gmail.com', '01552386124', 'ziaulkhan', '$2y$11$jGvzis5iHmr9p5GRcqXpGO2O0/oeU3V3Y.jjBuMthMOYog8OzrtOS', 'ziaul', 'khan', 'male', 0, 1, 1, '2017-03-13 18:45:11', '2017-04-26 21:59:20', 0),
-(18, 'jakir@gmail.com', '01677', 'jakir', '$2y$11$XwfCyvq9H/cqddN9avzFme01D0T.9B8JvKQUKs48EnPoZBTDpq1Om', 'Jakir', 'Habib', 'male', 0, 4, 1, '2018-03-24 23:30:24', '0000-00-00 00:00:00', 0),
-(19, 's@ghmail.com', '01677', 's@gmail.com', '$2y$11$eGP2LKfBAlWMAJnSQ0Zob.QaKtVabshgUCQe414mD1cPEgqWn3eWC', 'Shofik', 'Shoaib', 'male', 0, 1, 1, '2018-03-26 10:52:27', '2018-03-26 10:56:02', 0),
-(20, 'm@gmail.com', '015', 'm', '$2y$11$BmGk.5gFO9dAK2a7y7czveP86Jd0QDtQ5f4iaE1v1z/qG71PaH7Fu', 'test', 'member', 'male', 0, 5, 1, '2018-03-30 23:38:45', '0000-00-00 00:00:00', 6);
+INSERT INTO `tbl_users` (`id`, `email`, `mobile`, `username`, `password`, `name`, `surname`, `gender`, `media_id`, `user_role_id`, `status`, `created`, `updated`, `member_id`, `client_id`) VALUES
+(8, 'info@sinhabd.com', '01738050950', 'bakulsinha', '$2y$11$Ev1aOsKdLt9r99tbVJyGtuAdU2pI1gN.xd0CMlh2TutbkaYvolhce', 'Super', 'Admin', 'male', 0, 1, 1, '0000-00-00 00:00:00', '2017-07-25 17:52:11', 0, NULL),
+(11, 'ziaulkhan7@gmail.com', '01552386124', 'ziaulkhan', '$2y$11$jGvzis5iHmr9p5GRcqXpGO2O0/oeU3V3Y.jjBuMthMOYog8OzrtOS', 'ziaul', 'khan', 'male', 0, 1, 1, '2017-03-13 18:45:11', '2017-04-26 21:59:20', 0, NULL),
+(18, 'jakir@gmail.com', '01677', 'jakir', '$2y$11$XwfCyvq9H/cqddN9avzFme01D0T.9B8JvKQUKs48EnPoZBTDpq1Om', 'Jakir', 'Habib', 'male', 0, 4, 1, '2018-03-24 23:30:24', '0000-00-00 00:00:00', 0, NULL),
+(19, 's@ghmail.com', '01677', 's@gmail.com', '$2y$11$eGP2LKfBAlWMAJnSQ0Zob.QaKtVabshgUCQe414mD1cPEgqWn3eWC', 'Shofik', 'Shoaib', 'male', 0, 1, 1, '2018-03-26 10:52:27', '2018-03-26 10:56:02', 0, NULL),
+(20, 'm@gmail.com', '015', 'm', '$2y$11$BmGk.5gFO9dAK2a7y7czveP86Jd0QDtQ5f4iaE1v1z/qG71PaH7Fu', 'test', 'member', 'male', 0, 5, 1, '2018-03-30 23:38:45', '0000-00-00 00:00:00', 6, 'BOSOTI_2'),
+(21, '', '234234', 'aaa', '$2y$11$L7yuDeOizlobYgIByQDFM.qb7BFdWJvAVweC.jVzu7yc99v2iL3q6', 'New', 'Member', 'male', 0, 5, 1, '2018-04-03 00:38:56', '2018-04-06 02:07:21', 9, 'BOSOTI_4'),
+(22, '', '01677778888', '', '1234', 'Shofik', NULL, 'male', NULL, 5, 0, '0000-00-00 00:00:00', '2018-04-06 02:07:34', 15, 'BOSOTI_10'),
+(23, 'ss@gmail.com', '0170585258', '', '$2y$11$yqHfsfgoOx9aYdrNG4kAjelgs9WBFLNHoilCvri/b8al81fnAEF6i', 'Final Check', NULL, 'male', NULL, 5, 0, '0000-00-00 00:00:00', '2018-04-06 02:07:31', 16, 'BOSOTI_11'),
+(24, '', '01562123456', '', '$2y$11$g2cRGw8zc7DREnChornFNue1JTZVEhq6VKcZRovhluaOnThdcJMbS', 'Test 2', NULL, 'male', NULL, 5, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 17, 'BOSOTI_12'),
+(25, '', '017450585452', '', '$2y$11$BP167/AgElZfQ4zSgTYoh.TqGnFq0RR8v.8l/c09cL/vk237UO8ku', 'New Member Shofik', 'aaa', 'male', NULL, 5, 1, '2018-04-06 02:04:45', '2018-04-06 02:10:20', 18, 'BOSOTI_13');
 
 -- --------------------------------------------------------
 
@@ -558,6 +619,12 @@ ALTER TABLE `tbl_bank_account`
 --
 ALTER TABLE `tbl_client_histories`
  ADD PRIMARY KEY (`history_id`), ADD KEY `client_id` (`client_id`);
+
+--
+-- Indexes for table `tbl_due`
+--
+ALTER TABLE `tbl_due`
+ ADD PRIMARY KEY (`due_id`);
 
 --
 -- Indexes for table `tbl_expenses`
@@ -658,6 +725,11 @@ MODIFY `bank_acc_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 ALTER TABLE `tbl_client_histories`
 MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `tbl_due`
+--
+ALTER TABLE `tbl_due`
+MODIFY `due_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
+--
 -- AUTO_INCREMENT for table `tbl_expenses`
 --
 ALTER TABLE `tbl_expenses`
@@ -691,7 +763,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 -- AUTO_INCREMENT for table `tbl_members`
 --
 ALTER TABLE `tbl_members`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT for table `tbl_messages`
 --
@@ -706,7 +778,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `tbl_payments`
 --
 ALTER TABLE `tbl_payments`
-MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=36;
+MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=37;
 --
 -- AUTO_INCREMENT for table `tbl_settings`
 --
@@ -721,7 +793,7 @@ MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `tbl_user_roles`
 --

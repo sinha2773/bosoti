@@ -413,6 +413,60 @@ class Payment extends MY_Controller {
     	echo json_encode($return_data);
     }
 
+    function check_new_member()
+    {
+    	$this->db->trans_start();
+    	$new_member = $this->payment_model->is_new_member_available();
+    	if(!empty($new_member)){
+    		$this->payment_model->save_new_member($new_member);
+    		foreach ($new_member as $value) {
+    			$id = $value['member_id'];
+    			$data= array(
+    				'due_calculate' =>'yes',
+    			);
+    			$this->payment_model->update_member_due_status($id,$data);
+    		}
+    	}
+
+    	$this->calculate_due_for_member();
+
+    	if ($this->db->trans_status() === false) {
+    		$this->db->trans_rollback();
+    		echo json_encode("error transaction");
+    	}
+    	else
+    	{
+    		$this->db->trans_commit();
+    		echo  json_encode("success");
+    	}
+    }
+
+    function calculate_due_for_member()
+    {
+    	date_default_timezone_set("Asia/Dhaka");
+    	$today_date= date("Y-m-d");
+    	$due_info= $this->payment_model->get_member_due_info();
+
+    	foreach ($due_info as $value) {
+    		$member_id = $value['member_id'];
+    		$last_calculated_date = $value['last_calculate_date'];
+    		$date_diff=date_diff(new DateTime($today_date), new DateTime($last_calculated_date));
+    		$approx_paid = $date_diff->days * 100 ;
+    		$total_paid= $this->payment_model->total_deposited_by_member($member_id, $last_calculated_date, $today_date);
+    		$final_due =$approx_paid - $total_paid['total_amount'];
+    		// if($final_due == 0){
+
+    		// }
+    		$updated_due_amt = array(
+    			'member_id' => $member_id,
+    			'due_amt' => $value['due_amt'] + $final_due,
+    			'last_calculate_date' => $today_date,
+    		);
+    		$this->payment_model->update_due_info($member_id,$updated_due_amt);
+    	}
+
+    }
+
 }
 
 /* End of file welcome.php */
