@@ -1,24 +1,3 @@
-alter table `tbl_billgenerates` add column p_type tinyint(1) DEFAULT 0 AFTER `g_date`;
-alter table `tbl_billgenerates` add column clients int(10) DEFAULT 0 AFTER `p_type`;
-.....................done ...............
-
-
-
-done
-alter table `tbl_incomes` add column status tinyint(1) default 0 after remark;
-alter table `tbl_incomes` add column user_id int(11) default 8 after id;
-alter table `tbl_incomes` add column payment_method varchar(20) default null after amount;
-alter table `tbl_incomes` add column payment_from varchar(60) default null after payment_method;
-
-
-alter table `tbl_expenses` add column status tinyint(1) default 0 after remark;
-alter table `tbl_expenses` add column user_id int(11) default 8 after id;
-alter table `tbl_expenses` add column payment_method varchar(20) default null after amount;
-alter table `tbl_expenses` add column payment_to varchar(60) default null after payment_method;
-
-
-done
-ALTER TABLE `tbl_billgenerates` ADD `client_history` VARCHAR(255) NULL DEFAULT NULL AFTER `clients`;
 
 new:
 ALTER TABLE `tbl_users` ADD `client_id` VARCHAR(15) NULL ;
