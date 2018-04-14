@@ -76,6 +76,8 @@ class Payment_model extends MY_Model {
 
         $this->db->select("SUM(IF(payment_type != 4, amount, 0) - IF(payment_type = 4, amount,0)) AS total_amount", FALSE);
 
+        // $this->db->select('tbl_due.due_amt as "total_due"', FALSE);
+
 //         CASE
 //     WHEN Quantity > 30 THEN "The quantity is greater than 30"
 //     WHEN Quantity = 30 THEN "The quantity is 30"
@@ -83,6 +85,8 @@ class Payment_model extends MY_Model {
 // END
 // 
         $this->db->join('tbl_members m','p.client_id=m.id');
+        
+        // $this->db->join('tbl_due', 'tbl_due.member_id = m.id', 'left');
 
         // $this->db->where("cn.status>",0);
 
@@ -813,12 +817,53 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
     	return $this->db->get()->row();
     }
 
-    // helping to debuging
-    function pr($data){
-    	echo "<pre>";
-    	print_r($data);
-    	echo "</pre>";
+    function is_new_member_available()
+    {
+        $this->db->select('id as member_id,DATE_FORMAT(created, "%Y-%m-%d") as "last_calculate_date"', FALSE);
+        $this->db->from('tbl_members');
+        $this->db->where('status', 1);
+        $this->db->where('due_calculate', 'no');
+        return $this->db->get()->result_array();
     }
+
+    function save_new_member($new_member)
+    {
+        return $this->db->insert_batch('tbl_due', $new_member);
+    }
+
+    function get_member_due_info()
+    {
+        $this->db->select('due_id,member_id,due_amt,last_calculate_date', FALSE);
+        $this->db->from('tbl_due');
+        return $this->db->get()->result_array();
+    }
+
+    function update_member_due_status($id,$data)
+    {
+      return  $this->db->where('id', $id)->update('tbl_members',$data);
+  }
+
+  function total_deposited_by_member($member_id, $last_calculated_date, $today_date)
+  {
+      $this->db->select("SUM(IF(payment_type != 4, amount, 0) - IF(payment_type = 4, amount,0)) AS total_amount", FALSE);
+      $this->db->from('tbl_payments');
+      $this->db->where('client_id', $member_id);
+      $this->db->where('payment_date >',$last_calculated_date);
+      $this->db->where('payment_date <=', $today_date);
+      return $this->db->get()->row_array();
+  }
+
+  function update_due_info($member_id,$updated_due_amt)
+  {
+      return  $this->db->where('member_id', $member_id)->update('tbl_due',$updated_due_amt);
+  }
+
+    // helping to debuging
+  function pr($data){
+     echo "<pre>";
+     print_r($data);
+     echo "</pre>";
+ }
 
 
 

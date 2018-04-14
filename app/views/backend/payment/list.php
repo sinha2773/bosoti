@@ -42,6 +42,7 @@
                         <th>Name</th>
                         <th>Mobile</th>
                         <th>Balance</th>
+                        <th>Due</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -59,9 +60,10 @@
                         <td><?php echo $value->name; ?></td>
                         <td><?php echo $value->mobile; ?></td>
                         <td><?php echo $value->total_amount; ?></td>
+                        <<td>0</td>
                         
                         <td style="text-align: center">
-                            
+
                             <div class="dropdown">
                               <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-cog" aria-hidden="true"></i>
                                   <span class="caret"></span></button>
@@ -78,7 +80,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        
+
                         <th></th>
                         <th></th>
                         <th></th>                      

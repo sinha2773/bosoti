@@ -3,3 +3,16 @@ new:
 ALTER TABLE `tbl_users` ADD `client_id` VARCHAR(15) NULL ;
 ALTER TABLE `tbl_users` CHANGE `created` `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE `tbl_users` CHANGE `updated` `updated` DATETIME on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+
+ALTER TABLE `tbl_members` ADD `due_calculate` ENUM('yes','no') NOT NULL DEFAULT 'no' ;
+	
+CREATE TABLE `tbl_due` (
+ `due_id` int(11) NOT NULL AUTO_INCREMENT,
+ `member_id` int(11) NOT NULL,
+ `due_amt` double NOT NULL DEFAULT '0',
+ `last_calculate_date` date NOT NULL,
+ `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ `date_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (`due_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8
