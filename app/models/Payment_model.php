@@ -74,9 +74,9 @@ class Payment_model extends MY_Model {
         $this->db->select('sum(discount) total_discount, (select name from tbl_users u where u.id=p.added_by) as added_user, m.*');
         // $this->db->select("IF(payment_type = 'Deposit' )sum(amount) as new_amt", FALSE);
 
-        $this->db->select("SUM(IF(payment_type != 4, amount, 0) - IF(payment_type = 4, amount,0)) AS total_amount", FALSE);
+        $this->db->select("SUM(IF(payment_type != {$this->ADJUSTMENT_DEBIT}, amount, 0) - IF(payment_type = {$this->ADJUSTMENT_DEBIT}, amount,0)) AS total_amount", FALSE);
 
-        // $this->db->select('tbl_due.due_amt as "total_due"', FALSE);
+        $this->db->select('tbl_due.due_amt as "total_due"', FALSE);
 
 //         CASE
 //     WHEN Quantity > 30 THEN "The quantity is greater than 30"
@@ -84,9 +84,9 @@ class Payment_model extends MY_Model {
 //     ELSE "The quantity is something else"
 // END
 // 
-        $this->db->join('tbl_members m','p.client_id=m.id');
+        $this->db->join('tbl_payments p','p.client_id=m.id', 'left');
         
-        // $this->db->join('tbl_due', 'tbl_due.member_id = m.id', 'left');
+        $this->db->join('tbl_due', 'tbl_due.member_id = m.id', 'left');
 
         // $this->db->where("cn.status>",0);
 
@@ -130,7 +130,8 @@ class Payment_model extends MY_Model {
         $this->db->group_by("m.id");
         $this->db->group_by("added_user");
         // $this->db->order_by('payment_date', 'DESC');
-        $query = $this->db->get($this->payment_table.' p');
+        // $query = $this->db->get($this->payment_table.' p');
+        $query = $this->db->get('tbl_members m');
         //print_r($filter_data);
         // echo $this->db->last_query();exit;
 
@@ -845,7 +846,7 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
 
   function total_deposited_by_member($member_id, $last_calculated_date, $today_date)
   {
-      $this->db->select("SUM(IF(payment_type != 4, amount, 0) - IF(payment_type = 4, amount,0)) AS total_amount", FALSE);
+      $this->db->select("SUM(IF(payment_type != {$this->ADJUSTMENT_DEBIT}, amount, 0) - IF(payment_type = {$this->ADJUSTMENT_DEBIT}, amount,0)) AS total_amount", FALSE);
       $this->db->from('tbl_payments');
       $this->db->where('client_id', $member_id);
       $this->db->where('payment_date >',$last_calculated_date);

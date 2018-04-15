@@ -20,15 +20,18 @@
 
     <?php 
     $total_balance = 0;
+    $total_due = 0;
     foreach ($lists as $key => $value) { ?>
     <?php 
         $total_balance =  $total_balance + $value->total_amount;                        
+        $total_due =  $total_due + $value->total_due;
     ?>
     <tr class="">
         <td><?php echo $value->client_id ?></td>
         <td><?php echo $value->name; ?></td>
         <td><?php echo $value->mobile; ?></td>
         <td><?php echo $value->total_amount; ?></td>     
+        <td><?php echo $value->total_due; ?></td>     
         
     </tr>
         
@@ -38,8 +41,8 @@
         <th></th>        
         <th></th>
         <th></th>
-        <th><?php echo $this->payment->currencyFormat($total_balance);   
-        ?></th>
+        <th><?php echo $this->payment->currencyFormat($total_balance);?></th>
+        <th><?php echo $this->payment->currencyFormat($total_due);?></th>
     </tr>
 
 </table>

@@ -1,6 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Payment extends MY_Controller {
 	
+	protected $perDayBilled = 100;
+	
 	function __construct()
 	{
 		parent::__construct();	
@@ -451,7 +453,7 @@ class Payment extends MY_Controller {
     		$member_id = $value['member_id'];
     		$last_calculated_date = $value['last_calculate_date'];
     		$date_diff=date_diff(new DateTime($today_date), new DateTime($last_calculated_date));
-    		$approx_paid = $date_diff->days * 100 ;
+    		$approx_paid = $date_diff->days * $this->perDayBilled ;
     		$total_paid= $this->payment_model->total_deposited_by_member($member_id, $last_calculated_date, $today_date);
     		$final_due =$approx_paid - $total_paid['total_amount'];
     		// if($final_due == 0){
