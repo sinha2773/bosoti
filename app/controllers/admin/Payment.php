@@ -173,7 +173,7 @@ class Payment extends MY_Controller {
 					$collector_data= array(
 						'collector_name' => $this->input->post('collector_name'),
 						'collector_id' =>$this->input->post('collector_id'),
-						);
+					);
 					$this->session->set_userdata($collector_data);
 				}
 				if($this->session->userdata("user_role")== 4){
@@ -202,20 +202,46 @@ class Payment extends MY_Controller {
 				$p_data['added_by'] = $this->session->userdata('user_id');
 				$p_data['created'] = $this->now;
 
+				$member_id  = $this->input->post('client_id');
+				$check_due = $this->payment_model->get_due_info_by_id($member_id);
+
 				$this->payment_model->add($p_data);
+				/* Due Update Starts*/
+				if($p_data['payment_type'] == 1 || $p_data['payment_type'] == 2 || $p_data['payment_type'] == 3){
+					$check_due = $this->payment_model->get_due_info_by_id($member_id);
+					if(empty($check_due)){
+						$final_due = 0;
+						$updated_due_amt = array(
+							'member_id' => $member_id,
+							'due_amt' => $final_due,
+						);
+						$this->payment_model->save_member_due_info($updated_due_amt);
+					}
+					if($check_due > 0){
+						$final_due = $check_due - $p_data['amount'];
+						$updated_due_amt = array(
+							'member_id' => $member_id,
+							'due_amt' => $final_due,
+						);
+						$this->payment_model->update_due_info($member_id,$updated_due_amt);
+					}
+				}
+				/*Due Update Ends*/
+				/*Cashbook Update Starts*/
 				$current_cashbook_amt = $this->payment_model->get_cashbook_amount();
 				if($p_data['payment_type'] == 1 || $p_data['payment_type'] == 3)
 				{
 					$updated_amt = array(
 						'cashbook_amount' => $current_cashbook_amt['cashbook_amount'] + $p_data['amount'],
-						);
+					);
+					$this->payment_model->update_cashbook_amt($updated_amt);
 				}
 				if($p_data['payment_type'] == 4){
 					$updated_amt = array(
 						'cashbook_amount' => $current_cashbook_amt['cashbook_amount'] - $p_data['amount'],
-						);
+					);
+					$this->payment_model->update_cashbook_amt($updated_amt);
 				}
-				$this->payment_model->update_cashbook_amt($updated_amt);
 				$this->db->trans_complete();
 				if ($this->db->trans_status() === FALSE)
 				{
@@ -411,27 +437,37 @@ class Payment extends MY_Controller {
     	$return_data = array(
     		'member_info' =>$this->payment_model->get_member_info($text),
     		'payment_info' =>$this->payment_model->todays_payment_info($text,$today_date),
-    		);
+    	);
     	echo json_encode($return_data);
     }
 
     function check_new_member()
     {
     	$this->db->trans_start();
-    	$new_member = $this->payment_model->is_new_member_available();
+    	date_default_timezone_set("Asia/Dhaka");
+    	$today_date= date("Y-m-d");
+    	$new_member = $this->payment_model->get_active_members();
     	if(!empty($new_member)){
-    		$this->payment_model->save_new_member($new_member);
     		foreach ($new_member as $value) {
-    			$id = $value['member_id'];
-    			$data= array(
-    				'due_calculate' =>'yes',
-    				);
-    			$this->payment_model->update_member_due_status($id,$data);
+    			$member_id = $value['id'];
+    			$admission_date = $value['admission_date'];
+    			$date_diff=date_diff(new DateTime($today_date), new DateTime($admission_date));
+    			$approx_paid = $date_diff->days * $this->perDayBilled ;
+    			$total_paid= $this->payment_model->total_deposited_by_member($member_id);
+    			$final_due =$approx_paid - $total_paid['total_amount'];
+    			$updated_due_amt = array(
+    				'member_id' => $member_id,
+    				'due_amt' => $final_due,
+    			);
+    			$is_available = $this->payment_model->check_due_calculated_before($member_id);
+    			if(empty($is_available)){
+    				$this->payment_model->save_member_due_info($updated_due_amt);
+    			}
+    			else{
+    				$this->payment_model->update_due_info($member_id,$updated_due_amt);
+    			}
     		}
     	}
-
-    	$this->calculate_due_for_member();
-
     	if ($this->db->trans_status() === false) {
     		$this->db->trans_rollback();
     		echo json_encode("error transaction");
@@ -443,31 +479,31 @@ class Payment extends MY_Controller {
     	}
     }
 
-    function calculate_due_for_member()
-    {
-    	date_default_timezone_set("Asia/Dhaka");
-    	$today_date= date("Y-m-d");
-    	$due_info= $this->payment_model->get_member_due_info();
+    // function calculate_due_for_member()
+    // {
+    // 	date_default_timezone_set("Asia/Dhaka");
+    // 	$today_date= date("Y-m-d");
+    // 	$due_info= $this->payment_model->get_member_due_info();
 
-    	foreach ($due_info as $value) {
-    		$member_id = $value['member_id'];
-    		$last_calculated_date = $value['last_calculate_date'];
-    		$date_diff=date_diff(new DateTime($today_date), new DateTime($last_calculated_date));
-    		$approx_paid = $date_diff->days * $this->perDayBilled ;
-    		$total_paid= $this->payment_model->total_deposited_by_member($member_id, $last_calculated_date, $today_date);
-    		$final_due =$approx_paid - $total_paid['total_amount'];
-    		// if($final_due > 0){
+    // 	foreach ($due_info as $value) {
+    // 		$member_id = $value['member_id'];
+    // 		$last_calculated_date = $value['last_calculate_date'];
+    // 		$date_diff=date_diff(new DateTime($today_date), new DateTime($last_calculated_date));
+    // 		$approx_paid = $date_diff->days * $this->perDayBilled ;
+    // 		$total_paid= $this->payment_model->total_deposited_by_member($member_id, $last_calculated_date, $today_date);
+    // 		$final_due =$approx_paid - $total_paid['total_amount'];
+    // 		// if($final_due > 0){
 
-    		// }
-    		$updated_due_amt = array(
-    			'member_id' => $member_id,
-    			'due_amt' => $value['due_amt'] + $final_due,
-    			'last_calculate_date' => $today_date,
-    			);
-    		$this->payment_model->update_due_info($member_id,$updated_due_amt);
-    	}
+    // 		// }
+    // 		$updated_due_amt = array(
+    // 			'member_id' => $member_id,
+    // 			'due_amt' => $value['due_amt'] + $final_due,
+    // 			'last_calculate_date' => $today_date,
+    // 		);
+    // 		$this->payment_model->update_due_info($member_id,$updated_due_amt);
+    // 	}
 
-    }
+    // }
 
 }
 

@@ -818,12 +818,20 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
     	return $this->db->get()->row();
     }
 
-    function is_new_member_available()
+    // function is_new_member_available()
+    // {
+    //     $this->db->select('id as member_id,DATE_FORMAT(created, "%Y-%m-%d") as "last_calculate_date"', FALSE);
+    //     $this->db->from('tbl_members');
+    //     $this->db->where('status', 1);
+    //     $this->db->where('due_calculate', 'no');
+    //     return $this->db->get()->result_array();
+    // }
+
+    function get_active_members()
     {
-        $this->db->select('id as member_id,DATE_FORMAT(created, "%Y-%m-%d") as "last_calculate_date"', FALSE);
+        $this->db->select('id,admission_date', FALSE);
         $this->db->from('tbl_members');
         $this->db->where('status', 1);
-        $this->db->where('due_calculate', 'no');
         return $this->db->get()->result_array();
     }
 
@@ -844,13 +852,21 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
       return  $this->db->where('id', $id)->update('tbl_members',$data);
   }
 
-  function total_deposited_by_member($member_id, $last_calculated_date, $today_date)
+  // function total_deposited_by_member($member_id, $last_calculated_date, $today_date)
+  // {
+  //     $this->db->select("SUM(IF(payment_type != {$this->ADJUSTMENT_DEBIT}, amount, 0) - IF(payment_type = {$this->ADJUSTMENT_DEBIT}, amount,0)) AS total_amount", FALSE);
+  //     $this->db->from('tbl_payments');
+  //     $this->db->where('client_id', $member_id);
+  //     $this->db->where('payment_date >',$last_calculated_date);
+  //     $this->db->where('payment_date <=', $today_date);
+  //     return $this->db->get()->row_array();
+  // }
+
+  function total_deposited_by_member($member_id)
   {
       $this->db->select("SUM(IF(payment_type != {$this->ADJUSTMENT_DEBIT}, amount, 0) - IF(payment_type = {$this->ADJUSTMENT_DEBIT}, amount,0)) AS total_amount", FALSE);
       $this->db->from('tbl_payments');
       $this->db->where('client_id', $member_id);
-      $this->db->where('payment_date >',$last_calculated_date);
-      $this->db->where('payment_date <=', $today_date);
       return $this->db->get()->row_array();
   }
 
@@ -859,12 +875,35 @@ public function get_con_recon_payment($client_id, $bill_type = 0){
       return  $this->db->where('member_id', $member_id)->update('tbl_due',$updated_due_amt);
   }
 
+  function save_member_due_info($updated_due_amt)
+  {
+    $this->db->insert('tbl_due', $updated_due_amt);
+}
+
+function check_due_calculated_before($member_id)
+{
+    $this->db->select('due_id');
+    $this->db->from('tbl_due');
+    $this->db->where('member_id', $member_id);
+    $return_data = $this->db->get()->row_array();
+    return $return_data['due_id'];
+}
+
+function get_due_info_by_id($member_id)
+{
+    $this->db->select('due_amt');
+    $this->db->from('tbl_due');
+    $this->db->where('member_id', $member_id);
+    $return_data= $this->db->get()->row_array();
+    return $return_data['due_amt'];
+}
+
     // helping to debuging
-  function pr($data){
-     echo "<pre>";
-     print_r($data);
-     echo "</pre>";
- }
+function pr($data){
+ echo "<pre>";
+ print_r($data);
+ echo "</pre>";
+}
 
 
 
