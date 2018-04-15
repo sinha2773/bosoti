@@ -173,7 +173,7 @@ class Payment extends MY_Controller {
 					$collector_data= array(
 						'collector_name' => $this->input->post('collector_name'),
 						'collector_id' =>$this->input->post('collector_id'),
-					);
+						);
 					$this->session->set_userdata($collector_data);
 				}
 				if($this->session->userdata("user_role")== 4){
@@ -208,12 +208,12 @@ class Payment extends MY_Controller {
 				{
 					$updated_amt = array(
 						'cashbook_amount' => $current_cashbook_amt['cashbook_amount'] + $p_data['amount'],
-					);
+						);
 				}
 				if($p_data['payment_type'] == 4){
 					$updated_amt = array(
 						'cashbook_amount' => $current_cashbook_amt['cashbook_amount'] - $p_data['amount'],
-					);
+						);
 				}
 				$this->payment_model->update_cashbook_amt($updated_amt);
 				$this->db->trans_complete();
@@ -411,7 +411,7 @@ class Payment extends MY_Controller {
     	$return_data = array(
     		'member_info' =>$this->payment_model->get_member_info($text),
     		'payment_info' =>$this->payment_model->todays_payment_info($text,$today_date),
-    	);
+    		);
     	echo json_encode($return_data);
     }
 
@@ -425,7 +425,7 @@ class Payment extends MY_Controller {
     			$id = $value['member_id'];
     			$data= array(
     				'due_calculate' =>'yes',
-    			);
+    				);
     			$this->payment_model->update_member_due_status($id,$data);
     		}
     	}
@@ -456,14 +456,14 @@ class Payment extends MY_Controller {
     		$approx_paid = $date_diff->days * $this->perDayBilled ;
     		$total_paid= $this->payment_model->total_deposited_by_member($member_id, $last_calculated_date, $today_date);
     		$final_due =$approx_paid - $total_paid['total_amount'];
-    		// if($final_due == 0){
+    		// if($final_due > 0){
 
     		// }
     		$updated_due_amt = array(
     			'member_id' => $member_id,
     			'due_amt' => $value['due_amt'] + $final_due,
     			'last_calculate_date' => $today_date,
-    		);
+    			);
     		$this->payment_model->update_due_info($member_id,$updated_due_amt);
     	}
 
