@@ -353,9 +353,19 @@ $fetch_class = $this->router->fetch_class();
 					</li>
 				</ul>
 			</li>
+			<?php } ?>	
+
+			<?php if( $this->master->isPermission('bill_generate') ){?>
+			<li class="">
+				<a href="<?php echo base_url("admin/payment/check_new_member");?>"><i class="fa fa-lg fa-fw fa-cog"></i> Bill Generate</a>
+			</li>
 			<?php } ?>
 
-			
+			<?php if( $this->master->isPermission('db_backup') ){?>
+			<li>
+				<a href="<?php echo base_url("admin/setting/db_backup");?>"><i class="fa fa-lg fa-fw fa-cog"></i> DB Backup</a>
+			</li>
+			<?php } ?>
 			
 		</ul>
 	</nav>

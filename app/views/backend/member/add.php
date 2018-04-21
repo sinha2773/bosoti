@@ -363,6 +363,30 @@
 
     </div>
 
+    <div id="widget-grid" class="col-sm-3">       
+
+        <div class="section">
+            <div class="jarviswidget" id="wid-id-5" data-widget-editbutton="false" data-widget-deletebutton="false">
+                <header>
+                    <h2>Attachments Files</h2>
+                </header>
+                <div class="widget-body section_content">
+                    <div id="UploadFileContainer">
+                      <input class="form-control" type="file" name="files[]">
+                    </div>
+                    <div class="">                               
+                        <button onclick="addFileContainer('UploadFileContainer')" type="button" class="btn btn-success">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            <span>Add files</span>
+                        </button>                                
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
 
     <div class="form-group text-center" style="float: left; width: 100%;">
         <a href="<?php echo base_url($admin_path);?>/common/get_all/<?php echo $action;?>"><input type="button" class="btn btn-danger btn-lg" value="Cancel"></a>

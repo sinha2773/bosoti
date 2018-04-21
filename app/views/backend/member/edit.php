@@ -337,6 +337,53 @@
 
     </div>
 
+    <div id="widget-grid" class="col-sm-3">       
+
+        <div class="section">
+            <div class="jarviswidget" id="wid-id-5" data-widget-editbutton="false" data-widget-deletebutton="false">
+                <header>
+                    <h2>Attachments Files</h2>
+                </header>
+                <div class="widget-body section_content">
+                    <div id="UploadFileContainer">
+                      <?php if( !empty($data) && !empty($data->attachments) ){ 
+                        $files = json_decode($data->attachments);
+                        if( !empty($files) )
+                        {
+                        foreach($files as $file_id){
+                            if( $file_id==0 )
+                                continue;
+                      ?>
+
+                      <div class="old_media_container btn btn-default">
+                            <?php 
+                            $file = $this->media_model->getById($file_id);
+                            // dd($file);
+                            echo download_file($file->media_type, $file->image, $image_size='full', '', ['target'=>'_blank']);
+                            ?>
+                            <span title="Remove" class="old_media_close">X</span>
+                            <input type="hidden" name="old_media[]" value="<?php echo $file_id;?>">
+                      </div>
+                      <?php }
+                        }
+                        }else{?>
+                        <input class="form-control" type="file" name="files[]">
+                      <?php } ?>
+                    </div>
+                    <div class="">                               
+                        <button onclick="addFileContainer('UploadFileContainer')" type="button" class="btn btn-success">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            <span>Add files</span>
+                        </button>                                
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    
+
 
     <div class="form-group text-center" style="width: 100%; float: left;">
         <a href="<?php echo base_url($admin_path);?>/common/get_all/<?php echo $action;?>"><input type="button" class="btn btn-danger btn-lg"  value="Cancel"></a>

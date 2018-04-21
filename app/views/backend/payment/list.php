@@ -62,7 +62,7 @@
                         <td><?php echo $value->name; ?></td>
                         <td><?php echo $value->mobile; ?></td>
                         <td><?php echo $value->total_amount; ?></td>
-                        <<td><?php echo $value->total_due;?></td>
+                        <td><?php echo $value->total_due;?></td>
                         
                         <td style="text-align: center">
 

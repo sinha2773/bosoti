@@ -46,6 +46,8 @@ class User extends MY_Controller {
             'send_message',
             'message_history',
             'settings',
+            'bill_generate',
+            'db_backup',
         );
     }
 

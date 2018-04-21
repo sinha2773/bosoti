@@ -76,6 +76,22 @@ if ( ! function_exists('permalink'))
 	}
 }
 
+if ( ! function_exists('file_link'))
+{
+	function file_link($media_type, $image_name, $image_size='thumb' ){
+		return base_url("uploads")."/".$media_type."/".$image_size."/".$image_name;
+	}
+}
+
+if ( ! function_exists('download_file'))
+{
+	function download_file($media_type, $image_name, $image_size='thumb', $name='', $options=array() ){
+		$target = isset($options['target']) ? "target='{$options['target']}'" : '';
+		$name = $name=='' ? $image_name : $name;
+		return '<a '.$target.' class="download-btn" href="'.base_url("uploads")."/".$media_type."/".$image_size."/".$image_name.'"><i class="fa fa-download" aria-hidden="true"></i> '.$name.'</a>';
+	}
+}
+
 if( ! function_exists('createTree'))
 {
 	function createTree($tree) {

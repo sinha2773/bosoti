@@ -176,6 +176,31 @@
             </tr>
         </table>
     </div>
+    <div class="attachment_details">
+        <div id="UploadFileContainer">
+          <?php if( !empty($data) && !empty($data->attachments) ){ 
+            echo '<h4>Attached files</h4>';
+            $files = json_decode($data->attachments);
+            if( !empty($files) )
+            {
+            foreach($files as $file_id){
+                if( $file_id==0 )
+                    continue;
+            ?>
+              <div class="old_media_container btn btn-default">
+                    <?php 
+                    $file = $this->media_model->getById($file_id);
+                    // dd($file);
+                    echo download_file($file->media_type, $file->image, $image_size='full', '', ['target'=>'_blank']);
+                    ?>
+              </div>
+            <?php 
+                }
+            }
+            }
+            ?>
+        </div>
+    </div>
 
     <hr>
     <div class="reference_section" style="margin-top: 20px;">
@@ -243,8 +268,37 @@
                 <td>District:</td>
                 <td><?php echo $ref_data->p_district;?></td>
             </tr>
-        </table>
+        </table>       
+
         <?php } ?>
+
+        <div class="attachment_details">
+            <div id="UploadFileContainer">
+              <?php if( !empty($ref_data) && !empty($ref_data->attachments) ){ 
+                echo '<h4>Attached files</h4>';
+                $files = json_decode($ref_data->attachments);
+                if( !empty($files) )
+                {
+                foreach($files as $file_id){
+                    if( $file_id==0 )
+                        continue;
+                ?>
+                  <div class="old_media_container btn btn-default">
+                        <?php 
+                        $file = $this->media_model->getById($file_id);
+                        // dd($file);
+                        echo download_file($file->media_type, $file->image, $image_size='full', '', ['target'=>'_blank']);
+                        ?>
+                  </div>
+                <?php 
+                    }
+                }
+                }
+                ?>
+            </div>
+        </div>
+
+        
     </div>
 
 </div>

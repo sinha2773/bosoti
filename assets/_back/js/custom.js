@@ -41,3 +41,19 @@ var read_image = function(event, value, container) {
 
     reader.readAsDataURL(event.target.files[0]);
 };
+
+function addFileContainer(container){
+    $('#'+container).append('<input class="form-control" type="file" name="files[]">');
+}
+
+jQuery(document).ready(function(){
+
+    // media during update
+    $('.old_media_close').click(function(){
+        if( confirm("Are you sure to remove?") ){
+            $(this).parent('.old_media_container').remove();
+        }
+    });
+
+    
+});

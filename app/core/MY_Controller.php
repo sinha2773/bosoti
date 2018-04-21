@@ -38,6 +38,7 @@ class MY_Controller extends CI_Controller {
 		$this->admin_path = "admin/";
         $this->load->helper(array('form', 'file'));
         $this->load->model("master");
+        $this->load->model("media_model");
 		$this->app_title = $this->master->settings['app_title'];
 		//$this->load->library('fbpost');
 
@@ -177,6 +178,15 @@ class MY_Controller extends CI_Controller {
         unset($data["image2"]);
         unset($data["image_name2"]);
 
+        // multiple attachments
+        if(isset($_FILES['files']) && !empty($_FILES['files'])){
+            $old_medias = isset($_POST['old_media']) ? $this->input->post('old_media') : [];
+            $media_ids = isset($_FILES['files']) ? $this->master->fileUpload($_FILES['files'], $option, ['action'=>'insert']) : [];
+            $media_ids = array_merge($old_medias, $media_ids);
+            $data['attachments'] = json_encode($media_ids);
+            unset($data['old_media']);
+        }
+
         $data['created'] = $this->now;
         $data['updated'] = $this->now;
         $this->db->trans_start();
@@ -244,6 +254,15 @@ class MY_Controller extends CI_Controller {
         }
         unset($data["image2"]);
         unset($data["image_name2"]);
+
+        // multiple attachments
+        if(isset($_FILES['files']) && !empty($_FILES['files'])){
+            $old_medias = isset($_POST['old_media']) ? $this->input->post('old_media') : [];
+            $media_ids = isset($_FILES['files']) ? $this->master->fileUpload($_FILES['files'], $option, ['action'=>'insert']) : [];
+            $media_ids = array_merge($old_medias, $media_ids);
+            $data['attachments'] = json_encode($media_ids);
+            unset($data['old_media']);
+        }
 
         $data['updated'] = $this->now;
         $this->db->trans_start();
